@@ -1,0 +1,259 @@
+{% extends '../base.html' %}
+
+{% block content %}
+<style>
+    .sidebar {
+        position: absolute;
+        top:65.5px;
+        left: 0;
+        height: 100%;
+        width: 230px; 
+        background: linear-gradient(180deg, #2c3e50, #00b4f6);
+        overflow-y: auto; 
+        padding-top: 20px;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        font-family: 'Arial Narrow', sans-serif;
+        border-top-left-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+    }
+
+    .sidebar h2 {
+        
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+        justify-content: center; 
+        align-items: center;
+        text-align: center;
+        display: flex; 
+    }
+
+    .sidebar a {
+        padding: 8px 20px;
+        text-decoration: none;
+        font-size: 18px;
+        color: #fff;
+        display: block;
+        transition: background-color 0.3s, color 0.3s;
+        border-radius: 4px; 
+        margin: 2px 10px;
+    }
+
+   
+
+    .sidebar a.active {
+       
+        color: yellow;
+        border-bottom: 3px !important;
+        border-color: yellow;
+        
+    }
+    .sidebar::-webkit-scrollbar {
+        display: none;
+    }
+    .sidebar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    .dropdown-container {
+        display: none;
+        line-height: 15px !important;
+        /* padding-top: -2px !important;  */ 
+        padding-left: 2.5ch;
+        border-radius: 4px; 
+        margin: 0;
+    }
+
+    .dropdown-container a {
+        font-size: 16px;
+        margin:  0;
+        padding-left: 2.5ch;
+        padding:8px  20px;
+    }
+
+    .dropdown-btn {
+        cursor: pointer;
+        outline: none;
+    }
+
+    .main-content {
+        margin-left: 290px;
+        padding: 40px;
+        transition: margin-left 0.3s;
+    }
+    .dropdown-container .dropdown-container {
+        padding-left: 2ch !important;
+        margin: -1px;
+    }
+    body {
+        background-color: white;
+        color: #333;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        color: #005792;
+    }
+
+    .edit-icon {
+        display: none; 
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        color: #fff; 
+    }
+
+    .sidebar a {
+        position: relative;
+    }
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+.dropdown-container .dropdown-container {
+    padding-left: 0.2ch; 
+}
+</style>
+{% block styles %}
+
+{% endblock styles %}
+
+<div>
+   
+        <div class="sidebar">
+            <h2 id="myCompanyName"></h2>
+            <a class="dropdown-btn" href="#">Profile</a>
+
+            <div class="dropdown-container">
+                <a href="{% url 'basic_information' company.company_id %}" class="{% if request.resolver_match.url_name == 'basic_information' %}active{% endif %}">Basic Information</a>
+                <a href="{% url 'pitch_and_product' company.company_id %}" class="{% if request.resolver_match.url_name == 'pitch_and_product' %}active{% endif %}">Product & Services</a>
+                <a href="{% url 'pitchvideoandppt' company.company_id %}" class="{% if request.resolver_match.url_name == 'pitchvideoandppt' %}active{% endif %}">Pitch Presentation & Video</a>
+                <a href="{% url 'business_plan' company.company_id %}" class="{% if request.resolver_match.url_name == 'business_plan' %}active{% endif %}">Business Plan & Financials</a>
+                <a href="{% url 'bench4' company.company_id %}" class="{% if request.resolver_match.url_name == 'bench4' %}active{% endif %}">Bench marking & Valuation</a>
+                <a href="{% url 'founders' company.company_id %}" class="{% if request.resolver_match.url_name == 'organization' %}active{% endif %}">Founders & Organization</a>
+                <a href="{% url 'cap_table' company.company_id %}" class="{% if request.resolver_match.url_name == 'cap_table' %}active{% endif %}">Cap Table</a>
+                <a href="{% url 'news_post' company.company_id %}" class="{% if request.resolver_match.url_name == 'news_post' %}active{% endif %}">News & Events</a>
+                <a href="{% url 'company_ask' company.company_id %}" class="{% if request.resolver_match.url_name == 'company_ask' %}active{% endif %}">Company Ask</a>
+                
+               
+               
+                
+
+
+            </div>
+
+            <a class="dropdown-btn">Corporate Finance</a>
+            <div class="dropdown-container">
+                <a class="dropdown-btn">Planning and Budgeting</a>
+                <div class="dropdown-container">
+                    <a href="{% url 'planning_budgeting_income_statement_table' company.company_id %}" 
+                    class="{% if request.resolver_match.url_name == 'planning_budgeting_income_statement_table' or request.resolver_match.url_name == 'income_statement' %}active{% endif %}">
+                     Income Statement
+                 </a>
+                 
+                 <a href="{% url 'planning_budgeting_balance_sheet_table' company.company_id %}" 
+                 class="{% if request.resolver_match.url_name == 'planning_budgeting_balance_sheet_table' or request.resolver_match.url_name == 'balance_sheet' %}active{% endif %}">
+                 Balance Sheet
+              </a>
+              <a href="{% url 'planning_budgeting_cash_flow_table' company.company_id %}" 
+              class="{% if request.resolver_match.url_name == 'planning_budgeting_cash_flow_table' or request.resolver_match.url_name == 'cash_flow_manual_entry' %}active{% endif %}">
+              Cash Flow
+           </a>
+                           </div>
+               
+                <a class="dropdown-btn">Forecasting</a>
+                <div class="dropdown-container">
+                    <a href="{% url 'forecasting_income_statement_table' company.company_id %}" class="{% if request.resolver_match.url_name == 'forecasting_income_statement_table' %}active{% endif %}">Income Statement</a>
+                    <a href="{% url 'forecasting_balance_sheet_table' company.company_id %}" class="{% if request.resolver_match.url_name == 'forecasting_balance_sheet' %}active{% endif %}">Balance Sheet</a>
+                    <a href="{% url 'forecasting_cash_flow_table' company.company_id %}" class="{% if request.resolver_match.url_name == 'forecasting_cash_flow' %}active{% endif %}">Cash Flow</a>
+                </div>
+                <a href="#" class="{% if request.resolver_match.url_name == 'industry_benchmarking' %}active{% endif %}">Benchmarking</a>
+                <a href="#" class="{% if request.resolver_match.url_name == 'business_modeling' %}active{% endif %}">Valuation</a>
+            </div>
+
+            <a class="dropdown-btn">Due Diligence</a>
+            <div class="dropdown-container">
+                <a href="#" class="{% if request.resolver_match.url_name == 'document_management' %}active{% endif %}">Document Management</a>
+                <a href="#" class="{% if request.resolver_match.url_name == 'clearance_monitoring' %}active{% endif %}">Clearance Monitoring</a>
+                <a href="#" class="{% if request.resolver_match.url_name == 'compliance_monitoring' %}active{% endif %}">Compliance Monitoring</a>
+            </div>
+
+            <a class="dropdown-btn">Fund Raising</a>
+            <div class="dropdown-container">
+                <a href="#" class="{% if request.resolver_match.url_name == 'investor_matching' %}active{% endif %}">Investor Matching</a>
+                <a href="#" class="{% if request.resolver_match.url_name == 'ma_matching' %}active{% endif %}">M&A Matching</a>
+                <a href="#" class="{% if request.resolver_match.url_name == 'investor_relation' %}active{% endif %}">Investor Relation</a>
+            </div>
+
+            <a class="dropdown-btn">Investor Tool</a>
+            <div class="dropdown-container">
+                <a href="#" class="{% if request.resolver_match.url_name == 'performance_benchmarking' %}active{% endif %}">Performance Benchmarking</a>
+                <a href="#" class="{% if request.resolver_match.url_name == 'startup_ranking' %}active{% endif %}">Startup Ranking</a>
+                <a href="#" class="{% if request.resolver_match.url_name == 'startup_listing' %}active{% endif %}">Startup Listing</a>
+                <a href="#" class="{% if request.resolver.match.url_name == 'syndication_partnership' %}active{% endif %}">Syndication</a>
+            </div>
+        </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var dropdowns = document.getElementsByClassName("dropdown-btn");
+        function toggleDropdown(dropdown) {
+            var dropdownContent = dropdown.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+                localStorage.setItem(dropdown.textContent.trim(), 'closed');
+            } else {
+                dropdownContent.style.display = "block";
+                localStorage.setItem(dropdown.textContent.trim(), 'open');
+            }
+        }
+        for (var i = 0; i < dropdowns.length; i++) {
+            dropdowns[i].addEventListener("click", function() {
+                toggleDropdown(this);
+            });
+            var state = localStorage.getItem(dropdowns[i].textContent.trim());
+            if (state === 'open') {
+                dropdowns[i].nextElementSibling.style.display = 'block';
+            }
+        }
+        var currentUrl = window.location.href;
+        var menuItems = document.querySelectorAll('.sidebar a');
+        menuItems.forEach(function(item) {
+            if (item.href === currentUrl) {
+                item.classList.add('active');
+                var parentContainer = item.closest('.dropdown-container');
+                if (parentContainer) {
+                    parentContainer.style.display = 'block';
+                    var parentButton = parentContainer.previousElementSibling;
+                    if (parentButton) {
+                        localStorage.setItem(parentButton.textContent.trim(), 'open');
+                    }
+                }
+            }
+        });
+        menuItems.forEach(function(item) {
+            item.addEventListener('click', function() {
+                var activeItems = document.querySelectorAll('.sidebar a.active');
+                activeItems.forEach(function(activeItem) {
+                    activeItem.classList.remove('active');
+                    var parentContainer = activeItem.closest('.dropdown-container');
+                    if (parentContainer) {
+                        parentContainer.style.display = 'none';
+                        var parentButton = parentContainer.previousElementSibling;
+                        if (parentButton) {
+                            localStorage.setItem(parentButton.textContent.trim(), 'closed');
+                        }
+                    }
+                });
+            });
+        });
+    });
+
+    var selectedCompanyName = localStorage.getItem('selectedCompanyName');
+    document.getElementById('myCompanyName').innerHTML = selectedCompanyName ? selectedCompanyName.toUpperCase() : 'COMPANY NAME';
+</script>
+{% endblock content %}

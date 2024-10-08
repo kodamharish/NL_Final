@@ -1,0 +1,92 @@
+{% extends '../base.html' %}
+
+{% block content %}
+<style>
+    label {
+        width: auto !important;
+    }
+    table {
+        border: 1px solid #000000 !important;
+        border-collapse: collapse;
+    }
+    table th, table td {
+        border: 1px solid #000000 !important;
+    }
+</style>
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"/>
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center">
+            <a class="btn btn-secondary pl pr mb-3 text-white w-50" href="{% url 'add_team' %}">
+                Add Editor
+            </a>
+        </div>
+    </div>
+
+    <div class="row mt-5 mb-5">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table id="teamTable" class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>Sub User ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Creator ID</th>
+                            <th>Company ID</th>
+                            <!-- <th>Edit</th> -->
+                            <th>Delete</th>
+
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for editor in editors %}
+                        <tr>
+                            <td>{{editor.subuser_id}}</td>
+                            <td>{{ editor.firstname }}</td>
+                            <td>{{ editor.lastname }}</td>
+                            <td>{{ editor.email }}</td>
+                            <td>{{ editor.username }}</td>
+                            <td>{{ editor.user_type }}</td>
+                            <td>{{ editor.creator_id }}</td>
+                            <td>{{ editor.company_id }}</td>
+                            <!-- <td><a href="#" onclick="return confirmEdit('{{ editor.subuser_id }}')"><i class="fa fa-pen"></i></a></td> -->
+                            <td><a href="#" onclick="return confirmDelete('{{ editor.subuser_id }}')"><i class="fa fa-trash-alt"></i></a></td>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function() {
+        $('#teamTable').DataTable();
+    });
+
+    function confirmEdit(subuser_id) {
+        return confirm('Are you sure you want to Edit Sub User ID: ' + subuser_id + '?');
+    }
+
+    function confirmDelete(subuser_id) {
+        return confirm('Are you sure you want to Delete Sub User ID: ' + subuser_id + '?');
+    }
+</script>
+{% endblock content %}

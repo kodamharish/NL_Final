@@ -1,0 +1,107 @@
+{% extends '../admin/company_profile.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .container{
+        font-family: 'Agency FB';
+    }
+</style>
+<div class="container my-5">
+    <h2 class="mb-4">Investors Favorites</h2>
+
+    <div class="row">
+        <!-- Investors Column -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Favorite Investors</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item investor" data-investor="1">Investor 1</li>
+                        <li class="list-group-item investor" data-investor="2">Investor 2</li>
+                        <li class="list-group-item investor" data-investor="3">Investor 3</li>
+                        <li class="list-group-item investor" data-investor="4">Investor 4</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Industry Select Column -->
+        <div class="col-md-4">
+            <div class="mb-4">
+                <h3>Select an Industry</h3>
+                <select class="form-select" id="industry-select">
+                    <option value="">Select an industry</option>
+                    {% for sector in industries %}
+                    <option value="{{ sector.id }}">{{ sector.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Requirements Column -->
+        <div class="col-md-4">
+            <div class="mb-4">
+                <h3>Search Results</h3>
+                <div id="requirements">
+                    No requirements
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hidden Company Data -->
+    <div id="company-data" style="display: none;">
+        {% for company in companies %}
+        <div class="company-item" data-sector="{{ company.sector.id }}" data-name="{{ company.name }}" data-id="{{ company.company_id }}"></div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const industrySelect = document.getElementById('industry-select');
+        const requirementsDiv = document.getElementById('requirements');
+
+        // Collect all company elements and their data attributes
+        const companyElements = document.querySelectorAll('#company-data .company-item');
+        
+        industrySelect.addEventListener('change', function () {
+            const selectedOption = this.value;
+            requirementsDiv.innerHTML = ''; // Clear previous results
+
+            if (selectedOption) {
+                companyElements.forEach(company => {
+                    const companySector = company.getAttribute('data-sector');
+                    
+                    if (companySector === selectedOption) {
+                        const div = document.createElement('div');
+                        const companyId = company.getAttribute('data-id');
+                        const companyName = company.getAttribute('data-name');
+
+                        // Print company id and name to the console
+                        console.log(`Company ID: ${companyId}, Company Name: ${companyName}`);
+
+                        div.textContent = companyName;
+                        div.style.cursor = 'pointer'; // Show pointer cursor
+
+                        div.addEventListener('click', function () {
+                            console.log('Clicked companyId:', companyId); // Debug log
+                            const url = `/investor_base/${encodeURIComponent(companyId)}/`;
+                            console.log('Redirecting to URL:', url); // Debug log
+                            window.location.href = url;
+                        });
+                        requirementsDiv.appendChild(div);
+                    }
+                });
+                
+                if (requirementsDiv.children.length === 0) {
+                    requirementsDiv.textContent = 'No companies found for this industry.';
+                }
+            } else {
+                requirementsDiv.textContent = 'No industry selected';
+            }
+        });
+    });
+</script>
+
+{% endblock %}

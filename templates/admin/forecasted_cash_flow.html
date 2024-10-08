@@ -1,0 +1,1273 @@
+
+{% include 'admin/company_profile.html' %}
+{% load static %}
+
+{% block styles %}
+
+<style>
+    body {
+        overflow-x: auto;  /* Ensure horizontal scrolling is enabled */
+        overflow-y: hidden; /* Hide the vertical scrollbar, functionality remains */
+    }
+    .container {
+        padding-left: 280px;
+        max-width: 100%;
+        position: relative;
+        height: calc(100vh - 135px);
+        overflow-y: scroll;
+        max-height: 100%;
+        margin-top: 27px !important; /* Adjust this value */
+        margin-left: -20px;
+    }
+    .container::-webkit-scrollbar {
+        display: none; /* Hide scrollbar for Chrome, Safari, and Edge */
+    }
+
+.growth-icon {
+    width: 20px; /* Set the icon width */
+    height: 20px; /* Set the icon height */
+    vertical-align: middle; /* Align the icon with the text */
+    margin-left: 5px; /* Optional: Add some space between the text and the icon */
+}   
+.content {
+    margin: 40px auto;
+    padding-top: 10px; /* Adjust this value */
+    padding-left: 200px;
+    width: calc(100% - 200px);
+}
+
+
+    table {
+        font-family: 'Arial MT Rounded';
+        border-collapse: collapse;
+        table-layout: fixed;
+        color: #000;
+        background-color: #ffff;
+    }
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left !important;
+        width: 150px !important;
+        background-color: #ffff;
+        font-size: 14px;
+    }
+
+    td {
+        text-align: right;
+    }
+
+    th {
+        background-color: #ffff !important;
+        top: 0;
+        z-index: 2;
+    }
+
+    tr:nth-child(even) {
+        background-color: #ffff;
+    }
+
+    .rowview {
+        width: 35%;
+    }
+
+    .rowview1 {
+        width: 10%;
+    }
+
+    .btn-plus {
+        font-size: 24px;
+        color: #007bff;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-plus:hover {
+        color: #0056b3;
+    }
+
+    tr.hidden {
+        display: none;
+    }
+
+    .cell button {
+        font-size: 50%;
+        color: #000;
+        background-color: #fff;
+        padding: 0.3em 0.2em 0 0.2em;
+        border: 0.2em solid #00f;
+        border-radius: 50%;
+        line-height: 1;
+        text-align: center;
+        text-indent: 0;
+        transform: rotate(270deg);
+    }
+
+    .cell button svg {
+        width: 1.25em;
+        height: 1.25em;
+        fill: #00f;
+        transition: transform 0.25s ease-in;
+        transform-origin: center 45%;
+    }
+
+    .cell button[aria-expanded="true"] svg {
+        transform: rotate(90deg);
+    }
+
+    .indent-level-1 td:first-child {
+        padding-left: 2em;
+    }
+
+    .indent-level-2 td:first-child {
+        padding-left: 4em;
+    }
+
+    .indent-level-3 td:first-child {
+        padding-left: 6em;
+    }
+
+    .dropdown-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .inline-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 15px;
+    }
+
+    .inline-container label {
+        width: 85px;
+    }
+
+    .form-select {
+        margin-left: 10px;
+        width: 50%;
+        border-bottom: 1px solid black;
+        border-radius: 0px;
+    }
+
+    .table-container {
+        max-height: 500px;
+        overflow-y: scroll;  /* Keep vertical scrolling */
+        overflow-x: auto;    /* Enable horizontal scrolling */
+        position: relative;  /* Establish a positioning context */
+    }
+    
+    /* Hide vertical scrollbar */
+    .table-container::-webkit-scrollbar {
+        width: 0;  /* Hide vertical scrollbar in WebKit browsers */
+    }
+    .table-container::-webkit-scrollbar {
+        height: 8px;               /* Horizontal scrollbar height */
+    }
+    .table-container::-webkit-scrollbar-thumb {
+        background: #888;           /* Scrollbar color */
+    }
+    .table-container::-webkit-scrollbar-thumb:hover {
+        background: #555;           /* Scrollbar color on hover */
+    }
+
+    .modal-content {
+        font-family: 'Arial MT Rounded';
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .form-check {
+        margin-right: 15px;
+    }
+
+    .form-check-label {
+        margin-left: 5px;
+    }
+
+    .form-control {
+        font-family: 'Times New Roman', Times, serif;
+    }
+
+    .btn-primary {
+        font-family: 'Agency FB', Times, serif;
+    }
+
+    table td,
+    th {
+        text-wrap: nowrap !important;
+    }
+
+    .form-control {
+        width: 100px;
+        height: 30px;
+        margin: 0;
+        border-bottom: 1px solid black;
+        border-radius: 0px;
+    }
+
+    td {
+        position: relative;
+    }
+
+    td input {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: grey;
+        border-bottom: 1px solid black;
+        /* border-radius: 5px; */
+    }
+
+    /* Remove border and outline for all form controls */
+    input, 
+    select, 
+    textarea {
+        border-top: none !important; /* Remove borders */
+        border-left: none !important; /* Remove borders */
+        border-right: none !important; /* Remove borders */
+        box-shadow: none !important; /* Remove shadows */
+        outline: none !important; /* Remove outline */
+        border-bottom: 1px solid black;
+        /* border-radius: 5px; */
+    }
+
+    input:focus, 
+    select:focus, 
+    textarea:focus {
+        border-top: none !important; /* Remove borders */
+        border-left: none !important; /* Remove borders */
+        border-right: none !important; /* Remove borders */
+        box-shadow: none !important;
+        outline: none !important;
+        border-bottom: 1px solid black;
+        /* border-radius: 5px; */
+    }
+    .row{
+        font-size: 14px;
+        font-family: 'Arial MT Rounded';
+    }
+    .indent-level-4 td:first-child {
+    padding-left: 8em;
+}
+</style>
+
+
+{% endblock styles %}
+
+{% block content %}
+<div class="container  mt-5">
+    
+
+
+        <div class="row">
+            <div class="col-md-4">
+                <h6 class="mb-4" style="color: black; font-size: 18px;">
+                    Corporate Finance -
+                    {% if request.resolver_match.url_name == 'planning_budgeting_cash_flow_table' %}
+                    Planning & Budgeting
+                    {% elif request.resolver_match.url_name == 'forecasting_cash_flow_table' %}
+                    Forecasting
+                    {% endif %}
+                    - <b>Cash Flow</b>
+                </h6>
+            </div>
+
+            <div class="col-md-4">
+                <form method="get" action="">
+                    <div class="m-0 inline">
+                        <label for="pre_selected_cash_flow">Past Statements </label>
+                        <select class="form-select " id="pre_selected_cash_flow" name="pre_selected_cash_flow" required
+                            onchange="this.form.submit()">
+                            {% if pre_selected_cash_flow_data %}
+                            <option value="{{pre_selected_cash_flow_data.month_or_quarter_or_year_name}}">
+                                {{pre_selected_cash_flow_data.month_or_quarter_or_year_name}}</option>
+                            {% else %}
+                            <option value="">Select</option>
+                            {% endif %}
+
+                            {% for type in cash_flows %}
+                            <option value="{{type.month_or_quarter_or_year_name}}">
+                                {{type.month_or_quarter_or_year_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="col-md-4">
+                <form method="get" action="">
+                    <div class="m-0 inline">
+                        <label for="forecasted_cash_flow">Past Forecasted  Statements </label>
+                        <select class="form-select " id="forecasted_cash_flow" name="forecasted_cash_flow" required
+                            onchange="this.form.submit()">
+                            <!-- {% if pre_selected_cash_flow_data %}
+                            <option value="{{pre_selected_cash_flow_data.monthly_or_quarterly_or_yearly}}">
+                                {{pre_selected_cash_flow_data.monthly_or_quarterly_or_yearly}}</option>
+                            {% else %} -->
+                            <option value="">Select</option>
+                            <!-- {% endif %} -->
+
+                            {% for type in forecasted_cash_flows %}
+                            <option value="{{type.month_or_quarter_or_year_name}}">
+                                {{type.month_or_quarter_or_year_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            
+        </div>
+
+        <!-- {% if forecasted_cash_flow_data %}
+             {{forecasted_cash_flow_data}}
+        {% endif %} -->
+
+        {% if pre_selected_cash_flow_data or forecasted_cash_flow_data %}
+
+
+        <form method="post" id="cashFlowForm">
+                {% csrf_token %}
+
+
+
+                <div class="table-container mt-1">
+                <div class="table-wrapper">
+                        <table class="cell">
+                        <thead>
+                                <!-- <tr>
+                                <th class="rowview">Breakdown</th>
+                                {% for cash_flow in cash_flows %}
+                                <th class="rowview1">{{cash_flow.date|date:'d-m-Y'}}
+                                ({{cash_flow.monthly_or_quarterly_or_yearly}})</th>
+                                {% endfor %}
+                                
+                        </tr> -->
+
+                                <tr>
+                                <th class="rowview">Breakdown</th>
+                                <th class="rowview">{{ headers.0 }}</th>
+                                <!-- <th class="rowview">{{ headers.0 }} Growth Rate (%)</th> -->
+                                <th class="rowview"><img src="{% static 'images/xyz.jpg' %}" class="growth-icon">{{ headers.0 }}</th>
+
+                                {% for header in headers|slice:"1:" %}
+                                <th class="rowview">{{ header }}</th>
+                                <!-- <th class="rowview">{{ header }} Growth Rate (%)</th> -->
+                                <th class="rowview"><img src="{% static 'images/xyz.jpg' %}" class="growth-icon">{{ header }}</th>
+
+                                {% endfor %}
+                                </tr>
+                        </thead>
+                        <tbody>
+                                <tr data-breakdown="Operating Cash Flow">
+                                <td>
+                                        <button type="button" id="btnMA" aria-expanded="false"
+                                        onclick="toggle(this.id,'#MS01ase,#MS01NIFCO');" aria-controls="MS01ase MS01NIFCO"
+                                        aria-label="Total Equity Gross Minority Interest" aria-labelledby="btnMA lblMSa">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" focusable="false">
+                                                <path d="M70.3 13.8L40 66.3 9.7 13.8z"></path>
+                                        </svg>
+                                        </button> Operating Cash Flow
+                                </td>
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.operating_cash_flow }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.periods.preselected}} {% endif %}</td>
+                                <td> {% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate"> {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.periods.period1}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.periods.period2}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input "> {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.periods.period3}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.periods.period4}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.periods.period5}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.periods.period6}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.periods.period7}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.operating_cash_flow.growth_rates.period1}} {% endif %}</td>
+
+                                </tr>
+
+                                <tr id="MS01NIFCO" class="hidden indent-level-1" data-breakdown="Net Income">
+                                <td> Net Income from Continuing Operations</td>
+
+
+                                <td class="pre-selected-data">  {% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.net_income_from_continuing_operations }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.periods.period1}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate"> {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.periods.period1}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.growth_rates.period1}}  {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.periods.period2}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.growth_rates.period2}}  {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.periods.period3}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.growth_rates.period3}}  {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.periods.period4}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.growth_rates.period4}}  {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.periods.period5}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.growth_rates.period5}}  {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.periods.period6}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.growth_rates.period6}}  {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.periods.period7}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_income_from_continuing_operations.growth_rates.period7}}  {% endif %}</td>
+                                </tr>
+                                <tr id="MS01NIFCO" class="hidden indent-level-1">
+                                <td> Depreciation & amortization </td>
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %}  {{ pre_selected_cash_flow_data.depreciation_and_amortization }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.periods.preselected}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.growth_rates.preselected}} {% endif %}</td>
+                                <td  class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.periods.period1}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.periods.period2}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.periods.period3}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.periods.period4}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.periods.period5}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.periods.period6}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.periods.period7}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.depreciation_and_amortization.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01ase" class="hidden indent-level-1">
+                                <td>
+                                        <button type="button" id="btnMB" aria-expanded="false"
+                                        onclick="toggle(this.id,'#MS01acs,#MS01acss,#MS01are,#MS01aglnare,#MS01aoea');"
+                                        aria-controls="MS01acs MS01are MS01aglnare MS01aoea"
+                                        aria-label="Stockholders' Equity" aria-labelledby="btnMB lblMSb">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" focusable="false">
+                                                <path d="M70.3 13.8L40 66.3 9.7 13.8z"></path>
+                                        </svg>
+                                        </button> Change in working capital
+                                </td>
+
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.change_in_working_capital }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.periods.preselected}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.growth_rates.period3 }} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.growth_rates.period4 }} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.growth_rates.period4 }} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.growth_rates.period4 }} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_working_capital.growth_rates.period4 }} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01acs" class="hidden indent-level-2">
+                                <td> Changes in Receivables </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.changes_in_receivables }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.periods.preselected}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01acss" class="hidden indent-level-2">
+                                <td> Change in Inventory </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.change_in_inventory }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_inventory.periods.preselected}} {% endif %} </td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_inventory.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_inventory.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_inventory.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_inventory.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_inventory.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_inventory.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_inventory.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01are" class="hidden indent-level-2">
+                                <td> Change in Hedging Assets Current </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.change_in_hedging_assets_current }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.periods.preselected}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_hedging_assets_current.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01aglnare" class="hidden indent-level-2">
+                                <td> Change in Other Current Assets </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.change_in_other_current_assets }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.periods.preselected}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_receivables.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_assets.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01aoea" class="hidden indent-level-2">
+                                <td> Change in Payables And Accrued Expense </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.change_in_payables_and_accrued_expense }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.periods.preselected}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_payables_and_accrued_expense.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01aoea" class="hidden indent-level-2">
+                                <td> Change in Pension & Other Post Retirement Benefit Plans Current</td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.periods.preselected}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_pension_and_other_post_retirement_benefit_plans_current.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01aoea" class="hidden indent-level-2">
+                                <td> Change in Current Debt And Capital Lease Obligation </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data %}{{ pre_selected_cash_flow_data.change_in_current_debt_and_capital_lease_obligation }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.periods.preselected}} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_debt_and_capital_lease_obligation.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+
+                                <tr id="MS01aoea" class="hidden indent-level-2">
+                                <td> Change in Current Deferred Liabilities </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data %} {{ pre_selected_cash_flow_data.change_in_current_deferred_liabilities }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_current_deferred_liabilities.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01aoea" class="hidden indent-level-2">
+                                <td> Change in Other Current Liabilities </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data %} {{ pre_selected_cash_flow_data.change_in_other_current_liabilities }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input"  name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"   class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.change_in_other_current_liabilities.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr>
+                                <td>
+                                        <button type="button" id="btnMZ" aria-expanded="false"
+                                        onclick="toggle(this.id,'#MS01CFfcia');" aria-controls="MS01CFfcia"
+                                        aria-label="Investing Cash Flow" aria-labelledby="btnMZ lblMSa">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" focusable="false">
+                                                <path d="M70.3 13.8L40 66.3 9.7 13.8z"></path>
+                                        </svg>
+                                        </button> Investing Cash Flow
+                                </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data %} {{ pre_selected_cash_flow_data.investing_cash_flow }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate"> {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investing_cash_flow.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01CFfcia" class="hidden indent-level-1">
+                                <td>
+                                        <button type="button" id="btnMY" aria-expanded="false"
+                                        onclick="toggle(this.id,'#MS01nppas,#MS01gaoia,#MS01iaad,#MS01oncas');"
+                                        aria-controls="MS01nppas MS01gaoia MS01iaad MS01oncas"
+                                        aria-label="Cash Flow from Continuing Investing Activities"
+                                        aria-labelledby="btnMY lblMSb">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" focusable="false">
+                                                <path d="M70.3 13.8L40 66.3 9.7 13.8z"></path>
+                                        </svg>
+                                        </button> Cash Flow from Continuing Investing Activities
+                                </td>
+                                
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data %} {{ pre_selected_cash_flow_data.cash_flow_from_continuing_investing_activities }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_investing_activities.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01nppas" class="hidden indent-level-2">
+                                <td> Net PPE Purchase And Sale </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data %} {{ pre_selected_cash_flow_data.net_ppe_purchase_and_sale }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.periods.preselected }} {% endif %} </td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01gaoia" class="hidden indent-level-2">
+                                <td> Goodwill And Other Intangible Assets </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.goodwill_and_other_intangible_assets }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.periods.preselected }} {% endif %} </td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.net_ppe_purchase_and_sale.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.goodwill_and_other_intangible_assets.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01iaad" class="hidden indent-level-2">
+                                <td> Investments And Advances </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.investments_and_advances }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01oncas" class="hidden indent-level-2">
+                                <td> Other Non Current Assets </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.other_non_current_assets }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.periods.preselected }} {% endif %} </td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.investments_and_advances.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_assets.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr>
+                                <td>
+                                        <button type="button" id="btnMX" aria-expanded="false"
+                                        onclick="toggle(this.id,'#MS01CFfcias');" aria-controls="MS01CFfcia"
+                                        aria-label="Financing Cash Flow" aria-labelledby="btnMX lblMSa">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" focusable="false">
+                                                <path d="M70.3 13.8L40 66.3 9.7 13.8z"></path>
+                                        </svg>
+                                        </button> Financing Cash Flow
+                                </td>
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.financing_cash_flow }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.financing_cash_flow.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01CFfcias" class="hidden indent-level-1">
+                                <td>
+                                        <button type="button" id="btnMW" aria-expanded="false"
+                                        onclick="toggle(this.id,'#MS01ltdaclo,#MS01ncdls,#MS01taopnc,#MS01oncls,#MS01csip,#MS01csdpd');"
+                                        aria-controls="MS01ltdaclo MS01ncdls MS01taopnc MS01oncls MS01csip MS01csdpd"
+                                        aria-label="Cash Flow from Continuing Financing Activities"
+                                        aria-labelledby="btnMW lblMSb">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" focusable="false">
+                                                <path d="M70.3 13.8L40 66.3 9.7 13.8z"></path>
+                                        </svg>
+                                        </button> Cash Flow from Continuing Financing Activities
+                                </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %}  {{ pre_selected_cash_flow_data.cash_flow_from_continuing_financing_activities }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.cash_flow_from_continuing_financing_activities.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01ltdaclo" class="hidden indent-level-2">
+                                <td> Long Term Debt And Capital Lease Obligation</td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.long_term_debt_and_capital_lease_obligation }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.long_term_debt_and_capital_lease_obligation.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01ncdls" class="hidden indent-level-2">
+                                <td> Non Current Deferred Liabilities </td>
+
+                                <td class="pre-selected-data"> {% if pre_selected_cash_flow_data  %}{{ pre_selected_cash_flow_data.non_current_deferred_liabilities }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.non_current_deferred_liabilities.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01taopnc" class="hidden indent-level-2">
+                                <td> Trade and Other Payables Non Current </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.trade_and_other_payables_non_current }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.trade_and_other_payables_non_current.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01oncls" class="hidden indent-level-2">
+                                <td> Other Non Current Liabilities </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %}  {{ pre_selected_cash_flow_data.other_non_current_liabilities }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control pre-selected-growth-rate-input"  name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.other_non_current_liabilities.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01csip" class="hidden indent-level-2">
+                                <td> Common Stock Issuance/ (Payments) </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.common_stock_issuance_payments }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_issuance_payments.growth_rates.period7}} {% endif %}</td>
+                                </tr>
+                                <tr id="MS01csdpd" class="hidden indent-level-2">
+                                <td> Common Stock Dividend Paid </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %}  {{ pre_selected_cash_flow_data.common_stock_dividend_paid }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number"  class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %} <input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.common_stock_dividend_paid.growth_rates.period7 }} {% endif %}</td>
+                                </tr>
+                                <tr>
+                                <td> End Cash Position </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %}{{ pre_selected_cash_flow_data.end_cash_position }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.growth_rates.preselected}} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.growth_rates.period1}} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.growth_rates.period2}} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.growth_rates.period3}} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.growth_rates.period4}} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"   class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.growth_rates.period5}} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.growth_rates.period6}} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.end_cash_position.growth_rates.period7 }} {% endif %}</td>
+                                </tr>
+                                <tr>
+                                <td> Changes in Cash </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %}{{ pre_selected_cash_flow_data.changes_in_cash }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.growth_rates.preselected }} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.growth_rates.period1 }} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.growth_rates.period2 }} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.growth_rates.period3 }} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.growth_rates.period4 }} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.growth_rates.period5 }} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.growth_rates.period6 }} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.changes_in_cash.growth_rates.period7 }} {% endif %}</td>
+                                </tr>
+                                <tr>
+                                <td> Beginning Cash Position </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.beginning_cash_position }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.growth_rates.preselected }} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.growth_rates.period1 }} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.growth_rates.period2 }} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.growth_rates.period3 }} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.growth_rates.period4 }} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.growth_rates.period5 }} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.growth_rates.period6 }} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.beginning_cash_position.growth_rates.period7 }} {% endif %}</td>
+                                </tr>
+                                <tr>
+                                <td> Capital Expenditure </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.capital_expenditure }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.growth_rates.period1 }} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.growth_rates.period1 }} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.growth_rates.period2 }} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.growth_rates.period3 }} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.growth_rates.period4 }} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.growth_rates.period5 }} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.growth_rates.period6 }} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.capital_expenditure.growth_rates.period7 }} {% endif %}</td>
+                                </tr>
+                                <tr>
+                                <td> Issuance/ (Repurchase) of Capital Stock </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{pre_selected_cash_flow_data.issuance_repurchase_of_capital_stock }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.growth_rates.period1 }} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.growth_rates.period1 }} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.growth_rates.period2 }} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.growth_rates.period3 }} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.growth_rates.period4 }} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.growth_rates.period5 }} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.growth_rates.period6 }} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.issuance_repurchase_of_capital_stock.growth_rates.period7 }} {% endif %}</td>
+                                </tr>
+                                <tr>
+                                <td> Repayment of Debt </td>
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.repayment_of_debt }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.growth_rates.preselected }} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.growth_rates.period1 }} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.growth_rates.period2 }} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.growth_rates.period3 }} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.growth_rates.period4 }} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.growth_rates.period5 }} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"   class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.growth_rates.period6 }} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"   class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.repayment_of_debt.growth_rates.period7 }} {% endif %}</td>
+                                </tr>
+                                <tr>
+                                <td> Free Cash Flow </td>
+
+
+                                <td class="pre-selected-data">{% if pre_selected_cash_flow_data  %} {{ pre_selected_cash_flow_data.free_cash_flow }} {% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.periods.preselected }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control pre-selected-growth-rate-input" name="pre_selected_growth_rate" id="total-revenue-growth-rate">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.growth_rates.preselected }} {% endif %}</td>
+                                <td class="period-plus-1-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.periods.period1 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-1-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.growth_rates.period1 }} {% endif %}</td>
+                                <td class="period-plus-2-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.periods.period2 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number" class="form-control period-2-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.growth_rates.period2 }} {% endif %}</td>
+                                <td class="period-plus-3-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.periods.period3 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-3-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.growth_rates.period3 }} {% endif %}</td>
+                                <td class="period-plus-4-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.periods.period4 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"    class="form-control period-4-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.growth_rates.period4 }} {% endif %}</td>
+                                <td class="period-plus-5-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.periods.period5 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-5-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.growth_rates.period5 }} {% endif %}</td>
+                                <td class="period-plus-6-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.periods.period6 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"  class="form-control period-6-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.growth_rates.period6 }} {% endif %}</td>
+                                <td class="period-plus-7-value period-plus-value">{% if forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.periods.period7 }} {% endif %}</td>
+                                <td>{% if pre_selected_cash_flow_data  %}<input type="number"   class="form-control period-7-growth-rate-input period-growth-rate-input ">{% elif forecasted_cash_flow_data %} {{ forecasted_cash_flow_data.free_cash_flow.growth_rates.period7 }} {% endif %}</td>
+                                </tr>
+                        </tbody>
+                        </table>
+                </div>
+                </div>
+
+                <div class="row">
+                        <div class="col-md-12 mt-3 text-center">
+                                <input type="hidden" name="cash_flow_data" id="cashFlowData">
+                                <input type="hidden" name="selected_header" value="{{ headers.0 }}">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                </div>
+
+        </form>
+
+        {% endif %}
+</div>
+
+<script>
+    function toggle(btnID, eIDs) {
+        var theRows = document.querySelectorAll(eIDs);
+        var theButton = document.getElementById(btnID);
+        if (theButton.getAttribute("aria-expanded") == "false") {
+            for (var i = 0; i < theRows.length; i++) {
+                theRows[i].classList.add("shown");
+                theRows[i].classList.remove("hidden");
+            }
+            theButton.setAttribute("aria-expanded", "true");
+        } else {
+            for (var i = 0; i < theRows.length; i++) {
+                theRows[i].classList.add("hidden");
+                theRows[i].classList.remove("shown");
+            }
+            theButton.setAttribute("aria-expanded", "false");
+        }
+    }
+
+    function updatePeriodValues(preSelectedData, growthRates, periodValueElements, startIndex) {
+        let previousValue = parseFloat(preSelectedData);
+        for (let i = 0; i < startIndex; i++) {
+            let growthRate = parseFloat(growthRates[i].value) || 0;
+            previousValue += (previousValue * (growthRate / 100));
+        }
+        for (let i = startIndex; i < periodValueElements.length; i++) {
+            let growthRate = parseFloat(growthRates[i].value) || 0;
+            let newValue = previousValue + (previousValue * (growthRate / 100));
+            periodValueElements[i].textContent = newValue.toFixed(2);
+            previousValue = newValue;
+        }
+    }
+
+    function updateAllGrowthRates(selector, value) {
+        const growthRateInputs = document.querySelectorAll(selector);
+        growthRateInputs.forEach(input => {
+            input.value = value;
+        });
+    }
+
+    function handleGrowthRateInputChange(event, periodIndex) {
+        const value = event.target.value;
+        const periodGrowthRateSelector = `.period-${periodIndex + 1}-growth-rate-input`;
+        updateAllGrowthRates(periodGrowthRateSelector, value);
+
+        const rows = document.querySelectorAll('tr');
+        rows.forEach(row => {
+            const preSelectedDataElement = row.querySelector('.pre-selected-data');
+            const periodValueElements = row.querySelectorAll('.period-plus-value');
+            const growthRateInputs = row.querySelectorAll('.period-growth-rate-input');
+            if (preSelectedDataElement && periodValueElements.length && growthRateInputs.length) {
+                updatePeriodValues(preSelectedDataElement.textContent, growthRateInputs, periodValueElements, periodIndex + 1);
+            }
+        });
+    }
+
+    document.addEventListener('input', function (event) {
+        if (event.target.classList.contains('pre-selected-growth-rate-input')) {
+            const value = event.target.value;
+            updateAllGrowthRates('.pre-selected-growth-rate-input', value);
+            updateAllGrowthRates('.period-1-growth-rate-input', value);
+            updateAllGrowthRates('.period-2-growth-rate-input', value);
+            updateAllGrowthRates('.period-3-growth-rate-input', value);
+            updateAllGrowthRates('.period-4-growth-rate-input', value);
+            updateAllGrowthRates('.period-5-growth-rate-input', value);
+            updateAllGrowthRates('.period-6-growth-rate-input', value);
+            updateAllGrowthRates('.period-7-growth-rate-input', value);
+
+            const rows = document.querySelectorAll('tr');
+            rows.forEach(row => {
+                const preSelectedDataElement = row.querySelector('.pre-selected-data');
+                const periodValueElements = row.querySelectorAll('.period-plus-value');
+                const growthRateInputs = row.querySelectorAll('.period-growth-rate-input');
+                if (preSelectedDataElement && periodValueElements.length && growthRateInputs.length) {
+                    updatePeriodValues(preSelectedDataElement.textContent, growthRateInputs, periodValueElements, 0);
+                }
+            });
+        } else if (event.target.classList.contains('period-growth-rate-input')) {
+            const periodIndex = Array.from(event.target.classList).find(cls => cls.startsWith('period-')).split('-')[1] - 1;
+            handleGrowthRateInputChange(event, periodIndex);
+        }
+    });
+</script>
+
+
+<script>
+        document.getElementById('cashFlowForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+    
+            const tableData = [];
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const rowData = {
+                    breakdown: row.cells[0].innerText.trim(),
+                    data: []
+                };
+                for (let i = 1; i < row.cells.length; i++) {
+                    const cellValue = row.cells[i].querySelector('input') ? row.cells[i].querySelector('input').value : row.cells[i].innerText.trim();
+                    rowData.data.push(cellValue);
+                }
+                tableData.push(rowData);
+            });
+    
+            document.getElementById('cashFlowData').value = JSON.stringify(tableData);
+            this.submit();
+        });
+    </script>
+
+    
+
+
+
+{% endblock content %}

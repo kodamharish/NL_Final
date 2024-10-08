@@ -1,0 +1,475 @@
+
+{% include './company_profile.html' %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .main-content {
+            flex: 1;
+            overflow-y: scroll; /* Enables vertical scrolling */
+            overflow-x: hidden; /* Hides horizontal scroll */
+            margin-top: -20px;
+            margin-left: 250px;
+            font-family: 'Arial MT Rounded' !important;
+            height: 100vh; /* Adjust height as needed to fit the content area */
+        }
+
+        /* Hide scrollbar for Webkit browsers like Chrome, Safari */
+        .main-content::-webkit-scrollbar {
+            display: none; /* Hides the scrollbar */
+        }
+
+        /* Hide scrollbar for IE and Edge */
+        .main-content {
+            -ms-overflow-style: none; /* IE */
+            scrollbar-width: none; /* Firefox */
+        }
+
+        .profile-card {
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            max-width: 550px;
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background-color: #fff;
+            box-shadow: none;
+            position: relative;
+            top: -50px;
+            margin-left: -150px;
+            font-family: 'Arial MT Rounded' !important;
+        }
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            background-color: #6c757d;
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .profile-img img {
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-img .edit-icon {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: #6c757d;
+            border-radius: 50%;
+            padding: 5px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: none; /* Hidden by default */
+            top:80px;
+        }
+        /* .add-button {
+            position: absolute;
+            top: 0px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+            margin-top: 90px;
+        } */
+        .container {
+            max-width: 1200px;
+            margin: 20px;
+            overflow: hidden;
+        }
+        .scrollable-container {
+            max-height: 80vh;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            padding-right: 20px; /* Adjust padding to account for scrollbar width */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .container::-webkit-scrollbar {
+            display: none;
+        }
+        .form-control {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            border-bottom: None;
+            align-items: center;
+            text-align: center;
+            font-family: 'Arial MT Rounded' !important;
+        }
+        .placeholder {
+            text-align: center !important;
+        }
+        .heading {
+            font-size: 1rem;
+            margin-left: -10px; 
+            margin-top:20px;
+            font-weight: bolder;
+        }
+        .edit-save-icons {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        .edit-save-icons img {
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+        .profile-card p {
+        margin: 0;
+        padding: 0;
+    }
+
+    .profile-card .form-control {
+        margin-bottom: 5px; /* Reduced margin between fields */
+        padding: 0.375rem 0.75rem; /* Maintain consistent padding */
+    }
+    .breadcrumb{
+        font-size: 18px;
+        color: black;
+        flex: 1;
+        margin-top: 25px;
+        margin-left: 260px;
+        font-family: 'Arial MT Rounded' !important;
+        display: flex;
+        align-items: left;        
+        }
+
+        .bold-text {
+            font-weight: bold;
+        }
+        html, body {
+            overflow: hidden; /* Hides the scrollbars */
+        }
+        .btn-custom {
+            background-color: transparent; /* Set background color */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            display: flex;
+            align-items: center; /* Center the image and text vertically */
+            gap: 10px; /* Gap between image and text */
+            margin-left: 1460px;
+            margin-top: -41px;
+            padding: 0;
+            position: absolute;
+        }
+        .btn-custom img {
+            width: 35px; /* Ensure the image has a proper size */
+            height: 35px;
+            margin: 0;
+            padding: 0;
+            display: inline-block; /* Make sure it's displayed properly */
+        }
+        .edit-save-icons img {
+            width: 29px;
+            height: 29px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="breadcrumb">
+        <span>My Companies</span> &ndash; <span>{{ company.name }}</span> &ndash; <span class="bold-text">Founders & Organization</span>
+    </div>
+    <div class="btn btn-custom" id="addButton" onclick="toggleForm()">
+        <img src="{% static 'images/add.png' %}" alt="Add">
+    </div>
+
+    <!-- <div class="add-button" id="addButton"><i class="fas fa-plus"></i></div> -->
+
+
+
+    <div class="main-content">
+        <div class="container position-relative mt-4">
+          
+
+            <div id="profile-cards-container" class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 justify-content-center g-4 mt-5">
+                {% for founder in founder %}
+                <div class="col d-flex justify-content-center">
+                    <div class="profile-card">
+                        <div class="profile-img">
+                            {% if founder.photo %}
+                            <img src="{{ founder.photo.url }}">
+                            {% else %}
+                            <img src="https://via.placeholder.com/100">
+                            {% endif %}
+                            <input type="file" class="profile-img-upload" style="display: none;">
+                            <div class="edit-icon" id="edit_icon1">
+                                <img src="https://img.icons8.com/material-outlined/20/000000/pencil--v1.png" alt="Upload">
+                            </div>
+                        </div>
+                        <p><input type="hidden" class="form-control" name="id" value="{{ founder.id }}" readonly></p>
+                        <p><input type="text" class="form-control" name="name" value="{{ founder.name }}" readonly></p>
+                        <p><input type="text" class="form-control" name="title" value="{{ founder.title }}" readonly></p>
+                        <p>
+                            <input type="date" class="form-control" name="date_joined" value="{{ founder.date_joined|date:'Y-m-d' }}" readonly>
+                        </p>
+                        <p><input type="url" class="form-control" name="linkedin_url" value="{{ founder.linkedin_url }}" readonly></p>
+                        <p><input type="text" class="form-control" name="short_profile" value="{{ founder.short_profile }}"></p>
+                        <div class="edit-save-icons">
+                            <img src="https://img.icons8.com/material-outlined/20/000000/pencil--v1.png" alt="Edit" class="edit-icon-card">
+                            <img src="https://img.icons8.com/material-outlined/20/000000/trash--v1.png" alt="Delete" class="delete-icon-card">
+                            <img src="https://img.icons8.com/material-outlined/20/000000/save--v1.png" alt="Save" class="save-icon-card" style="display:none;">
+                        </div>
+                    </div>
+                </div>
+                
+                {% endfor %}
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const addButton = document.getElementById('addButton');
+    const profileCardsContainer = document.getElementById('profile-cards-container');
+
+    addButton.addEventListener('click', function() {
+        // Create a new card element
+        const newCard = document.createElement('div');
+        newCard.classList.add('col', 'd-flex', 'justify-content-center', 'mb-3');
+        newCard.innerHTML = `
+            <div class="profile-card">
+                <div class="profile-img">
+                    <img src="https://via.placeholder.com/100" alt="Profile Picture" class="profile-img-placeholder">
+                    <input type="file" name="photo" class="profile-img-upload" style="display: none;">
+                    <div class="edit-icon">
+                        <img src="https://img.icons8.com/material-outlined/20/000000/pencil--v1.png" alt="Upload">
+                    </div>
+                </div>
+                <p><input type="text" class="form-control" name="name" placeholder="Enter Name"></p>
+                <p><input type="title" class="form-control" name="title" placeholder="Enter Title"></p>
+                <p><input type="date" class="form-control" name="date_joined" placeholder="Enter LinkedIn URL"></p>
+                <p><input type="url" class="form-control" name="linkedin_url" placeholder="Enter LinkedIn URL"></p>
+                <p><textarea class="form-control" name="short_profile" placeholder="Enter Short Profile"></textarea></p>
+                <div class="edit-save-icons">
+                    <img class="save-icon" src="{% static 'images/save.png' %}" alt="Save">
+                    <img class="delete-icon-card" src="{% static 'images/delete.png' %}"  alt="Delete">
+                </div>
+            </div>
+        `;
+
+        // Append the new card to the container
+        profileCardsContainer.appendChild(newCard);
+
+        // Add event listeners for the new card's save and delete icons
+        const saveIcon = newCard.querySelector('.save-icon');
+        const deleteIcon = newCard.querySelector('.delete-icon-card');
+        const inputs = newCard.querySelectorAll('.form-control');
+        const profileImg = newCard.querySelector('.profile-img');
+        const profileImgUpload = newCard.querySelector('.profile-img-upload');
+
+        saveIcon.addEventListener('click', function() {
+            let valid = true;
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    valid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+
+            if (valid) {
+                const formData = new FormData();
+                inputs.forEach(input => {
+                    formData.append(input.name, input.value);
+                });
+                if (profileImgUpload.files.length > 0) {
+                    formData.append('photo', profileImgUpload.files[0]);
+                }
+
+                fetch("{% url 'founders' company.company_id %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        inputs.forEach(input => input.setAttribute('readonly', true));
+                        saveIcon.style.display = 'none';
+                    } else {
+                        alert('Error saving data');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                alert('Please fill out all fields');
+            }
+        });
+
+        deleteIcon.addEventListener('click', function() {
+            newCard.remove();
+        });
+
+        // Image upload handling for new cards
+        profileImg.addEventListener('click', function() {
+            profileImgUpload.click();
+        });
+
+        profileImgUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImg.querySelector('.profile-img-placeholder').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+
+    // Add event listeners for existing cards' edit icons
+    const editIcons = document.querySelectorAll('.edit-icon-card');
+    const saveIcons = document.querySelectorAll('.save-icon-card');
+    const editIconExistingCards = document.querySelectorAll('.edit-icon');
+
+    editIcons.forEach((editIcon, index) => {
+        const saveIcon = saveIcons[index];
+        const profileImg = editIcon.closest('.profile-card').querySelector('.profile-img');
+        const inputs = editIcon.closest('.profile-card').querySelectorAll('.form-control');
+        const editIconExisting = editIcon.closest('.profile-card').querySelector('.edit-icon');
+
+        editIcon.addEventListener('click', function() {
+            inputs.forEach(input => input.removeAttribute('readonly'));
+            saveIcon.style.display = 'block';
+            editIconExisting.style.display = 'block'; // Show the pencil icon
+        });
+        
+
+        // Image upload handling for existing cards
+        const profileImgUpload = profileImg.querySelector('.profile-img-upload');
+
+        editIconExisting.addEventListener('click', function() {
+            profileImgUpload.click();
+        });
+
+        profileImgUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImg.querySelector('img').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+ 
+    saveIcon.addEventListener('click', function() {
+            let valid = true;
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    valid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+            if (valid) {
+                const formData = new FormData();
+                inputs.forEach(input => {
+                    formData.append(input.name, input.value);
+                });
+                if (profileImgUpload.files.length > 0) {
+                    formData.append('photo', profileImgUpload.files[0]);
+                }
+                fetch("{% url 'founders' company.company_id %}", { // Replace 'update_founder' with your URL name and use the founder ID
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        inputs.forEach(input => input.setAttribute('readonly', true));
+                        saveIcon.style.display = 'none';
+                        alert('Changes saved successfully');
+                    } else {
+                        alert('Error saving data');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                alert('Please fill out all fields');
+            }
+            document.getElementById('edit_icon1').style.display='block';
+        });
+    });
+
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteIcons = document.querySelectorAll('.delete-icon-card');
+
+    deleteIcons.forEach((deleteIcon) => {
+        deleteIcon.addEventListener('click', function() {
+            const profileCard = deleteIcon.closest('.profile-card');
+            const founderId = profileCard.querySelector('input[name="id"]').value;
+
+            if (confirm("Are you sure you want to delete this founder?")) {
+                fetch(`/founder/delete/${founderId}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        profileCard.remove();  // Remove the card from the UI
+                        alert("Founder deleted successfully");
+                    } else {
+                        alert("Error deleting founder");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while deleting the founder.');
+                });
+            }
+        });
+    });
+});
+
+    </script>
+</body>
+</html>
+
+{% endblock %}

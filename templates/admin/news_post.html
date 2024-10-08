@@ -1,0 +1,498 @@
+
+
+{% include './company_profile.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company News</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            position: relative;
+            padding: 20px 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            max-width: 1000px;
+            margin-left: 240px;
+            height: 600px;
+            overflow-y: auto;
+            margin-top: -50px; /* Move the container upwards */
+            /* padding-top: 0px; */
+            scrollbar-width: none; /* For Firefox */
+        }
+        .container::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+}
+        body {
+            font-family: 'Arial MT Rounded';
+            overflow: hidden;
+        }
+
+        .label-text {
+            font-size: 12px;
+            color: grey;
+        }
+
+        .content-text {
+            font-size: 16px;
+        }
+
+        .news-item {
+            border-bottom: 1px solid #898888;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            position: relative;
+        }
+
+        .edit-btn,
+        .update-btn,
+        .delete-btn,
+        .cancel-btn {
+            position: absolute;
+            top: 10px;
+        }
+
+        .edit-btn,
+        .update-btn {
+            right: 120px;
+        }
+
+        .delete-btn {
+            right: 60px;
+        }
+
+        .cancel-btn {
+            right: 10px;
+        }
+
+        .add-news-btn {
+            cursor: pointer;
+            font-size: 30px;
+            color: black;
+            text-align: right;
+            margin-bottom: 20px;
+            margin-left: 1000px;
+        }
+
+        .edit-buttons {
+            display: none;
+        }
+
+        .news-summary {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .form-control {
+            border: none;
+            border-radius: 0px;
+        }
+
+        .form-control:focus {
+            border-left: 0px;
+            border-right: 0px;
+            border-top: 0px;
+            border-bottom: 1px solid black;
+            box-shadow: none;
+        }
+        .breadcrumb{
+            font-size: 18px;
+            color: black;
+            flex: 1;
+            margin-top: 25px;
+            margin-left: 260px;
+            font-family: 'Arial MT Rounded' !important;
+            display: flex;
+            align-items: left;  
+            /* align-items: space-between;       */
+        }
+        .add-news-btn {
+            background-color: transparent; /* Set background color */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            display: flex;
+            align-items: center; /* Center the image and text vertically */
+            gap: 10px; /* Gap between image and text */
+            margin-left: 1460px;
+            margin-top: -41px;
+            padding: 0;
+            position: absolute;
+        }
+        .add-news-btn img {
+            width: 35px; /* Ensure the image has a proper size */
+            height: 35px;
+            margin: 0;
+            padding: 0;
+            display: inline-block; /* Make sure it's displayed properly */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="breadcrumb">
+        <span>My Companies</span> &ndash; <span>{{ company.name }}</span> &ndash; <span class="bold-text">News</span>
+    </div>
+    <div class="add-news-btn" id="add-news-btn" onclick="toggleForm()">
+        <img src="{% static 'images/add.png' %}" alt="Add">
+    </div>
+    
+
+    <div class="container my-0" id="container">
+        <!-- Button to show the form -->
+        {% if news_data %}
+        
+        {% endif %}
+
+        {% if news_data %}
+        {% for i in news_data|dictsortreversed:"line_no" %}
+        {% if not i.line_no == 1 %}
+        <form id="news-form_{{i.line_no}}" class="mb-4 news-item">
+            <div class="mb-3">
+                <label for="newsDate_{{i.line_no}}" class="label-text">Date:</label>
+                <input type="text" class="form-control content-text newsDate" id="newsDate_{{i.line_no}}" value="{{i.sub_date|date:'d-m-Y'}}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="summary_{{i.line_no}}" class="label-text">Brief Summary:</label>
+                <textarea class="form-control content-text summary" id="summary_{{i.line_no}}" rows="3" readonly>{{i.summary}}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="link_{{i.line_no}}" class="label-text">Link:</label>
+                <input type="text" class="form-control content-text link" id="link_{{i.line_no}}" value="{{i.link}}" readonly>
+            </div>
+          <div class="text-end">
+    <button type="button" class="btn btn-warning edit-btn" id="edit-news_{{i.line_no}}" style="background-color: white; border: none;" onclick="editNews({{i.line_no}})">
+        <img src="{% static 'images/edit.png' %}" style="width: 29px; height: 29px;">
+    </button>
+    <button type="button" class="btn btn-danger delete-btn" id="delete-news_{{i.line_no}}" style="background-color: white; border: none;" onclick="deleteNews({{i.id}})">
+        <img src="{% static 'images/delete.png' %}" style="width: 29px; height: 29px;">
+    </button>
+
+    <button type="button" class="btn btn-primary save-btn" id="save-news_{{i.line_no}}" style="display:none; background-color: white; border: none;" onclick="saveNews({{i.line_no}})">
+        <img src="{% static 'images/save.png' %}" style="width: 29px; height: 29px;">
+    </button>
+    <button type="button" class="btn btn-secondary cancel-btn" id="cancel-news_{{i.line_no}}" style="display:none; background-color: white; border: none;" onclick="cancelEdit({{i.line_no}})">
+        <img src="{% static 'images/cancel.png' %}" style="width: 29px; height: 29px;">
+    </button>
+</div>
+
+        </form>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+        <!-- News Form -->
+        <!-- <form id="news-form" class="mb-4">
+            <div class="mb-3">
+                <label for="newsDate" class="label-text">Date:</label>
+                <input type="text" class="form-control content-text" id="newsDate_1" name="newsDate" {% if news_data %}{% for i in news_data %}{% if i.line_no == 1 %} value="{{i.sub_date|date:'d-m-Y'}}" {% endif %}{% endfor %}{% else %} value="{{current_date|date:'d-m-Y'}}" {% endif %} readonly>
+            </div>
+            <div class="mb-3">
+                <label for="summary" class="label-text">Brief Summary:</label>
+                <textarea class="form-control content-text" name="summary" id="summary_1" rows="3"
+                    placeholder="Enter the news summary">{% if news_data %}{% for i in news_data %}{% if i.line_no == 1 %}{{i.summary}}{% endif %}{% endfor %}{% endif %}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="link" class="label-text">Link:</label>
+                <input type="text" class="form-control content-text" name="link" id="link_1" {% if news_data %}{% for i in news_data %}{% if i.line_no == 1 %} value="{{i.link}}" {% endif %}{% endfor %}{% endif %} placeholder="www.example.com">
+            </div>
+            Align button to the right -->
+            <!-- <div class="text-end">
+                <button type="button" class="btn btn-primary content-text" id="submit-news_1" onclick="handleNewsSubmit(1)">Add News</button>
+            </div>
+        </form> -->
+
+        <!-- Section to display added news -->
+        <div id="news-container"></div>
+
+    </div>
+
+    {% if last_rec %}
+    <script>
+        var last_rec_1 = "{{last_rec}}";        
+    </script>
+    {% else %}
+    <script>
+        var last_rec_1 = 1
+    </script>
+    {% endif %}
+
+    <script>
+
+        let sectionCount = last_rec_1; // Initialize section count
+
+        console.log('sectionCount', sectionCount)
+
+        document.getElementById('add-news-btn').addEventListener('click', function () {
+            sectionCount++;
+            const newSectionHTML = `
+            <form id="news-form_${sectionCount}" class="mb-4">
+                <div class="mb-3">
+                    <label for="newsDate_${sectionCount}" class="label-text">Date:</label>
+                    <input type="text" class="form-control content-text" id="newsDate_${sectionCount}" value="{{ current_date|date:'d-m-Y' }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="summary_${sectionCount}" class="label-text">Brief Summary:</label>
+                    <textarea class="form-control content-text" id="summary_${sectionCount}" rows="3" placeholder="Enter the news summary"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="link_${sectionCount}" class="label-text">Link:</label>
+                    <input type="text" class="form-control content-text" id="link_${sectionCount}" placeholder="www.example.com">
+                </div>
+                <!-- Align button to the right -->
+                <div class="text-end">
+        <button type="button" class="btn btn-primary content-text" id="submit-news_${sectionCount}" onclick="handleNewsSubmit(${sectionCount})" style="background-color: white; border:none;">
+            <img src="{% static 'images/save.png' %}" alt="Add" style="width: 35px; height: 35px;">
+        </button>
+    </div>
+            </form>
+        `;
+
+        // Insert new section into the container
+        document.getElementById('container').insertAdjacentHTML('beforeend', newSectionHTML);
+
+        // Scroll the container to the bottom
+        const container = document.getElementById('container');
+        container.scrollTop = container.scrollHeight;
+    });
+        
+
+    function handleNewsSubmit(sectionId) {
+    const date = document.getElementById(`newsDate_${sectionId}`).value;
+    const summary = document.getElementById(`summary_${sectionId}`).value;
+    const link = document.getElementById(`link_${sectionId}`).value;
+
+    // Create a FormData object to send data to the server
+    const formData = new FormData();
+    formData.append('newsDate', date);
+    formData.append('summary', summary);
+    formData.append('link', link);
+    formData.append('line_no', sectionId); // Use sectionId as line number
+
+    // Make the POST request to submit the form
+    fetch("{% url 'news_post' company.company_id %}", {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            // Handle HTTP errors
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();  // Ensure we are expecting JSON response
+    })
+    .then(data => {
+        if (data.message) {
+            // Replace the form with a new entry including Edit/Delete buttons
+            const newsItemHTML = `
+            <form id="news-form_${sectionId}" class="mb-4 news-item">
+                <div class="mb-3">
+                    <label for="newsDate_${sectionId}" class="label-text">Date:</label>
+                    <input type="text" class="form-control content-text newsDate" id="newsDate_${sectionId}" value="${date}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="summary_${sectionId}" class="label-text">Brief Summary:</label>
+                    <textarea class="form-control content-text summary" id="summary_${sectionId}" rows="3" readonly>${summary}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="link_${sectionId}" class="label-text">Link:</label>
+                    <input type="text" class="form-control content-text link" id="link_${sectionId}" value="${link}" readonly>
+                </div>
+              <div class="text-end">
+    <button type="button" class="btn edit-btn" id="edit-news_${sectionId}" onclick="editNews(${sectionId})" style="background: none; border: none; padding: 0;">
+        <img src="{% static 'images/save.png' %}" style="width: 29px; height: 29px;">
+    </button>
+    <button type="button" class="btn delete-btn" id="delete-news_${sectionId}" onclick="deleteNews(${sectionId})" style="background: none; border: none; padding: 0;">
+        <img src="{% static 'images/delete.png' %}" style="width: 29px; height: 29px;">
+    </button>
+    <button type="button" class="btn save-btn" id="save-news_${sectionId}" style="display:none; background: none; border: none; padding: 0;" onclick="saveNews(${sectionId})">
+        <img src="{% static 'images/edit.png' %}" style="width: 29px; height: 29px;">
+    </button>
+    <button type="button" class="btn cancel-btn" id="cancel-news_${sectionId}" style="display:none; background: none; border: none; padding: 0;" onclick="cancelEdit(${sectionId})">
+        <img src="{% static 'images/cancel.png' %}" style="width: 29px; height: 29px;">
+    </button>
+</div>
+
+            </form>
+            `;
+
+            // Replace the form with the newly added news item including buttons
+            document.getElementById(`news-form_${sectionId}`).outerHTML = newsItemHTML;
+            document.getElementById('add-news-btn').style.display = 'none';
+        } else if (data.error) {
+            alert('Error: ' + data.error);
+        } else {
+            alert('Unexpected response format.');
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
+    });
+}
+
+
+        function refreshNewsSection() {
+            // Fetch the updated news section from the server
+            fetch("{% url 'news_post' company.company_id %}")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();  // Get the response as HTML text
+                })
+                .then(html => {
+                    // Parse the returned HTML and extract the news section
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newNewsSection = doc.querySelector('#news-container'); // Adjust selector if necessary
+
+                    // Replace the old news section with the new one
+                    const oldNewsSection = document.querySelector('#news-container');
+                    if (oldNewsSection && newNewsSection) {
+                        oldNewsSection.innerHTML = newNewsSection.innerHTML;
+                        
+                        // Re-attach event listeners for new dynamically added elements
+                        attachNewsEventListeners();  // Ensure you have a function for this
+                    }
+                })
+                .catch(error => {
+                    console.error('Error while refreshing news section:', error);
+                });
+        }
+
+        // Function to re-attach event listeners after the DOM has been updated
+        function attachNewsEventListeners() {
+            // Re-attach event listeners for dynamically added buttons and forms
+            document.querySelectorAll('.submit-news').forEach((button, index) => {
+                button.addEventListener('click', () => {
+                    handleNewsSubmit(index + 1);  // Ensure the right section is being submitted
+                });
+            });
+
+            // Add any other necessary event listeners for the dynamically updated content
+        }
+        function editNews(lineNo) {
+    // Toggle form fields to make them editable
+    document.getElementById(`newsDate_${lineNo}`).removeAttribute('readonly');
+    document.getElementById(`summary_${lineNo}`).removeAttribute('readonly');
+    document.getElementById(`link_${lineNo}`).removeAttribute('readonly');
+
+    // Show Save and Cancel buttons, hide Edit and Delete buttons
+    document.getElementById(`edit-news_${lineNo}`).style.display = 'none';
+    document.getElementById(`delete-news_${lineNo}`).style.display = 'none';
+    document.getElementById(`save-news_${lineNo}`).style.display = 'inline-block';
+    document.getElementById(`cancel-news_${lineNo}`).style.display = 'inline-block';
+}
+function cancelEdit(lineNo) {
+    // Disable form fields and revert to their original state
+    document.getElementById(`newsDate_${lineNo}`).setAttribute('readonly', true);
+    document.getElementById(`summary_${lineNo}`).setAttribute('readonly', true);
+    document.getElementById(`link_${lineNo}`).setAttribute('readonly', true);
+
+    // Hide Save and Cancel buttons, show Edit and Delete buttons
+    document.getElementById(`edit-news_${lineNo}`).style.display = 'inline-block';
+    document.getElementById(`delete-news_${lineNo}`).style.display = 'inline-block';
+    document.getElementById(`save-news_${lineNo}`).style.display = 'none';
+    document.getElementById(`cancel-news_${lineNo}`).style.display = 'none';
+}
+function deleteNews(newsId) {
+    if (confirm('Are you sure you want to delete this news item?')) {
+        // Create a POST request to delete the news
+        fetch(`/news/delete/${newsId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message);
+                // Check if the news form exists before trying to remove it
+                window.location.reload();
+                const newsForm = document.getElementById(`news-form_${newsId}`);
+                if (newsForm) {
+                    newsForm.remove();
+                } else {
+                    console.error(`Element news-form_${newsId} not found in the DOM.`);
+                }
+            } else {
+                alert('Error: ' + (data.error || 'Failed to delete news item.'));
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error.message);
+        });
+    }
+}
+
+function saveNews(lineNo) {
+    const date = document.getElementById(`newsDate_${lineNo}`).value;
+    const summary = document.getElementById(`summary_${lineNo}`).value;
+    const link = document.getElementById(`link_${lineNo}`).value;
+
+    // Convert the date from DD-MM-YYYY to YYYY-MM-DD
+    const dateParts = date.split('-');
+    const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // Convert to YYYY-MM-DD
+
+    // Create a FormData object to send the updated data to the server
+    const formData = new FormData();
+    formData.append('newsDate', formattedDate); // Use the converted date
+    formData.append('summary', summary);
+    formData.append('link', link);
+    formData.append('line_no', lineNo); // Use the line number as the identifier
+
+    // Make the POST request to update the news
+    fetch(`/news/update/${lineNo}/`, { // You'll create a URL pattern for this view
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            // Handle HTTP errors
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json(); // Expecting a JSON response from the backend
+    })
+    .then(data => {
+        if (data.message) {
+            alert(data.message);
+            // Optionally, update the UI after successful save
+            document.getElementById(`save-news_${lineNo}`).style.display = 'none';
+            document.getElementById(`cancel-news_${lineNo}`).style.display = 'none';
+            document.getElementById(`edit-news_${lineNo}`).style.display = 'inline-block';
+            document.getElementById(`delete-news_${lineNo}`).style.display = 'inline-block';
+
+            // Disable the form fields after saving
+            document.getElementById(`newsDate_${lineNo}`).setAttribute('readonly', true);
+            document.getElementById(`summary_${lineNo}`).setAttribute('readonly', true);
+            document.getElementById(`link_${lineNo}`).setAttribute('readonly', true);
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
+    });
+}
+
+
+    </script>
+
+</body>
+
+</html>
+{% endblock content %}

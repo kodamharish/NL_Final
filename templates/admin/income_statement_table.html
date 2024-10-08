@@ -1,0 +1,1320 @@
+{% include 'admin/company_profile.html' %}
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    :root {
+        --row-height: 20px !important;
+        --font-size: 14px;
+        --first-column-width: 400px !important;
+        --indentation: 20px;
+        --double-indentation: 40px;
+        --triple-indentation: 60px;
+        --quad-indentation: 80px;
+        --column-width: 220px !important;
+    }
+
+    body {
+        
+        font-size: var(--font-size);
+        color: black;
+        overflow: hidden;
+        
+    }
+
+    .container {
+        margin-left: 245px;
+        max-width: 100%;
+        position: relative;
+        height: calc(100vh - 135px);
+        overflow-y: auto;
+        max-height: 100%;
+        margin-top: 25px !important;
+        font-family: 'Arial MT Rounded';
+    }
+
+    .content {
+        margin: 40px auto;
+        padding-top: 30px;
+        padding-left: 200px;
+    }
+
+    .table-wrapper {
+        position: relative;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: auto;
+        flex-grow:1;
+        max-width: 80% !important;
+        margin-right: 0px;
+        overflow-y: auto; /* Add vertical scrollbar */
+    scrollbar-width: none;  /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none; 
+    }
+    .table-wrapper::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, WebKit */
+}
+
+    table {
+        width: 100%;
+        table-layout: relative;
+        border-collapse: collapse;
+        font-family: 'Arial MT Rounded';
+        font-size: var(--font-size);
+        width: calc(var(--first-column-width) + 4 * var(--column-width));
+        /* coloumn-width:var(--column-width) !important; */
+        
+    }
+    th:first-child {
+        position: sticky;
+        left: 0;
+        background-color: white;
+        z-index: 3;
+        width: 350px !important;
+        text-align: left;
+    }
+
+        td:first-child, th:first-child {
+        width: var(--first-column-width); /* 350px fixed width */
+        white-space: nowrap; /* Prevent text wrap */
+        text-overflow: ellipsis; /* Ellipsis for overflow */
+    }
+
+    th, td {
+        vertical-align: middle;
+        text-align: right; 
+        padding: 12px;
+        height: var(--row-height);
+        font-size: var(--font-size);
+        line-height: 1.2;
+        overflow: hidden;
+        white-space: nowrap; /* Prevent text wrap */
+        text-overflow: ellipsis; /* Add ellipsis for overflow text */
+        transition: background-color 0.3s ease;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+       
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        text-align: center !important;
+    }
+
+    td:first-child {
+        position: sticky;
+        left: 0;
+        background-color: white;
+        z-index: 3;
+        width: 350px !important;
+        text-align: left;
+    }
+    .td{
+        text-align: right !important;
+    }
+
+
+    .table tbody tr:hover {
+        background-color: #f0f0f0;
+    }
+
+    .indent-level-1 td:first-child {
+        padding-left: var(--indentation) !important;
+    }
+
+    .indent-level-2 td:first-child {
+        padding-left: var(--double-indentation) !important;
+    }
+
+    .indent-level-3 td:first-child {
+        padding-left: var(--triple-indentation) !important;
+    }
+
+    .indent-level-4 td:first-child {
+        padding-left: var(--quad-indentation) !important;
+    }
+
+    .expandable-icon {
+        cursor: pointer;
+        margin-left: 5px;
+    }
+
+    .expandable-icon::before {
+        content: "\25B6";
+        display: inline-block;
+        transform: rotate(90deg);
+    }
+
+    .collapse.show .expandable-icon::before {
+        content: "\25BC";
+        transform: rotate(0deg);
+    }
+
+    .btn-plus {
+        /* font-size: 24px; */
+        color: #000000;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding-left: 0px;
+        margin-top: -18px;
+        font-weight: bold; 
+        margin-right: 35px;
+    }
+
+    .btn-plus:hover {
+        color: #0056b3;
+    }
+
+    tr.hidden {
+        display: none;
+    }
+
+    .table-container {
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: auto;
+        scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer and Edge */
+}
+
+.table-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, WebKit */
+}
+
+    /* Remove vertical lines inside the table */
+    table, th, td {
+        border-left: none;
+        border-right: none;
+    }
+
+    .editable input {
+        border: none;            /* Remove all borders */
+        border-bottom: 1px solid #000; /* Add only bottom border */
+        text-align: right;        /* Align text to the right */
+        background: transparent;  /* Make background transparent */
+        outline: none;            /* Remove focus outline */
+        padding: 0;
+        width: 100%;              /* Make input fields fill the cell */
+        box-shadow: none !important; /* Remove any default box shadow */
+        -webkit-box-shadow: none !important; /* For WebKit browsers */
+        -moz-box-shadow: none !important; /* For Mozilla-based browsers */
+        border-radius: 0px !important;
+    }
+
+    .editable input:focus {
+        outline: none;            /* Remove focus outline */
+        box-shadow: none !important; /* Remove any box shadow on focus */
+        -webkit-box-shadow: none !important; /* For WebKit browsers */
+        -moz-box-shadow: none !important; /* For Mozilla-based browsers */
+    }
+    .btn-success {
+        
+        color: green;
+        background-color: white;
+        padding-left: 0px;
+        margin-top: -18px;
+        font-weight: bold; 
+        margin-right: 50px;
+        outline: None !important;
+        border: none !important;
+        
+    }
+    .btn-success:hover {
+        
+        color: green;
+        background-color: white;
+        padding-left: 0px;
+        margin-top: -18px;
+        font-weight: bold; 
+        margin-right: 50px;
+        outline: None !important;
+        border: none !important;
+        margin-left: 20px;
+        
+    }
+     /* .saveButton btn btn-success::before{
+        background-color: white !important;
+        color: green !important;
+
+     } */
+     .table-card-wrapper {
+    display: flex;
+    justify-content: space-between; /* Ensure even space between table and card */
+    align-items: flex-start; /* Align the card and table at the top */
+    width: 80%; /* Make the wrapper take full width */
+}
+    .card{
+        /* flex:1; */
+        margin-left: -80px;
+        margin-right: -20px;
+        max-width: 20%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: none;  /* Hide scrollbar for Firefox */
+        -ms-overflow-style: none; 
+        max-height: 550px;
+        border-left: 1px solid black;
+        border-bottom: 0px;
+        border-right: 0px;
+        border-top: 0px;
+        border-radius: 0px;
+        width: 250px;
+        
+
+    }
+    .card::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, WebKit */
+}
+    .form-group{
+    padding-left: 0px;
+    margin-left: 0px;
+}
+.form-control{
+    border-bottom: 1px black solid;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-radius: 0px;
+}
+.card-title{
+    padding-bottom: 20px;
+    text-align: center;
+}
+.liquidity{
+    text-align: center;
+    color:black;
+}
+.label{
+    font-family: 'Arial MT Rounded';
+    font-size: 12px;
+    color: grey;
+    text-decoration: none;
+    
+}
+.lable-value{
+    font-family: 'Arial MT Rounded';
+    font-size: 16px;
+    text-decoration: bold;
+    margin-top: -8px;
+}
+.btn-group ms-3{
+    margin-left: 100px !important;
+}
+
+        .row h6 {
+        font-size: 18px /* Update font size for header */
+    }
+    .btn-custom {
+      background-color: transparent; /* Set background color */
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      display: flex;
+      align-items: center; /* Center the image and text vertically */
+      gap: -10px; /* Gap between image and text */
+      margin-top: -10px;
+      margin-left: -80px;
+    }.btn-custom img {
+      width: 35px;
+      height: 35px;
+    }
+
+    /* On hover, change background color */
+    /* .btn-custom:hover {
+      background-color: #0056b3;
+    } */
+     #plus{
+        margin-top: -10px;
+     }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="container mt-5">
+    {% for msg in messages %}
+    <p class="text-danger text-center mt-2 fw-bold" style="font-size: 1rem;">{{ msg }}</p>
+    {% endfor %}
+    <div class="row" style="align-items: center;">
+        <div class="col-md-6 d-flex align-items-center">
+            <h6 class="mb-6" style="color: black; font-size: 18px; white-space: nowrap;">
+                Corporate Finance -Planning & Budgeting - <b>Income Statement</b>
+            </h6>
+            
+            
+            <div class="btn-group ms-3" >
+                <button class="btn btn-primary">Monthly</button>
+                <button class="btn btn-primary">Quarterly</button>
+                <button class="btn btn-primary">Annually</button>
+            </div>
+        </div>
+
+       
+        <div class="col-md-4 text-end d-flex justify-content-end align-items-center">
+            
+            <a href="#" class="btn btn-custom" id="plus" data-bs-toggle="modal" data-bs-target="#balance_sheet"><img src="{% static 'images/add.png' %}"></a>
+            <button id="editButton" class="btn btn-custom "style="position: relative; left: -80px;"><img src="{% static 'images/edit.png' %}"></button>
+            <button id="saveButton" class="btn btn-custom  d-none" style="position: relative; left: -80px;"> <img src="{% static 'images/save.png' %}"></button>
+            <!-- The Modal -->
+            <div class="modal" id="balance_sheet">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title"></h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body text-center">
+                            <form method="POST" action="#" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="inline">
+                                    <div style="margin-right:15px;">
+                                        <input type="radio" class="form-check-input" id="monthly"
+                                            name="select_type_of_data" value="monthly">
+                                        <label class="form-check-label" for="monthly">Monthly</label>
+                                    </div>
+                                    <div style="margin-right:15px;">
+                                        <input type="radio" class="form-check-input" id="quarterly"
+                                            name="select_type_of_data" value="quarterly">
+                                        <label class="form-check-label" for="quarterly">Quarterly</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" class="form-check-input" id="yearly"
+                                            name="select_type_of_data" value="yearly">
+                                        <label class="form-check-label" for="yearly">Yearly</label>
+                                    </div>
+                                </div>
+                                <div id="dropdown-container" class="mt-3"></div>
+                                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                            </form>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-container mt-1">
+        <div class="table-card-wrapper">
+        <div class="table-wrapper">
+            <table class="cell">
+                <thead>
+                    <tr>
+                        <th class="rowview">Breakdown</th>
+                        {% for income_statement in income_statements %}
+                        <th class="rowview1">{{income_statement.end_date|date:'d-m-Y'}}
+                            <span class="period-type" style="display: none;">{{ income_statement.monthly_or_quarterly_or_yearly }}</span>
+                           </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Total Assets Section -->
+                    <tr>
+                        <td>Total Revenue <span class="expandable-icon" onclick="toggle(this, '#MS01a');"></span></td>
+                        {% for income_statement in income_statements %}
+                        <td class="total_revenue" id="total_assets-{{ forloop.counter }}" data-field-name="total_revenue" >{{income_statement.total_revenue}}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01a" class="hidden indent-level-1">
+                        <td>Operating Revenue <span onclick="toggle(this, '#MS01b');"></span></td>
+                        {% for income_statement in income_statements %}
+                        <td class="editable operating_revenue" id="operating_revenue-{{ forloop.counter }}" data-field-name="operating_revenue"  oninput="calculateincomestatement()">{{ income_statement.operating_revenue }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01a" class="hidden indent-level-1">
+                        <td>Other Income/(Expense) <span class="expandable-icon" onclick="toggle(this, '#LI02a');"></span></td>
+                        {% for income_statement in income_statements %}
+                        <td class="other_income" id="other_income-{{ forloop.counter }}" data-field-name="other_income_or_expense" >{{ income_statement.other_income_or_expense }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI02a" class="hidden indent-level-2">
+                        <td>Gain/(Loss) on Sale of Security <span></span></td>
+                        {% for income_statement in income_statements %}
+                        <td class=" editable gain_loss" id="gain_loss-{{ forloop.counter }}" data-field-name="gain_or_loss_on_sale_of_security"  oninput="calculateincomestatement()">{{ income_statement.gain_or_loss_on_sale_of_security }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI02a" class="hidden indent-level-2">
+                        <td>Special Income/(Charges)</td>
+                        {% for income_statement in income_statements %}
+                        <td class="editable special_income" id="special_income-{{ forloop.counter }}" data-field-name="special_income"  oninput="calculateincomestatement()">{{ income_statement.special_income_or_charges }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI02a" class="hidden indent-level-2">
+                        <td>Write Off</td>
+                        {% for income_statement in income_statements %}
+                        <td class="editable write_off" id="write_off-{{ forloop.counter }}" data-field-name="write_off"  oninput="calculateincomestatement()">{{ income_statement.write_off }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI02a" class="hidden indent-level-2">
+                        <td>Other Non Operating Income/ (Expenses)</td>
+                        {% for income_statement in income_statements %}
+                        <td class="editable non_operating_income" id="non_operating_income-{{ forloop.counter }}"  data-field-name="other_non_operating_income_or_expenses" oninput="calculateincomestatement()">{{ income_statement.other_non_operating_income_or_expenses }}</td>
+                        {% endfor %}
+                    </tr>
+                        <tr>
+                        <td>Cost of Revenue <span></span></td>
+                        {% for income_statement in income_statements %}
+                        <td class="editable cost_of_revenue" id="cost_of_revenue-{{ forloop.counter }}" data-field-name="cost_of_revenue"  oninput="calculateincomestatement()">{{income_statement.cost_of_revenue}}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                    <td>Gross Profit <span></span></td>
+                    {% for income_statement in income_statements %}
+                    <td class="gross_profit" id="gross_profit-{{ forloop.counter }}" data-field-name="gross_profit" >{{income_statement.gross_profit}}</td>
+                    {% endfor %}
+                </tr>
+
+                        <tr>
+                        <td>Operating Expense <span class="expandable-icon" onclick="toggle(this, '#LI01');"></span></td>
+                        {% for income_statement in income_statements %}
+                        <td class=" total_non_current_assets_column" data-field-name="operating_expense"  id="total_non_current_assets-{{ forloop.counter }}" oninput="calculateincomestatement()">{{ income_statement.operating_expense }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <tr id="LI01" class="hidden indent-level-1">
+                        <td>Selling, General and Administrative Expense <span class="expandable-icon" onclick="toggle(this, '#LI011a');"></span></td>
+                        {% for income_statement in income_statements %}
+                        <td class=" net_ppe_column" id="net_ppe-{{ forloop.counter }}" data-field-name="selling_general_and_administrative_expense" >{{ income_statement.selling_general_and_administrative_expense }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI011a" class="hidden indent-level-2">
+                        <td>General & Administrative Expenses <span></span></td>
+                        {% for income_statement in income_statements %}
+                        <td class="editable general_administrative" id="general_administrative-{{ forloop.counter }}" data-field-name="general_and_administrative_expenses"   oninput="calculateincomestatement()">{{ income_statement.general_and_administrative_expenses }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI011a" class="hidden indent-level-2">
+                        <td>Selling and Marketing Expense <span span></td>
+                        {% for income_statement in income_statements %}
+                        <td class="editable selling_markting" id="selling_markting-{{ forloop.counter }}" data-field-name="selling_and_marketing_expense"  oninput="calculateincomestatement()">{{ income_statement.selling_and_marketing_expense }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI01" class="hidden indent-level-1">
+                        <td>Research & Development <span></span></td>
+                        {% for income_statement in income_statements %}
+                        <td class=" editable research" id="research-{{ forloop.counter }}" data-field-name="research_and_development_expense"  oninput="calculateincomestatement()">{{ income_statement.research_and_development_expense }}</td>
+                        {% endfor %}
+                    </tr>
+                   
+
+                    <!-- Total Liabilities Net Minority Interest -->
+                    <tr>
+                        <td>Operating Income <span class="expandable-icon" onclick="toggle(this, '#LI01a');"></span></td>
+                        {% for income_statement in income_statements %}
+                        <td class="operating_income" id="operating_income-{{ forloop.counter }}" data-field-name="operating_income"  oninput="calculateincomestatement()">{{ income_statement.operating_income }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI01a" class="hidden indent-level-1">
+                        <td>Net Non Operating Interest Income/ (Expense) <span class="expandable-icon" onclick="toggle(this, '#LI01b');"></span></td>
+                        {% for income_statement in income_statements %}
+                        <td class=" current-liabilities-column" id="current-liabilities-{{ forloop.counter }}" data-field-name="net_non_operating_interest_income_expense"  oninput="calculateincomestatement()">{{ income_statement.net_non_operating_interest_income_expense }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI01b" class="hidden indent-level-2">
+                        <td>Interest Income Non Operating <span></span></td>
+                        {% for income_statement in income_statements %}
+                        <td class="editable  income_non_operating" id="income_non_operatingenses-{{ forloop.counter }}" data-field-name="interest_income_non_operating"  oninput="calculateincomestatement()">{{ income_statement.interest_income_non_operating }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI01b" class="hidden indent-level-2">
+                        <td>Interest Expense Non Operating</td>
+                        {% for income_statement in income_statements %}
+                        <td class="editable expense_non_operating" id="expense_non_operating-{{ forloop.counter }}" data-field-name="interest_expense_non_operating"  oninput="calculateincomestatement()">{{ income_statement.interest_expense_non_operating }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Total Non-Current Liabilities Net Minority Interest -->
+                    
+                    <tr>
+                        <td>Pretax Income</td>
+                        {% for income_statement in income_statements %}
+                            <td class="pertax_income" id="pertax_income-{{ forloop.counter }}"  data-field-name="pretax_income">{{income_statement.pretax_income}}</td>
+                            {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Tax Provision</td>
+                        {% for income_statement in income_statements %}
+                        <td class="editable tax_provision" id="tax_provision-{{ forloop.counter }}"  data-field-name="tax_provision" oninput="calculateincomestatement()">{{ income_statement.other_non_operating_income_or_expenses }}</td>
+            
+                            {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Net Income</td>
+                        {% for income_statement in income_statements %}
+                            <td class="net_income" id="net_income-{{ forloop.counter }}"  data-field-name="net_income">{{income_statement.net_income}}</td>
+                            {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Preference Share Dividends</td>
+                        {% for income_statement in income_statements %}
+                            <td class="editable share_dividends" id="share_dividends-{{ forloop.counter }}"  data-field-name="preference_share_dividends" oninput="calculateincomestatement()">{{income_statement.preference_share_dividends}}</td>
+                            {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Net Income to CSH...</td>
+                        {% for income_statement in income_statements %}
+                            <td class="common_stock_holders" id="common_stock_holders-{{ forloop.counter }}"  data-field-name="net_income_to_common_stockholders">{{income_statement.net_income_to_common_stockholders}}</td>
+                            {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Equity Share Dividends</td>
+                        {% for income_statement in income_statements %}
+                            <td class="editable equity" id="equity-{{ forloop.counter }}"  data-field-name="equity_share_dividends" oninput="calculateincomestatement()">{{income_statement.equity_share_dividends}}</td>
+                            
+                            {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Retained Earnings</td>
+                        {% for income_statement in income_statements %}
+                            <td class="retained_earnings" id="retained_earnings-{{ forloop.counter }}"  data-field-name="retained_earnings">{{income_statement.retained_earnings}}</td>
+                            {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Basic EPS</td>
+                        {% for income_statement in income_statements %}
+                            <td class="basic_eps" id="basic_eps-{{ forloop.counter }}"  data-field-name="basic_eps">{{income_statement.basic_eps}}</td>
+                            {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Diluted EPS</td>
+                        {% for income_statement in income_statements %}
+                            <td class="editable diluted_eps" id="diluted_eps-{{ forloop.counter }}"  data-field-name="diluted_eps" oninput="calculateincomestatement()">{{income_statement.diluted_eps}}</td>
+                            {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Depreciation and Amortization</td>
+                        {% for income_statement in income_statements %}
+                            <td class="editable depreciation" id="depreciation-{{ forloop.counter }}"  data-field-name="depreciation_and_amortization" oninput="calculateincomestatement()">{{income_statement.depreciation_and_amortization}}</td>
+                            {% endfor %}
+                    </tr>
+                    <td>No Of Equity Shares</td>
+                        {% for income_statement in income_statements %}
+                            <td class="editable equity_shares" id="equity_shares-{{ forloop.counter }}"  data-field-name="no_of_equity_shares" oninput="calculateincomestatement()">{{income_statement.no_of_equity_shares}}</td>
+                            {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>EBITDA</td>
+                        {% for income_statement in income_statements %}
+                            <td  class="ebitda" id="ebitda-{{ forloop.counter }}"  data-field-name="ebitda">{{income_statement.ebitda}}</td>
+                            {% endfor %}
+                    </tr>
+                    
+
+                   
+                </tbody>
+            </table>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row"  style="margin-top: -20px; text-align: end; color: grey;"><p>Currency in INR</p></div>
+                <h5 class="card-title">Ratios</h5>
+                <div class="form-group">
+                    <div class="row align-items-center" style="margin-bottom: 10px;">
+                        <div class="col-md-6" style="text-align: right; ">
+                            <label for="period">Select Period</label>
+                        </div>
+                        <div class="col-md-6">
+                            <select id="period" class="form-control">
+                                <option value="" disabled selected>Choose Period</option>
+                                {% for income_statement in income_statements %}
+                                    <option value="{{ income_statement.id }}">{{ income_statement.end_date|date:'d-m-Y' }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+        
+                <h6 class="liquidity">Liquidity Ratios</h6>
+                <div class="info-block">
+                    <label for="gross_profit_ratio" class="label"> Gross profit ratio</label>
+                    <p id="gross_profit_ratio" class="lable-value"></p>
+                </div>
+                <div class="info-block">
+                    <label for="operating_profit_ratio" class="label">Operating profit ratio </label>
+                    <p id="operating_profit_ratio" class="lable-value"></p>
+                </div>
+                <div class="info-block">
+                    <label for="ebitda_margin" class="label">EBITDA Margin</label>
+                    <p id="ebitda_margin" class="lable-value"></p>
+                </div>
+                <div class="info-block">
+                    <label for="net_profit_margin" class="label">Net profit margin</label>
+                    <p id="net_profit_margin" class="lable-value"></p>
+                </div>
+                <div class="info-block">
+                    <label for="earning_per_share" class="label">Earnings per share</label>
+                    <p id="earnings_per_share" class="lable-value"></p> 
+                </div>
+                <div class="info-block">
+                    <label for="interest_ratio" class="label">Interest Service Coverage Ratio </label>
+                    <p id="interest_ratio" class="lable-value"></p>
+                </div>
+        
+        
+                <h6 class="liquidity">Activity Ratios</h6>
+                <div class="info-block">
+                    <label for="operating_cash_flow_ratio" class="label">Operating Cash Flow Ratio</label>
+                    <p id="operating_cash_flow_ratio" class="lable-value"></p>
+                </div>
+                <div class="info-block">
+                    <label for="debt_service_coverage_ratio" class="label">Debt Service Coverage Ratio</label>
+                    <p id="debt_service_coverage_ratio" class="lable-value"></p>
+
+                </div>
+            </div>
+        </div>
+        
+</div>
+</div>
+
+<script>
+    function toggle(button, targetId) {
+        var targetRows = document.querySelectorAll(targetId);
+        var isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+        button.setAttribute('aria-expanded', !isExpanded);
+        targetRows.forEach(row => {
+            if (isExpanded) {
+                row.classList.add('hidden');
+            } else {
+                row.classList.remove('hidden');
+            }
+        });
+    }
+
+    // Collapse all by default when the page is loaded
+    window.onload = function() {
+        document.querySelectorAll('.expandable-icon').forEach(icon => {
+            icon.setAttribute('aria-expanded', 'false');
+            var targetId = icon.getAttribute('onclick').split("'")[1];
+            document.querySelectorAll(targetId).forEach(row => row.classList.add('hidden'));
+        });
+    }
+     // Embed the Python-generated JSON data into JavaScript variables
+     const months = JSON.parse('{{ months_json|escapejs }}');
+    const quarters = JSON.parse('{{ quarters_json|escapejs }}');
+    const years = JSON.parse('{{ years_json|escapejs }}');
+
+    // JavaScript to handle dropdown options based on selected radio button
+    const radioButtons = document.querySelectorAll('input[name="select_type_of_data"]');
+    const dropdownContainer = document.getElementById('dropdown-container');
+
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', function () {
+            dropdownContainer.innerHTML = ''; // Clear the container
+
+            if (this.value === 'yearly') {
+                // Create Year Dropdown
+                const yearWrapper = document.createElement('div');
+                yearWrapper.classList.add('inline-container');
+
+                const yearLabel = document.createElement('label');
+                yearLabel.setAttribute('for', 'year-select');
+                yearLabel.textContent = 'Select Year:';
+
+                const yearSelect = document.createElement('select');
+                yearSelect.name = 'year';
+                yearSelect.id = 'year-select';
+                yearSelect.classList.add('form-select');
+                createOptions(years, yearSelect);
+
+                yearWrapper.appendChild(yearLabel); // Add the year label to the wrapper
+                yearWrapper.appendChild(yearSelect); // Add the year dropdown to the wrapper
+                dropdownContainer.appendChild(yearWrapper); // Add the year wrapper to the container
+
+            } else {
+                // Create Year Dropdown
+                const yearWrapper = document.createElement('div');
+                yearWrapper.classList.add('inline-container');
+
+                const yearLabel = document.createElement('label');
+                yearLabel.setAttribute('for', 'year-select');
+                yearLabel.textContent = 'Select Year:';
+
+                const yearSelect = document.createElement('select');
+                yearSelect.name = 'year';
+                yearSelect.id = 'year-select';
+                yearSelect.classList.add('form-select');
+                createOptions(years, yearSelect);
+
+                yearWrapper.appendChild(yearLabel); // Add the year label to the wrapper
+                yearWrapper.appendChild(yearSelect); // Add the year dropdown to the wrapper
+                dropdownContainer.appendChild(yearWrapper); // Add the year wrapper to the container
+
+                // Create Month/Quarter Dropdown
+                const mainWrapper = document.createElement('div');
+                mainWrapper.classList.add('inline-container');
+
+                const mainLabel = document.createElement('label');
+                mainLabel.setAttribute('for', 'main-select');
+
+                const mainSelect = document.createElement('select');
+
+                mainSelect.id = 'main-select';
+                mainSelect.classList.add('form-select');
+
+                if (this.value === 'monthly') {
+                    mainLabel.textContent = 'Select Month:';
+                    mainSelect.name = 'month';
+                    createOptions(months, mainSelect);
+                } else if (this.value === 'quarterly') {
+                    // Convert quarters object to an array of strings in the format "Q1 Jan,Feb,Mar"
+                    const quartersArray = Object.entries(quarters).map(([key, value]) => `${key} ${value}`);
+                    mainLabel.textContent = 'Select Quarter:';
+                    mainSelect.name = 'quarter';
+
+                    createOptions(quartersArray, mainSelect);
+                }
+
+                mainWrapper.appendChild(mainLabel); // Add the main label to the wrapper
+                mainWrapper.appendChild(mainSelect); // Add the main dropdown to the wrapper
+                dropdownContainer.appendChild(mainWrapper); // Add the main wrapper to the container
+            }
+        });
+    });
+
+    function createOptions(options, selectElement) {
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.textContent = option;
+            selectElement.appendChild(opt);
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+    setupInitialTableView();
+    setupEditAndSaveButtons();
+    setupPeriodFilter();
+});
+
+function setupInitialTableView() {
+    document.querySelectorAll('.expandable-icon').forEach(icon => {
+        const targetId = icon.getAttribute('onclick').split("'")[1];
+        document.querySelectorAll(targetId).forEach(row => row.classList.add('hidden'));
+    });
+
+    filterTable('monthly'); 
+}
+
+function setupEditAndSaveButtons() {
+    const editButton = document.getElementById('editButton');
+    const saveButton = document.getElementById('saveButton');
+
+    editButton.addEventListener('click', function () {
+        toggleEditMode(true);
+    });
+
+    saveButton.addEventListener('click', function () {
+        const columnData = collectEditedColumnData();
+        if (columnData.length === 0) {
+            alert('No changes detected.');
+        } else {
+            sendEditedData(columnData);
+        }
+    });
+}
+
+function toggleEditMode(isEditing) {
+    document.getElementById('editButton').classList.toggle('d-none', isEditing);
+    document.getElementById('saveButton').classList.toggle('d-none', !isEditing);
+
+    document.querySelectorAll('.editable').forEach(cell => {
+        if (isEditing) {
+            const value = cell.innerText.trim();
+            cell.innerHTML = `<input type="number" class="form-control" value="${value}" data-initial-value="${value}" />`;
+            const input = cell.querySelector('input');
+            input.addEventListener('input', () => handleInputChange(cell));
+        } else {
+            const input = cell.querySelector('input');
+            if (input) {
+                cell.innerText = input.value; // Assign the updated value back to the cell
+            }
+        }
+    });
+}
+let editedColumns = new Set(); // Keep track of edited columns
+
+// Handle input changes and detect which columns have changed
+function handleInputChange(cell) {
+    const input = cell.querySelector('input');
+    if (input) {
+        const initialValue = input.getAttribute('data-initial-value');
+        const currentValue = input.value.trim();
+        const columnIndex = cell.cellIndex;
+
+        if (initialValue !== currentValue) {
+            editedColumns.add(columnIndex); // Track edited columns by index
+        }
+    }
+}
+
+// Collect the data for all edited columns
+function collectEditedColumnData() {
+    const editedData = [];
+    editedColumns.forEach(columnIndex => {
+        const columnValues = collectColumnValues(columnIndex);
+        if (columnValues) {
+            editedData.push(columnValues); 
+        }
+    });
+
+    return editedData;
+}
+function collectColumnValues(columnIndex) {
+    const cells = document.querySelectorAll(`tbody td:nth-child(${columnIndex + 1})`);
+    const columnValues = [];
+    cells.forEach((cell, rowIndex) => {
+        const input = cell.querySelector('input');
+        const value = input ? input.value.trim() : cell.innerText.trim();
+        const fieldName = cell.dataset.fieldName || '';
+        const rowId = cell.closest('tr').dataset.rowId;
+
+        columnValues.push({
+            fieldName,
+            value,
+            rowId  
+        });
+    });
+    const endDate = getEndDate(columnIndex);
+    const periodType = getPeriodType(columnIndex);
+    columnValues.push({
+        endDate,
+        periodType
+    });
+    return { columnIndex, values: columnValues };
+}
+function getEndDate(columnIndex) {
+    const endDateElement = document.querySelector(`th.rowview1:nth-child(${columnIndex + 1})`);
+    return endDateElement ? endDateElement.innerText.trim() : 'undefined';
+}
+function getPeriodType(columnIndex) {
+    const periodTypeElement = document.querySelector(`th.rowview1:nth-child(${columnIndex + 1}) .period-type`);
+    return periodTypeElement ? periodTypeElement.innerText.trim() : 'undefined';
+}
+function sendEditedData(editedData) {
+    const jsonData = JSON.stringify({ editedData });
+
+    // Make the request to the Django backend
+    fetch('{% url "save_edited_data_income" company.company_id %}', {  // Replace "your_save_url" with the actual Django URL name
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: jsonData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        alert('Data saved successfully!');
+        toggleEditMode(false);
+        editedColumns.clear(); // Clear the set after saving
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to save data.');
+    });
+}
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const periodSelect = document.getElementById('period');
+
+    periodSelect.addEventListener('change', function() {
+        const selectedPeriodId = this.value;
+        console.log(selectedPeriodId);
+
+        // Assuming balancesheetratios_json is correctly passed and formatted
+        const balancesheetRatios = JSON.parse('{{ balancesheetratios_json|escapejs }}');
+
+        const selectedRatios = balancesheetRatios.find(ratio => ratio.incomesheet_id === parseInt(selectedPeriodId));
+        console.log(selectedRatios)
+        if (selectedRatios) {
+                document.getElementById('gross_profit_ratio').textContent = selectedRatios.gross_profit_ratio !== null ? selectedRatios.gross_profit_ratio : 'N/A';
+    document.getElementById('operating_profit_ratio').textContent = selectedRatios.operating_profit_ratio !== null ? selectedRatios.operating_profit_ratio : 'N/A';
+    document.getElementById('ebitda_margin').textContent = selectedRatios.ebitda_margin !== null ? selectedRatios.ebitda_margin : 'N/A';
+    document.getElementById('net_profit_margin').textContent = selectedRatios.net_profit_margin !== null ? selectedRatios.net_profit_margin : 'N/A';
+    document.getElementById('earnings_per_share').textContent = selectedRatios.earnings_per_share !== null ? selectedRatios.earnings_per_share : 'N/A';
+    document.getElementById('interest_ratio').textContent = selectedRatios.interest_service !== null ? selectedRatios.interest_service : 'N/A';
+    document.getElementById('operating_cash_flow_ratio').textContent = selectedRatios.operating_cash_flow_ratio !== null ? selectedRatios.operating_cash_flow_ratio : 'N/A';
+    document.getElementById('debt_service_coverage_ratio').textContent = selectedRatios.debt_service_coverage_ratio !== null ? selectedRatios.debt_service_coverage_ratio : 'N/A';
+
+        } else {
+            const ratioIds = ['gross_profit_ratio', 'operating_profit_ratio', 'ebitda_margin', 'net_profit_margin', 'earnings_per_share', 'interest_ratio', 'operating_cash_flow_ratio', 'debt_service_coverage_ratio'];
+            ratioIds.forEach(id => document.getElementById(id).textContent = 'N/A');
+        }
+    });
+});
+
+function calculateincomestatement() {
+    calculategrossProfit();
+    calculatetotalrevenue();
+    calculateSGA();
+    calculateOperatingExpense();
+    calculateOperatingIncome();
+    calculateNetNonOperatingInterestIncomeExpense();
+    calculateOtherIncomeExpense();
+    calculatePretaxIncome();
+    calculateNetIncome();
+    calculateNetIncometocsh();
+    retainedearnings();
+    calculateBasicEPS();
+    calculateEBITDA();
+}
+function calculateEBITDA() {
+    setTimeout(() => {
+    // Get all necessary columns (Operating Income, Depreciation and Amortization, and EBITDA)
+    const operatingIncomeColumns = document.querySelectorAll('.operating_income'); // Operating Income column
+    const depreciationColumns = document.querySelectorAll('.depreciation'); // Depreciation and Amortization column
+    const ebitdaColumns = document.querySelectorAll('.ebitda'); // EBITDA column
+
+    // Loop through each row to calculate EBITDA
+    operatingIncomeColumns.forEach((operatingIncomeCell, index) => {
+        const operatingIncome = getCellValue(operatingIncomeCell); // Get Operating Income value
+        const depreciation = getCellValue(depreciationColumns[index]); // Get Depreciation and Amortization value
+
+        const ebitda = operatingIncome + depreciation; // Calculate EBITDA
+
+        // Update the corresponding EBITDA cell
+        updateCellValue(`ebitda-${index + 1}`, ebitda); // Update cell with ID 'ebitda-1', 'ebitda-2', etc.
+    });
+}, 0);
+}
+
+
+function retainedearnings() {
+    setTimeout(() => {
+    // Get all necessary columns (Pretax Income, Tax Provision, and Net Income)
+    const netincomecshcolumns = document.querySelectorAll('.common_stock_holders'); // Pretax Income column
+    const equitycolumns = document.querySelectorAll('.equity'); // Tax Provision column
+    const retainedColumns = document.querySelectorAll('.retained_earnings'); // Net Income column
+
+    // Loop through each row to calculate Net Income
+    netincomecshcolumns.forEach((    netincomecshCell, index) => {
+        const netincomecsh = getCellValue(netincomecshCell); // Get Pretax Income value
+        const equity = getCellValue(equitycolumns[index]); // Get Tax Provision value
+
+        const retained = netincomecsh - equity; // Calculate Net Income
+
+        // Update the corresponding Net Income cell
+        updateCellValue(`retained_earnings-${index + 1}`, retained); // Update cell with ID 'net_income-1', 'net_income-2', etc.
+    });
+}, 0);
+}
+
+function calculateBasicEPS() {
+    setTimeout(() => {
+    // Get all necessary columns (Net Income to Common Stockholders, Number of Equity Shares, and Basic EPS)
+    const netIncomeColumns = document.querySelectorAll('.common_stock_holders'); // Net Income to Common Stockholders column
+    const equitySharesColumns = document.querySelectorAll('.equity_shares'); // Number of Equity Shares column
+    const basicEPSColumns = document.querySelectorAll('.basic_eps'); // Basic EPS column
+
+    // Loop through each row to calculate Basic EPS
+    netIncomeColumns.forEach((netIncomeCell, index) => {
+        const netIncome = getCellValue(netIncomeCell); // Get Net Income to Common Stockholders value
+        const equityShares = getCellValue(equitySharesColumns[index]); // Get Number of Equity Shares value
+        console.log(equityShares, netIncome)
+        const basicEPS = equityShares ? (netIncome / equityShares) : 0; // Calculate Basic EPS (prevent division by zero)
+
+        // Update the corresponding Basic EPS cell
+        updateCellValue(`basic_eps-${index + 1}`, basicEPS); // Update cell with ID 'basic_eps-1', 'basic_eps-2', etc.
+    });
+}, 0);
+}
+
+function calculateNetIncometocsh() {
+    setTimeout(() => {
+    // Get all necessary columns (Pretax Income, Tax Provision, and Net Income)
+    const netincomecolumns = document.querySelectorAll('.net_income'); // Pretax Income column
+    const sharecolumns = document.querySelectorAll('.share_dividends'); // Tax Provision column
+    const netIncomeColumns = document.querySelectorAll('.common_stock_holders'); // Net Income column
+
+    // Loop through each row to calculate Net Income
+    netincomecolumns.forEach((    netincomeCell, index) => {
+        const netincome = getCellValue(netincomeCell); // Get Pretax Income value
+        const shares = getCellValue(sharecolumns[index]); // Get Tax Provision value
+
+        const netIncome = netincome - shares; // Calculate Net Income
+
+        // Update the corresponding Net Income cell
+        updateCellValue(`common_stock_holders-${index + 1}`, netIncome); // Update cell with ID 'net_income-1', 'net_income-2', etc.
+    });
+}, 0);
+}
+
+
+
+function calculateNetIncome() {
+    setTimeout(() => {
+    // Get all necessary columns (Pretax Income, Tax Provision, and Net Income)
+    const pretaxIncomeColumns = document.querySelectorAll('.pertax_income'); // Pretax Income column
+    const taxProvisionColumns = document.querySelectorAll('.tax_provision'); // Tax Provision column
+    const netIncomeColumns = document.querySelectorAll('.net_income'); // Net Income column
+
+    // Loop through each row to calculate Net Income
+    pretaxIncomeColumns.forEach((pretaxIncomeCell, index) => {
+        const pretaxIncome = getCellValue(pretaxIncomeCell); // Get Pretax Income value
+        const taxProvision = getCellValue(taxProvisionColumns[index]); // Get Tax Provision value
+
+        const netIncome = pretaxIncome - taxProvision; // Calculate Net Income
+
+        // Update the corresponding Net Income cell
+        updateCellValue(`net_income-${index + 1}`, netIncome); // Update cell with ID 'net_income-1', 'net_income-2', etc.
+    });
+}, 0);
+}
+
+function calculatePretaxIncome() {
+    setTimeout(() => {
+    // Get all necessary columns (Operating Income, Net Non Operating Interest Income/ (Expense), and Pretax Income)
+    const operatingIncomeColumns = document.querySelectorAll('.operating_income'); // Operating Income column
+    const netNonOperatingInterestColumns = document.querySelectorAll('.current-liabilities-column'); // Net Non Operating Interest Income/ (Expense) column
+    const pretaxIncomeColumns = document.querySelectorAll('.pertax_income'); // Pretax Income column
+
+    // Loop through each row to calculate Pretax Income
+    operatingIncomeColumns.forEach((operatingIncomeCell, index) => {
+        const operatingIncome = getCellValue(operatingIncomeCell); // Get Operating Income value
+        const netNonOperatingInterest = getCellValue(netNonOperatingInterestColumns[index]); // Get Net Non Operating Interest Income/ (Expense) value
+
+        const pretaxIncome = operatingIncome + netNonOperatingInterest; // Calculate Pretax Income
+
+        // Update the corresponding Pretax Income cell
+        updateCellValue(`pertax_income-${index + 1}`, pretaxIncome); // Update cell with ID 'pertax_income-1', 'pertax_income-2', etc.
+    });
+}, 0);
+}
+function calculateOtherIncomeExpense() {
+    setTimeout(() => {
+    // Get all necessary columns (Gain/Loss on Sale of Security, Special Income/Charges, Write Off, Other Non Operating Income/Expenses, and Other Income/Expense)
+    const gainLossColumns = document.querySelectorAll('.gain_loss'); // Gain/Loss on Sale of Security column
+    const specialIncomeColumns = document.querySelectorAll('.special_income'); // Special Income/Charges column
+    const writeOffColumns = document.querySelectorAll('.write_off'); // Write Off column
+    const nonOperatingIncomeColumns = document.querySelectorAll('.non_operating_income'); // Other Non Operating Income/Expenses column
+    const otherIncomeExpenseColumns = document.querySelectorAll('.other_income'); // Other Income/Expense column
+
+    // Loop through each row to calculate Other Income/Expense
+    gainLossColumns.forEach((gainLossCell, index) => {
+        const gainLoss = getCellValue(gainLossCell); // Get Gain/Loss on Sale of Security value
+        const specialIncome = getCellValue(specialIncomeColumns[index]); // Get Special Income/Charges value
+        const writeOff = getCellValue(writeOffColumns[index]); // Get Write Off value
+        const nonOperatingIncome = getCellValue(nonOperatingIncomeColumns[index]); // Get Other Non Operating Income/Expenses value
+
+        const otherIncomeExpense = gainLoss + specialIncome + writeOff + nonOperatingIncome; // Calculate Other Income/Expense
+
+        // Update the corresponding Other Income/Expense cell
+        updateCellValue(`other_income-${index + 1}`, otherIncomeExpense); // Update cell with ID 'other_income-1', 'other_income-2', etc.
+    });
+}, 0);
+}
+function calculateNetNonOperatingInterestIncomeExpense() {
+    setTimeout(() => {
+    // Get all necessary columns (Interest Income Non Operating, Interest Expense Non Operating, and Net Non Operating Interest Income/Expense)
+    const interestIncomeColumns = document.querySelectorAll('.income_non_operating'); // Interest Income Non Operating column
+    const interestExpenseColumns = document.querySelectorAll('.expense_non_operating'); // Interest Expense Non Operating column
+    const netNonOperatingInterestColumns = document.querySelectorAll('.current-liabilities-column'); // Net Non Operating Interest Income/Expense column
+
+    // Loop through each row to calculate Net Non Operating Interest Income/Expense
+    interestIncomeColumns.forEach((incomeCell, index) => {
+        const interestIncome = getCellValue(incomeCell); // Get Interest Income Non Operating value
+        const interestExpense = getCellValue(interestExpenseColumns[index]); // Get Interest Expense Non Operating value
+
+        const netNonOperatingInterest = interestIncome - interestExpense; // Calculate Net Non Operating Interest Income/Expense
+
+        // Update the corresponding Net Non Operating Interest Income/Expense cell
+        updateCellValue(`current-liabilities-${index + 1}`, netNonOperatingInterest); // Update cell with ID 'current-liabilities-1', 'current-liabilities-2', etc.
+    });
+}, 0);
+}
+
+
+function calculateOperatingIncome() {
+    setTimeout(() => {
+    // Get all necessary columns (Gross Profit, Operating Expense, and Operating Income)
+    const grossProfitColumns = document.querySelectorAll('.gross_profit'); // Gross Profit column
+    const operatingExpenseColumns = document.querySelectorAll('.total_non_current_assets_column'); // Operating Expense column
+    const operatingIncomeColumns = document.querySelectorAll('.operating_income'); // Operating Income column
+
+    // Loop through each row to calculate Operating Income
+    grossProfitColumns.forEach((grossProfitCell, index) => {
+        const grossProfit = getCellValue(grossProfitCell); // Get Gross Profit value
+        const operatingExpense = getCellValue(operatingExpenseColumns[index]); // Get Operating Expense value
+
+        const operatingIncome = grossProfit - operatingExpense; // Calculate Operating Income
+
+        // Update the corresponding Operating Income cell
+        updateCellValue(`operating_income-${index + 1}`, operatingIncome); // Operating Income cell ID: 'operating_income-1', 'operating_income-2', etc.
+    });
+}, 0); 
+}
+
+function calculateOperatingExpense() {
+    setTimeout(() => {
+    // Get all necessary columns (SG&A Expense, R&D Expense, and Operating Expense)
+    const sgaColumns = document.querySelectorAll('.net_ppe_column'); // Selling, General and Administrative Expense column
+    const researchColumns = document.querySelectorAll('.research'); // Research & Development Expense column
+    const operatingExpenseColumns = document.querySelectorAll('.total_non_current_assets_column'); // Operating Expense column
+
+    // Loop through each row to calculate Operating Expense
+    sgaColumns.forEach((sgaCell, index) => {
+        const sgaExpense = getCellValue(sgaCell); // Get SG&A value
+        const researchExpense = getCellValue(researchColumns[index]); // Get Research & Development value
+
+        const operatingExpense = sgaExpense + researchExpense; // Calculate Operating Expense
+
+        // Update the corresponding Operating Expense cell
+        updateCellValue(`total_non_current_assets-${index + 1}`, operatingExpense); // Operating Expense cell ID: 'total_non_current_assets-1', 'total_non_current_assets-2', etc.
+    });
+}, 0);
+}
+
+function calculateSGA() {
+    setTimeout(() => {
+    // Get all necessary columns (General & Administrative, Selling and Marketing, and SG&A Expense)
+    const generalAdministrativeColumns = document.querySelectorAll('.general_administrative'); // General & Administrative Expenses column
+    const sellingMarketingColumns = document.querySelectorAll('.selling_markting'); // Selling and Marketing Expense column
+    const netPPEColumns = document.querySelectorAll('.net_ppe_column'); // SG&A Expense (Selling, General and Administrative Expense) column
+
+    // Loop through each row to calculate SG&A Expense
+    generalAdministrativeColumns.forEach((generalAdminCell, index) => {
+        const generalAdministrative = getCellValue(generalAdminCell); // Get General & Administrative value
+        const sellingMarketing = getCellValue(sellingMarketingColumns[index]); // Get Selling and Marketing value
+
+        const sgaExpense = generalAdministrative + sellingMarketing; // Calculate SG&A Expense
+
+        // Update the corresponding SG&A Expense cell
+        updateCellValue(`net_ppe-${index + 1}`, sgaExpense); // SG&A Expense cell ID: 'net_ppe-1', 'net_ppe-2', etc.
+    });
+}, 0);
+}
+
+
+function calculatetotalrevenue() {
+    setTimeout(() => {
+    // Get all necessary columns (Operating Revenue, Other Income/Expense, and Total Revenue)
+    const operatingRevenueColumns = document.querySelectorAll('.operating_revenue'); // Operating Revenue column
+    const otherIncomeColumns = document.querySelectorAll('.other_income'); // Other Income/Expense column
+    const totalRevenueColumns = document.querySelectorAll('.total_revenue'); // Total Revenue column
+
+    // Loop through each row to calculate Total Revenue
+    operatingRevenueColumns.forEach((operatingRevenueCell, index) => {
+        const operatingRevenue = getCellValue(operatingRevenueCell); // Get the Operating Revenue value
+        const otherIncome = getCellValue(otherIncomeColumns[index]); // Get the Other Income/Expense value
+
+        const totalRevenue = operatingRevenue + otherIncome; // Calculate Total Revenue
+
+        // Update the corresponding Total Revenue cell
+        updateCellValue(`total_assets-${index + 1}`, totalRevenue); // Total Revenue cell ID: 'total_assets-1', 'total_assets-2', etc.
+    });
+}, 0);
+}
+
+function calculategrossProfit() {
+    setTimeout(() => {
+        // Get all necessary columns (Total Revenue, Cost of Revenue, and Gross Profit)
+        const totalRevenue = document.querySelectorAll('.total_revenue');
+        const costOfRevenueColumns = document.querySelectorAll('.cost_of_revenue');
+        const grossProfitColumns = document.querySelectorAll('.gross_profit');
+        
+        totalRevenue.forEach((totalRevenueCell, index) => {
+            const totalRevenue = getCellValue(totalRevenueCell);
+            const costOfRevenue = getCellValue(costOfRevenueColumns[index]);
+            
+            console.log(totalRevenue, 'totalRevenue');
+            console.log(costOfRevenue, 'costOfRevenue');
+            
+            const grossProfit = totalRevenue - costOfRevenue;
+            updateCellValue(`gross_profit-${index + 1}`, grossProfit);
+        });
+    }, 0);  // Delay the execution to ensure complete input
+}
+function getCellValue(cell) {
+    const input = cell.querySelector('input');
+    const value = input ? input.value : cell.innerText;
+    return parseFloat(value.trim()) || 0;
+}
+
+
+function updateCellValue(cellId, value) {
+    const cell = document.getElementById(cellId);
+    if (cell) {
+        cell.innerText = value.toFixed(2); // Update the cell with formatted value (2 decimal places)
+    } else {
+        console.warn(`Cell with ID ${cellId} not found.`);
+    }
+}
+
+// Attach calculateGrossProfit function to each Cost of Revenue input's 'input' event
+document.querySelectorAll('.cost_of_revenue input').forEach(input => {
+    input.addEventListener('input', calculateincomestatement);
+});
+document.querySelectorAll('.operating_revenue input, .other_income input').forEach(input => {
+    input.addEventListener('input', calculateincomestatement);
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Initially filter the table to show only monthly values
+    filterTable('monthly');
+
+    // Add event listeners to the buttons
+    document.querySelector('.btn-group').addEventListener('click', function (event) {
+        const target = event.target;
+        if (target.tagName === 'BUTTON') {
+            const period = target.textContent.trim().toLowerCase();
+            filterTable(period);
+        }
+    });
+});
+
+function filterTable(period) {
+    const headers = document.querySelectorAll('th .period-type');
+    const rows = document.querySelectorAll('tbody tr');
+
+    headers.forEach((header, index) => {
+        const periodType = header.textContent.trim().toLowerCase();
+        if (periodType === period) {
+            showColumn(index + 1);  // Show the column corresponding to the period
+        } else {
+            hideColumn(index + 1);  // Hide the column corresponding to the period
+        }
+    });
+
+    showColumn(0);  // Ensure the first column (Breakdown) is always shown
+}
+
+function showColumn(index) {
+    // Show the header
+    document.querySelectorAll('th')[index].style.display = ''; 
+
+    // Show all cells in this column
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+        row.querySelectorAll('td')[index].style.display = ''; 
+    });
+}
+
+function hideColumn(index) {
+    // Hide the header
+    document.querySelectorAll('th')[index].style.display = 'none'; 
+
+    // Hide all cells in this column
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+        row.querySelectorAll('td')[index].style.display = 'none';
+    });
+}
+
+</script>
+{% endblock content %}

@@ -1,0 +1,249 @@
+{% include '../base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Information Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-size: 12px; 
+            font-family: 'Arial MT Rounded';
+        }
+
+        .form-label {
+            font-weight: normal;
+            color: grey;
+        }
+
+        .form-control,.form-select{
+            border: none;
+            border-bottom: 1px solid #000;
+            border-radius: 0;
+            padding-left: 0;
+            background-color: transparent;
+            outline: none !important;
+        }
+
+        .form-control:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        .form-select:focus{
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .form-control-dotted {
+            border: none;
+            border-bottom: 1px dotted #000;
+            border-radius: 0;
+            padding-left: 0;
+            background-color: transparent;
+            outline: none;
+        }
+
+        .form-control-dotted:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        .btn btn-primary{
+            align-items: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <form method="POST" action="{% url 'add_company' %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="company-name" class="form-label">Company Name</label>
+                    <input type="text" class="form-control" id="company-name" name="name">
+                </div>
+
+                <div class="mb-3">
+                    <label for="founded-in" class="form-label">Founded In</label>
+                    <input type="date" class="form-control" id="founded-in" name="date_of_incorporation">
+                </div>
+
+                <div class="mb-3">
+                    <label for="industry-sector" class="form-label">Industry / Sector</label>
+                    <select class="form-select" id="industry-sector" name="sector">
+                        <option value="">Select Industry / Sector</option>
+                        <option value="Aerospace & Defence">Aerospace & Defence</option>
+                        <option value="Agro Chemical">Agro Chemical</option>
+                        <option value="Air Transport Service">Air Transport Service</option>
+                        <option value="Alchoholic Beverages">Alchoholic Beverages</option>
+                        <option value="Auto Ancillary Industry">Auto Ancillary Industry</option>
+                        <option value="Automobiles">Automobiles</option>
+                        <option value="Banks">Banks</option>
+                        <option value="Bearings">Bearings</option>
+                        <option value="Cables">Cables</option>
+                        <option value="Capital Goods - Electrical Electronic Companies">Capital Goods - Electrical Electronic Companies</option>
+                        <option value="Capital Goods - Non Electrical Electronic Companies">Capital Goods - Non Electrical Electronic Companies</option>
+                        <option value="Castings, Forgings & Fastners">Castings, Forgings & Fastners</option>
+                        <option value="Cement">Cement</option>
+                        <option value="Ceramic">Ceramic</option>
+                        <option value="Chemical Companies">Chemical Companies</option>
+                        <option value="Computer Education">Computer Education</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Consumer Durables">Consumer Durables</option>
+                        <option value="Credit Rating Agency">Credit Rating Agency</option>
+                        <option value="Crude Oil & Natural Gas">Crude Oil & Natural Gas</option>
+                        <option value="Diamond, Gems & Jewellery Companies">Diamond, Gems & Jewellery Companies</option>
+                        <option value="Diversified">Diversified</option>
+                        <option value="Dry Cell">Dry Cell</option>
+                        <option value="E-Commerce">E-Commerce</option>
+                        <option value="Edible Oil">Edible Oil</option>
+                        <option value="Education">Education</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Ferro Alloys">Ferro Alloys</option>
+                        <option value="Fertilizer">Fertilizer</option>
+                        <option value="Finance">Finance</option>
+                        <option value="FMCG">FMCG</option>
+                        <option value="Gas Distribution">Gas Distribution</option>
+                        <option value="Glass & Glass Product Company">Glass & Glass Product Company</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Hotel & Restaurant">Hotel & Restaurant</option>
+                        <option value="Infrastrure Developers">Infrastrure Developers</option>
+                        <option value="Infrastrure Investment Trust">Infrastrure Investment Trust</option>
+                        <option value="Insurance">Insurance</option>
+                        <option value="IT - Hardware">IT - Hardware</option>
+                        <option value="IT - Software">IT - Software</option>
+                        <option value="Leather">Leather</option>
+                        <option value="Logistics">Logistics</option>
+                        <option value="Marine Ports & Service">Marine Ports & Service</option>
+                        <option value="Miscellaneous">Miscellaneous</option>
+                        <option value="Non Ferrous Metal">Non Ferrous Metal</option>
+                        <option value="Oil Drill/ Allied Companies">Oil Drill/ Allied Companies</option>
+                        <option value="Packaging Companies">Packaging Companies</option>
+                        <option value="Paints/ Varnish Companies">Paints/ Varnish Companies</option>
+                        <option value="Paper Companies">Paper Companies</option>
+                        <option value="Petrochemical Companies">Petrochemical Companies</option>
+                        <option value="Pharmaceutical Companies">Pharmaceutical Companies</option>
+                        <option value="Plantation & Plantation Product Companies">Plantation & Plantation Product Companies</option>
+                        <option value="Plastc Product Companies">Plastc Product Companies</option>
+                        <option value="Plywood Board/ Laminate Companies">Plywood Board/ Laminate Companies</option>
+                        <option value="Power Generation & Distribution">Power Generation & Distribution</option>
+                        <option value="Power Infrastructure">Power Infrastructure</option>
+                        <option value="Printing & Stationery">Printing & Stationery</option>
+                        <option value="Quick Service Restaurant Companies">Quick Service Restaurant Companies</option>
+                        <option value="Railways">Railways</option>
+                        <option value="Readymade Garments">Readymade Garments</option>
+                        <option value="Real Estate Investment Trust">Real Estate Investment Trust</option>
+                        <option value="Realty Companies">Realty Companies</option>
+                        <option value="Refineries">Refineries</option>
+                        <option value="Refractories">Refractories</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Ship Building Companies">Ship Building Companies</option>
+                        <option value="Shipping Companies">Shipping Companies</option>
+                        <option value="Steel Companies">Steel Companies</option>
+                        <option value="Stock/ Commodity Broking Companies">Stock/ Commodity Broking Companies</option>
+                        <option value="Sugar Companies">Sugar Companies</option>
+                        <option value="Telecom Equipment & Infra Services">Telecom Equipment & Infra Services</option>
+                        <option value="Telecom Handsets/ Mobile Companies">Telecom Handsets/ Mobile Companies</option>
+                        <option value="Telecom Services">Telecom Services</option>
+                        <option value="Textile Companies">Textile Companies</option>
+                        <option value="Tobacco Products">Tobacco Products</option>
+                        <option value="Trading">Trading</option>
+                        <option value="Tyres">Tyres</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="business-type" class="form-label">Type of Business</label>
+                    <select class="form-select" id="business-type" name="business_type">
+                        <!-- Add the options here -->
+                        <option value="">Select Type of Business</option>
+                        <option value="B2B">B2B (Business to Business)</option>
+                        <option value="B2G">B2G (Business to Government)</option>
+                        <option value="B2C">B2C (Business to Consumer)</option>
+                        <option value="B2B2B">B2B2B (Business to Business to Business)</option>
+                        <option value="D2C">D2C (Direct to Consumer)</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>                
+
+                <div class="mb-3">
+                    <label for="employees" class="form-label">Number of Employees (Including founders)</label>
+                    <input type="text" class="form-control" id="employees" name="no_of_employees">
+                </div>
+
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" name="location">
+                </div>
+
+                <div class="mb-3">
+                    <label for="online-presence" class="form-label">Online Presence</label>
+                    <input type="text" class="form-control" id="online-presence" name="website_url">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Contact Information</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">E Mail:</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Phone Number:</label>
+                            <input type="tel" class="form-control" id="phone" name="phone">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="company-vision" class="form-label">Company Vision</label>
+                    <input type="text" class="form-control" id="company-vision" name="vision">
+                </div>
+
+                <div class="mb-3">
+                    <label for="products-services" class="form-label">Products & Services</label>
+                    <input type="text" class="form-control" id="products-services" name="products">
+                </div>
+
+                <div class="mb-3">
+                    <label for="key-competitors" class="form-label">Key Competitors</label>
+                    <input type="text" class="form-control" id="key-competitors" name="competitor">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Three Year Revenue & Profit</label>
+                    <div class="black-label">Current Year (YTD): Revenue = $<input type="text" class="form-control-dotted" name="current_revenue"> P/L = -$<input type="text" class="form-control-dotted" name="current_pl"></div>
+                    <div class="black-label mt-2">Previous Year: Revenue = $<input type="text" class="form-control-dotted" name="previous_revenue"> P/L = -$<input type="text" class="form-control-dotted" name="previous_pl"></div>
+                    <div class="black-label mt-2">A year before: Revenue = $<input type="text" class="form-control-dotted" name="a_yearbefore_revenue"> P/L = -$<input type="text" class="form-control-dotted" name="a_yearbefore_pl"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="customers" class="form-label">Number of Customers</label>
+                    <input type="text" class="form-control" id="customers" name="customers">
+                </div>
+
+                <div class="mb-6">
+                    <label for="additional-info" class="form-label">Additional Information</label>
+                    <input type="text" class="form-control" id="additional-info" name="additional">
+                </div>
+                <div class="mb-3 d-flex justify-content-end" style="padding-top: 10px;">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+{% endblock content %}

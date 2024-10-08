@@ -1,0 +1,361 @@
+{% include 'admin/company_profile.html' %}
+
+{% block styles %}
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    .container {
+    padding-left: 220px;
+    max-width: 90%;
+    padding-top: 0px;
+
+    position: relative;  /* Changed from fixed to relative */
+    overflow-y: scroll;
+    max-height: none;
+    margin-top: -20px;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    font-size: 14px !important;
+    
+}
+    .container::-webkit-scrollbar {
+        display: none;  /* Safari and Chrome */
+    }
+
+    .content {
+        margin: 40px auto;
+        padding-top: 30px;
+        padding-left: 200px;
+        width: calc(100% - 200px);
+    }
+
+    table {
+        width: 80%;
+        font-family: 'Arial MT Rounded';
+        border-collapse: collapse;
+        table-layout: auto;
+        padding-top: -10px;
+        border-right: 0px;
+        border-left: 0px;
+        font-size: 14px;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        text-align: left !important;
+        padding: 0.5px;
+        padding-bottom: 0.5px !important;
+        font-size: 14px;
+        border-right: 0px;
+        border-left: 0px;
+    }
+
+    td {
+        text-align: right;
+    }
+
+    th {
+        background-color: white;
+        top: 0;
+        z-index: 0;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .rowview {
+        width: 30% !important;
+    }
+
+    .rowview1 {
+        width: 15% !important;
+    }
+
+    .rowview2 {
+        width: fit-content !important;
+    }
+
+    tr.hidden {
+        display: none;
+    }
+
+    .indent-level-1 td:first-child {
+        padding-left: 2em;
+    }
+
+    .indent-level-2 td:first-child {
+        padding-left: 4em;
+    }
+
+    .indent-level-3 td:first-child {
+        padding-left: 6em;
+    }
+
+    .indent-level-4 td:first-child {
+        padding-left: 8em;
+    }
+
+    .table-container {
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: auto;
+        -ms-overflow-style: none;  /* Internet Explorer 10+ */
+        scrollbar-width: none;  /* Firefox */
+    }
+
+    .table-container::-webkit-scrollbar {
+        display: none;  /* Safari and Chrome */
+    }
+
+
+    .form-control {
+        height: 20px;
+        padding: 0 5px;
+        font-size: 14px;
+        line-height: 20px;
+        border: none;
+        border-bottom: 0.5px solid black;
+        outline: none !important;
+        box-shadow: none !important;
+        color: grey;
+        border-radius: 0px;
+    }
+
+    .root {
+        row-gap: inherit;
+    }
+
+    .row {
+        height: -10px;
+    }
+
+    .breadcrumb {
+        margin-top: 20px;
+        margin-left: 280px;
+        font-size: 25px !important;
+        color: black;
+        align-items: left;
+    }
+
+    .bold-text {
+        font-weight: bold;
+    }
+    body {
+    overflow: hidden;  /* Hides the body scroll bar */
+    font-family: 'Arial MT Rounded' !important;
+}
+
+.btn-primary {
+        margin-top: -60px; /* Added negative margin to adjust the position of the button */
+    }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="breadcrumb">
+    <span>Corporate Finance</span> &ndash; <span>Planning & Budgeting</span> &ndash; <span class="bold-text">cashFlow</span>
+</div>
+<div class="container mt-0">
+    <form method="POST" action="{% url 'cash_flow_manual_entry' company.company_id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="table-responsive table-container">
+            <table class="table table-bordered table-wrapper">
+                <thead>
+                    <tr>
+                        <th class="rowview">Breakdown</th>
+                        <th class="rowview1">TTM {{balance_sheet.date|date:'d-m-Y'}}</th>
+                        <th class="rowview2">Definition</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: grey;"><b>Operating Cash Flow</b></td>
+                        <td><input type="number" class="form-control" id="Operating_Cash_Flow" name="Operating_Cash_Flow" placeholder="00.00"></td>
+                        <td>Cash generated from a company's core business operations.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Net Income from Continuing Operations</td>
+                        <td><input type="number" class="form-control" id="Net_Income_from_Continuing_Operations" name="Net_Income_from_Continuing_Operations" placeholder="00.00"></td>
+                        <td>Profit from the ongoing operations of a business, excluding discontinued activities.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Depreciation & amortization</td>
+                        <td><input type="number" class="form-control" id="Depreciation_&_amortization" name="Depreciation_and_amortization" placeholder="00.00"></td>
+                        <td>Non-cash expenses that reduce the value of tangible and intangible assets over time.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Change in working capital</td>
+                        <td><input type="number" class="form-control" id="Change_in_working_capital" name="Change_in_working_capital" placeholder="00.00"></td>
+                        <td>The difference in current assets and current liabilities over a period.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Changes in Receivables</td>
+                        <td><input type="number" class="form-control" name="Changes_in_Receivables" id="Changes_in_Receivables" placeholder="00.00"></td>
+                        <td>Variations in the amount of money owed to the company by customers.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Change in Inventory</td>
+                        <td><input type="number" class="form-control" name="Change_in_Inventory" id="Change_in_Inventory" placeholder="00.00"></td>
+                        <td>Adjustments in the value of goods available for sale.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Change in Hedging Assets Current</td>
+                        <td><input type="number" class="form-control" name="Change_in_Hedging_Assets_Current" id="Change_in_Hedging_Assets_Current" placeholder="00.00"></td>
+                        <td>Variations in assets used to offset potential losses from other investments.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Change in Other Current Assets</td>
+                        <td><input type="number" class="form-control" name="Change_in_Other_Current_Assets" id="Change_in_Other_Current_Assets" placeholder="00.00"></td>
+                        <td>Fluctuations in miscellaneous short-term assets.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Change in Payables And Accrued Expense</td>
+                        <td><input type="number" class="form-control" name="Change_in_Payables_And_Accrued_Expense" id="Change_in_Payables_And_Accrued_Expense" placeholder="00.00"></td>
+                        <td>Differences in amounts owed to suppliers and expenses incurred but not yet paid.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Change in Pension & Other Post Retirement Benefit Plans Current</td>
+                        <td><input type="number" class="form-control" name="Change_in_Pension_&_Other_Post_Retirement_Benefit_Plans_Current" id="Change_in_Pension_and_Other_Post_Retirement_Benefit_Plans_Current" placeholder="00.00"></td>
+                        <td>Adjustments in the current portion of liabilities for employee benefits.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Change in Current Debt And Capital Lease Obligation</td>
+                        <td><input type="number" class="form-control" name="Change_in_Current_Debt_And_Capital_Lease_Obligation" id="Change_in_Current_Debt_And_Capital_Lease_Obligation" placeholder="00.00"></td>
+                        <td>Variations in short-term borrowing and lease payments.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Change in Current Deferred Liabilities</td>
+                        <td><input type="number" class="form-control" name="Change_in_Current_Deferred_Liabilities" id="Change_in_Current_Deferred_Liabilities" placeholder="00.00"></td>
+                        <td>Changes in liabilities incurred but not yet recognized as expenses.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Change in Other Current Liabilities</td>
+                        <td><input type="number" class="form-control" name="Change_in_Other_Current_Liabilities" id="Change_in_Other_Current_Liabilities" placeholder="00.00"></td>
+                        <td>Fluctuations in miscellaneous short-term liabilities.</td>
+                    </tr>
+                    <tr>
+                        <td>Investing Cash Flow</td>
+                        <td><input type="number" class="form-control" id="Investing_Cash_Flow" name="Investing_Cash_Flow" placeholder="00.00"></td>
+                        <td>Cash used for or generated from investments in assets.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Cash Flow from Continuing Investing Activities</td>
+                        <td><input type="number" class="form-control" id="Cash_Flow_from_Continuing_Investing_Activities" name="Cash_Flow_from_Continuing_Investing_Activities" placeholder="00.00"></td>
+                        <td>Cash flow from investments related to the ongoing operations of the business.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Net PPE Purchase And Sale</td>
+                        <td><input type="number" class="form-control" id="Net_PPE_Purchase_And_Sale" name="Net_PPE_Purchase_And_Sale" placeholder="00.00"></td>
+                        <td>Cash spent on or received from buying and selling property, plant, and equipment.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Goodwill And Other Intangible Assets</td>
+                        <td><input type="number" class="form-control" id="Goodwill_And_Other_Intangible_Assets" name="Goodwill_And_Other_Intangible_Assets" placeholder="00.00"></td>
+                        <td>Investments in non-physical assets like goodwill, patents, and trademarks.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Investments And Advances</td>
+                        <td><input type="number" class="form-control" id="Investments_And_Advances" name="Investments_And_Advances" placeholder="00.00"></td>
+                        <td>Cash used for long-term financial investments and prepayments.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Other Non Current Assets</td>
+                        <td><input type="number" class="form-control" id="Other_Non_Current_Assets" name="Other_Non_Current_Assets" placeholder="00.00"></td>
+                        <td>Long-term assets not classified elsewhere.</td>
+                    </tr>
+                    <tr>
+                        <td>Financing Cash Flow</td>
+                        <td><input type="number" class="form-control" id="Financing_Cash_Flow" name="Financing_Cash_Flow" placeholder="00.00"></td>
+                        <td>Cash flow from transactions with the company's owners or creditors.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Cash Flow from Continuing Financing Activities</td>
+                        <td><input type="number" class="form-control" id="Cash_Flow_from_Continuing_Financing_Activities" name="Cash_Flow_from_Continuing_Financing_Activities" placeholder="00.00"></td>
+                        <td>Cash flow from financing related to the ongoing operations of the business.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Long Term Debt And Capital Lease Obligation</td>
+                        <td><input type="number" class="form-control" id="Long_Term_Debt_And_Capital_Lease_Obligation" name="Long_Term_Debt_And_Capital_Lease_Obligation" placeholder="00.00"></td>
+                        <td>Cash flow related to long-term borrowings and lease agreements.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Non Current Deferred Liabilities</td>
+                        <td><input type="number" class="form-control" id="Non_Current_Deferred_Liabilities" name="Non_Current_Deferred_Liabilities" placeholder="00.00"></td>
+                        <td>Cash flow related to long-term liabilities incurred but not yet recognized.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Trade and Other Payables Non Current</td>
+                        <td><input type="number" class="form-control" id="Trade_and_Other_Payables_Non_Current" name="Trade_and_Other_Payables_Non_Current" placeholder="00.00"></td>
+                        <td>Long-term payables related to business operations.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Other Non Current Liabilities</td>
+                        <td><input type="number" class="form-control" id="Other_Non_Current_Liabilities" name="Other_Non_Current_Liabilities" placeholder="00.00"></td>
+                        <td>Cash flow related to miscellaneous long-term liabilities.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Common Stock Issuance/ (Payments)</td>
+                        <td><input type="number" class="form-control" id="Common_Stock_Issuance/_(Payments)" name="Common_Stock_Issuance_or_Payments" placeholder="00.00"></td>
+                        <td>Cash flow from issuing or buying back common stock.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Common Stock Dividend Paid</td>
+                        <td><input type="number" class="form-control" id="Common_Stock_Dividend_Paid" name="Common_Stock_Dividend_Paid" placeholder="00.00"></td>
+                        <td>Cash paid to shareholders as dividends.</td>
+                    </tr>
+                    <tr>
+                        <td>End Cash Position</td>
+                        <td><input type="number" class="form-control" id="End_Cash_Position" name="End_Cash_Position" placeholder="00.00"></td>
+                        <td>The company's cash balance at the end of a period.</td>
+                    </tr>
+                    <tr>
+                        <td>Changes in Cash</td>
+                        <td><input type="number" class="form-control" id="Changes_in_Cash" name="Changes_in_Cash" placeholder="00.00"></td>
+                        <td>The difference in cash balance from the beginning to the end of a period.</td>
+                    </tr>
+                    <tr>
+                        <td>Beginning Cash Position</td>
+                        <td><input type="number" class="form-control" id="Beginning_Cash_Position" name="Beginning_Cash_Position" placeholder="00.00"></td>
+                        <td>The company's cash balance at the start of a period.</td>
+                    </tr>
+                    <tr>
+                        <td>Capital Expenditure</td>
+                        <td><input type="number" class="form-control" id="Capital_Expenditure" name="Capital_Expenditure" placeholder="00.00"></td>
+                        <td>Cash spent on acquiring or maintaining fixed assets.</td>
+                    </tr>
+                    <tr>
+                        <td>Issuance/ (Repurchase) of Capital Stock</td>
+                        <td><input type="number" class="form-control" id="Issuance_or_Repurchase_of_Capital_Stock" name="Issuance_or_Repurchase_of_Capital_Stock" placeholder="00.00"></td>
+                        <td>Cash flow from issuing or buying back the company's stock.</td>
+                    </tr>
+                    <tr>
+                        <td>Repayment of Debt</td>
+                        <td><input type="number" class="form-control" id="Repayment_of_Debt" name="Repayment_of_Debt" placeholder="00.00"></td>
+                        <td>Cash used to pay back borrowed funds.</td>
+                    </tr>
+                    <tr>
+                        <td>Free Cash Flow</td>
+                        <td><input type="number" class="form-control" id="Free_Cash_Flow" name="Free_Cash_Flow" placeholder="00.00"></td>
+                        <td>Cash generated by the company after accounting for capital expenditures.</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary" id="submit_income_statement">Submit</button>
+            </div>
+        </div>
+
+
+    </form>
+</div>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+{% endblock content %}

@@ -1,0 +1,465 @@
+{% extends '../base.html' %}
+{% block content %}
+<style>
+label{
+    width:320px !important;
+}
+</style>
+<div class="container">
+    <form method="POST" action="#" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row mt-5 mb-5">
+            <div class="col-md-6">
+                <div class="mb-3 mt-3 inline">
+                    <label for="startup_name">Startup Name</label>
+                    <input type="text" class="form-control w-50" name="startup_name" value="{{company.name}}" required>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="date_of_incorporation">Founded In</label>
+                    <input type="date" class="form-control w-50" name="date_of_incorporation" value="{{company.date_of_incorporation|date:'Y-m-d'}}" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control w-50" name="email" value="{{company.email}}" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="linkedin_url">Linkedin URL</label>
+                    <input type="url" class="form-control w-50" name="linkedin_url" value="{{company.linkedin_url}}" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="sector">Industory/Sector</label>
+                    <select class="form-select w-50" id="sector" name="sector"  value="{{company.sector}}" required>
+                        <option value="">Select</option>
+                        {% for sector in sectors %}
+                        <option value="{{sector.name}}">{{sector.name}}</option>
+                        {% endfor %}
+                        
+                    </select>
+                </div>
+                
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="type_of_business ">Type of Business </label>
+                    <select class="form-select w-50" id="type_of_business" name="type_of_business" value="{{company.type_business}}" required>
+                        <option value="">Select</option>
+                        {% for business_type in business_types %}
+                        <option value="{{business_type.name}}">{{business_type.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="website_url">Website URL</label>
+                    <input type="url" class="form-control w-50" name="website_url" value="{{company.website_url}}" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="location">Location</label>
+                    <input type="text" class="form-control w-50" name="location" value="{{company.location}}" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="product_or_service">Product/Service</label>
+                    <input type="text" class="form-control w-50" name="product_or_service"  value="{{company.company_type}}" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="subscription_type">Subscription Type</label>
+                    <select class="form-select w-50" id="subscription_type" name="subscription_type"  value="{{company.subscription_type}}" required>
+                        <option value="">Select</option>
+                        <option value="basic">Basic</option>
+                        <option value="premium">Premium</option>
+                        <option value="advance">Advance</option>
+                    </select>
+                </div>
+
+    
+                <!-- <div class="mb-3 mt-3 inline">
+                    <label for="business_plan">Business Plan</label>
+                    <input type="file" class="w-50" name="business_plan" required>
+                </div> -->
+                
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 mt-3 inline">
+                    <label for="no_of_employees">No. of Employees (includes FTE, Contractors, Interns and Others)</label>
+                    <input type="text" class="form-control w-50" name="no_of_employees" value="{{company_profile.number_of_clients_users}}" required>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="tam">TAM</label>
+                    <input type="number" class="form-control w-50" name="tam" value="{{company_profile.tam}}" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="cagr">CAGR</label>
+                    <input type="text" class="form-control w-50" name="cagr" value="{{company_profile.cagr}}" required>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="previous_year_revenue">Previous Year Revenue</label>
+                    <input type="number" class="form-control w-50" name="previous_year_revenue" value="{{company_profile.previous_year_revenue}}" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="current_year_revenue">Current Year Revenue (ARR)</label>
+                    <input type="number" class="form-control w-50" name="current_year_revenue" value="{{company_profile.current_year_revenue_arr}}" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="current_monthly_burn_rate">Current Monthly Burn Rate</label>
+                    <input type="number" class="form-control w-50" name="current_monthly_burn_rate" value="{{company_profile.current_monthly_burn_rate}}" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="forecasted_revenue_for_next_year">Forecasted Revenue for next year</label>
+                    <input type="number" class="form-control w-50" name="forecasted_revenue_for_next_year" value="{{company_profile.forecasted_revenue_for_next_year}}" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="stage_of_business">Stage of Business </label>
+                    <select class="form-select w-50" id="stage_of_business" name="stage_of_business" value="{{company_profile.stage_of_business}}" required>
+                        <option value="">Select</option>
+                        {% for business_stage in business_stages %}
+                        <option value="{{business_stage.name}}">{{business_stage.name}}</option>
+                        {% endfor %}
+                        
+
+                    </select>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="equity_funds_raised_so_far">Equity Funds raised so far?</label>
+                    <input type="number" class="form-control w-50" name="equity_funds_raised_so_far" value="{{company_profile.equity_funds_raised_so_far}}" required>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="funds_needed">Funds Needed</label>
+                    <input type="number" class="form-control w-50" name="funds_needed" value="{{company_profile.funds_needed}}" required>
+                </div>
+
+                <!-- <div class="mb-3 mt-3 inline">
+                    <label for="business_introductry_video_url">Business Introductory Video (URL)</label>
+                    <input type="url" class="form-control w-50" name="business_introductry_video_url" required>
+                </div> --> 
+            </div>
+        </div>
+
+       
+        {% for founder in founders %}
+
+        <!-- Founder Details Section -->
+        <div id="founders-section">
+            <div class="row mt-5 mb-5 founder-section">
+                <h4 class="mb-4 text-center">Founder {{ forloop.counter }}  Details</h4>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="founder1_name">Name</label>
+                        <input type="text" class="form-control w-50" name="founder_{{forloop.counter}}_name" value="{{founder.name}}" required>
+                    </div>
+                    <div class="mb-3 mt-3 inline">
+                        <label for="founder1_linkedin_profile">LinkedIn Profile</label>
+                        <input type="text" class="form-control w-50" name="founder_{{forloop.counter}}_linkedin_profile" value="{{founder.linkedin_url}}" required>
+                    </div>
+                    <div class="mb-3 mt-3 inline">
+                        <label for="founder1_short_profile">Short Profile</label>
+                        <textarea class="form-control w-50" rows="6" name="founder_{{forloop.counter}}_short_profile" required>{{founder.short_profile}}</textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="founder1_phone_no">Phone Number</label>
+                        <input type="number" class="form-control w-50" name="founder_{{forloop.counter}}_phone_no" value="{{founder.phone_number}}" required>
+                    </div>
+                    <div class="mb-3 mt-3 inline">
+                        <label for="founder1_email">Email ID</label>
+                        <input type="email" class="form-control w-50" name="founder_{{forloop.counter}}_email" value="{{founder.email}}" required>
+                    </div>
+                    <div class="mb-3 mt-3 inline">
+                        <label for="founder1_photo">Professional Photo</label>
+                        <input type="file" class="w-50" name="founder_{{forloop.counter}}_photo" value="{{founder.photo}}" >
+                        {% if founder.photo %}
+                            <img src="{{ founder.photo.url }}" alt="Current Photo" style="max-width: 100px;">
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Button to Add More Founders -->
+        <!-- <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-founder-btn">Add Another Founder</button>
+            </div>
+        </div> -->
+
+
+
+        {% for executive_member in executive_members %}
+
+
+         <!-- Executive Member Details Section -->
+         <div id="executive-members-section">
+            <div class="row mt-5 mb-5 executive-member-section">
+                <h4 class="mb-4 text-center">Executive Team 1 Details</h4>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="executive_member_name_1">Name</label>
+                        <input type="text" class="form-control w-50" name="executive_member_{{forloop.counter}}_name" value="{{executive_member.name}}" required>
+                    </div>
+                    <div class="mb-3 mt-3 inline">
+                        <label for="executive_member_email_1">Email ID</label>
+                        <input type="email" class="form-control w-50" name="executive_member_{{forloop.counter}}_email" value="{{executive_member.email}}" required>
+                    </div>
+                    
+                </div>
+                <div class="col-md-6">
+                    
+                    <div class="mb-3 mt-3 inline">
+                        <label for="executive_member_designation_1">Designation</label>
+                        <input type="text" class="form-control w-50" name="executive_member_{{forloop.counter}}_designation"  value="{{executive_member.designation}}" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+        <!-- Button to Add More Executive Team -->
+        <!-- <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-executive-member-btn">Add Another Executive Team Member</button>
+            </div>
+        </div> -->
+
+
+
+        <!-- Advisors Details Section -->
+         {% for advisor in advisors %}
+        <div id="advisors-section">
+            <div class="row mt-5 mb-5 advisor-section">
+                <h4 class="mb-4 text-center">Advisor {{forloop.counter}} Details</h4>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="advisor_1_name">Name</label>
+                        <input type="text" class="form-control w-50" name="advisor_{{forloop.counter}}_name" value="{{advisor.name}}" required>
+                    </div>
+                    <div class="mb-3 mt-3 inline">
+                        <label for="advisor_1_email">Email ID</label>
+                        <input type="email" class="form-control w-50" name="advisor_{{forloop.counter}}_email" value="{{advisor.email}}" required>
+                    </div>
+                    
+                </div>
+                <div class="col-md-6">
+                    
+                    <div class="mb-3 mt-3 inline">
+                        <label for="advisor_1_phno">Phone Number</label>
+                        <input type="text" class="form-control w-50" name="advisor_{{forloop.counter}}_phno" value="{{advisor.phonenumber}}" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+        <!-- Button to Add More Advisors -->
+        <!-- <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-advisor-btn">Add Another Advisor</button>
+            </div>
+        </div> -->
+
+
+
+
+        
+      
+        <!-- Problems Solved Details Section -->
+         {% for solved_problem in solved_problems %}
+        <div id="solved-problems-section">
+            <div class="row mt-5 mb-5 solved-problem-section">
+                <h4 class="mb-4 text-center">Problem Solved 1</h4>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="problem_solved_1">Problem Solved</label>
+                        <textarea class="form-control w-50" rows="6" name="problem_solved_1" value="{{solved_problem.description}}" required>{{solved_problem.description}}</textarea>
+
+                    </div>
+                    
+                    
+                </div>
+                <div class="col-md-6">
+                    
+                    
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+        <!-- Button to Add More Problems Solved -->
+        <!-- <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-problem-solved-btn">Add Another</button>
+            </div>
+        </div> -->
+
+
+         <!-- Challanges Details Section -->
+          {% for challenge in challenges %}
+         <div id="challenges-section">
+            <div class="row mt-5 mb-5 challenge-section">
+                <h4 class="mb-4 text-center">Challange 1</h4>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="challenge_1">Challange</label>
+                        <textarea class="form-control w-50" rows="6" name="challenge_1" name="{{challenge.name}}" required>{{challenge.name}}</textarea>
+
+                    </div>
+                    
+                    
+                </div>
+                <div class="col-md-6">
+                    
+                    
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Button to Add More Challanges -->
+        <!-- <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-challenge-btn">Add Another</button>
+            </div>
+        </div> -->
+
+
+         <!-- Competitors Details Section -->
+          {% for competitor in competitors %}
+         <div id="competitors-section">
+            <div class="row mt-5 mb-5 competitor-section">
+                <h4 class="mb-4 text-center">Competitor 1</h4>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="competitor_1">Competitor</label>
+                        <input type="text" class="form-control w-50" name="competitor_1" value="{{competitor.name}}" required>
+
+                        
+                    </div>
+                    
+                    
+                </div>
+                <div class="col-md-6">
+                    
+                    
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Button to Add More Competitors -->
+        <!-- <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-competitor-btn">Add Another</button>
+            </div>
+        </div> -->
+
+
+
+       
+
+
+        
+
+         <!-- Client Names Section -->
+         <div id="clients-section" class="row mt-5 mb-5">
+            <h4 class="mb-4 text-center">Clients and Logo</h4>
+            {% for client in clients %}
+
+            <div class="col-md-6">
+  
+                  <div id="clients-section" class="mb-3 mt-3 inline">
+                      <label for="client_{{ forloop.counter }}">Client {{ forloop.counter }}</label>
+                      <input type="text" class="form-control w-50" name="client_{{ forloop.counter }}" value="{{client.name}}" required>
+                  </div>
+  
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 mt-3 inline">
+                    <label for="client_{{forloop.counter }}_logo">Logo</label>
+                    <input type="file" class="w-50" name="client_{{ forloop.counter }}_logo"  value="{{client.logo}}">
+                    {% if client.logo %}
+                            <img src="{{ client.logo.url }}" alt="logo" style="max-width: 100px;">
+                        {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+
+             
+        </div>
+        
+        <!-- Social Media Links Section -->
+        <div  class="row mt-5 mb-5">
+            <div class="col-md-6">
+            <h4 class="mb-4 text-center">Social Media Links</h4>
+                {% for social_media_url in social_media_urls%}
+                <div id="social-media-section" class="mb-3 mt-3 inline">
+                    <label for="url_{{ forloop.counter }}">URL {{ forloop.counter }}</label>
+                    <input type="text" class="form-control w-50" name="url_{{ forloop.counter }}" value="{{social_media_url.url}}" required>
+                </div>
+                {% endfor %}
+
+            </div>
+            <div class="col-md-6">
+                
+            </div>
+            
+        </div>
+
+        
+
+        <!-- Hidden input fields to store counts -->
+        <!-- <input type="hidden" name="founder_count" id="founder_count" value="1">
+
+        
+        <input type="hidden" name="executive_member_count" id="executive_member_count" value="1">
+        <input type="hidden" name="advisor_count" id="advisor_count" value="1">
+        <input type="hidden" name="problem_solved_count" id="problem_solved_count" value="1">
+
+        <input type="hidden" name="competitor_count" id="competitor_count" value="1">
+
+        <input type="hidden" name="challenge_count" id="challenge_count" value="1"> -->
+
+
+        <!-- <input type="hidden" name="social_media_count" id="social_media_count" value="1"> -->
+        <!-- <input type="hidden" name="url_count" id="url_count" value="2">
+
+        <input type="hidden" name="client_count" id="client_count" value="1"> -->
+
+        
+
+        <input type="hidden" name="founder_count" id="founder_count" value="{{founders|length}}">
+        <input type="hidden" name="executive_member_count" id="executive_member_count" value="{{executive_members|length}}">
+        <input type="hidden" name="advisor_count" id="advisor_count" value="{{advisors|length}}">
+        <input type="hidden" name="problem_solved_count" id="problem_solved_count" value="{{solved_problems|length}}">
+        <input type="hidden" name="competitor_count" id="competitor_count" value="{{competitors|length}}">
+        <input type="hidden" name="challenge_count" id="challenge_count" value="{{challenges|length}}"> 
+
+
+
+        <input type="hidden" name="url_count" id="url_count" value="{{social_media_urls|length}}">
+        <input type="hidden" name="client_count" id="client_count" value="{{clients|length}}">
+
+
+        <div class="row mt-5 mb-5">
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+{% endblock content %}

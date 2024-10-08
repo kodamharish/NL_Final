@@ -1,0 +1,66 @@
+{% extends '../base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row mt-5 mb-5">
+        <div class="col-md-3 super-admin">
+            <a href="{% url 'startups' %}">
+                <div class="card">
+                    <div class="card-body">
+                        <i class="fas fa-users"></i>
+                        <ul>
+                            <li>Start Ups</li>
+                            <li>{{startups}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+        <div class="col-md-3 super-admin">
+            <a href="{% url 'investors' %}">
+                <div class="card">
+                    <div class="card-body">
+                        <i class="fas fa-users"></i>
+                        <ul>
+                            <li>Investors</li>
+                            <li>{{investors}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 super-admin">
+            <a href="{% url 'ca_firms'%}">
+                <div class="card">
+                    <div class="card-body">
+                        <i class="fas fa-users"></i>
+                        <ul>
+                            <li>CA Firms</li>
+                            <li>{{ca_firms}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="col-md-3 super-admin">
+            <a href="{% url 'companies' %}">
+                <div class="card">
+                    <div class="card-body">
+                        <i class="fas fa-users"></i>
+                        <ul>
+                            <li>Companies</li>
+                            <li>{{companys}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+
+    </div>
+
+</div>
+{% endblock content %}

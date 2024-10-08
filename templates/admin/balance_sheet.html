@@ -1,0 +1,656 @@
+
+{% include 'admin/company_profile.html' %}
+
+{% block styles %}
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    .container {
+    margin-left: 250px;
+    max-width: 90%;
+    padding-top: 10px;
+
+    position: relative;  /* Changed from fixed to relative */
+    overflow-y: auto;
+    max-height: 100%;
+    margin-top: -20px;
+}
+
+    .content {
+        margin: 40px auto;
+        padding-top: 30px;
+        padding-left: 200px;
+        width: calc(100% - 200px);
+    }
+
+    table {
+        width: 80%;
+        font-family: 'Times New Roman', Times, serif;
+        border-collapse: collapse;
+        table-layout: auto;
+        padding-top: -10px;
+        border-right: 0px;
+        border-left: 0px;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        text-align: left !important;
+        padding: 0.5px;
+        padding-bottom: 0.5px !important;
+        font-size: 12px;
+        border-right: 0px;
+        border-left: 0px;
+    }
+
+    td {
+        text-align: right;
+    }
+
+    th {
+        background-color: white;
+        top: 0;
+        z-index: 0;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .rowview {
+        width: 30% !important;
+    }
+
+    .rowview1 {
+        width: 15% !important;
+    }
+
+    .rowview2 {
+        width: fit-content !important;
+    }
+
+    tr.hidden {
+        display: none;
+    }
+
+    .indent-level-1 td:first-child {
+        padding-left: 2em;
+    }
+
+    .indent-level-2 td:first-child {
+        padding-left: 4em;
+    }
+
+    .indent-level-3 td:first-child {
+        padding-left: 6em;
+    }
+
+    .indent-level-4 td:first-child {
+        padding-left: 8em;
+    }
+
+    .table-container {
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: auto;
+        -ms-overflow-style: none;  /* Internet Explorer 10+ */
+        scrollbar-width: none;  /* Firefox */
+    }
+
+    .table-container::-webkit-scrollbar {
+        display: none;  /* Safari and Chrome */
+    }
+
+    .form-control {
+        height: 20px;
+        padding: 0 5px;
+        font-size: 12px;
+        line-height: 20px;
+        border: none;
+        border-bottom: 0.5px solid black;
+        outline: none !important;
+        box-shadow: none !important;
+        color: grey;
+        border-radius: 0px;
+    }
+
+    .form-control1 {
+        height: 20px;
+        padding: 0 5px;
+        font-size: 12px;
+        line-height: 20px;
+        border: none;
+        border-bottom: none;
+        outline: none !important;
+        box-shadow: none !important;
+        color: grey;
+    }
+    .form-control1:focus {
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    .root {
+        row-gap: inherit;
+    }
+
+    .row {
+        height: -10px;
+    }
+
+    .breadcrumb {
+        margin-top: 20px;
+        margin-left: 260px;
+        font-size: 14px !important;
+        color: black;
+        display: inline-block; 
+        align-items: left;
+        font-family: 'Arial MT Rounded';
+    }
+    body {
+    overflow: hidden;  /* Hides the body scroll bar */
+}
+
+    .bold-text {
+        font-weight: bold;
+    }
+    .period {
+        font-size: 14px !important;
+        color: black;
+        display: inline-block; /* Ensures both elements appear on the same line */
+        margin-left: 100px; /* Creates a 100px gap between elements */
+        vertical-align: middle;
+        font-family: 'Arial MT Rounded';
+    }
+    .btn-primary {
+        margin-top: -80px; /* Added negative margin to adjust the position of the button */
+        align-items: center;
+        margin-left: -350px;
+    }
+   
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="breadcrumb">
+    <span>Corporate Finance</span> &ndash; <span>Planning & Budgeting</span> &ndash; <span class="bold-text">Balance Sheet</span>
+</div>
+<div class="period">
+    <span>Period: </span><span><span>{{ date }}</span>
+</div>
+
+<div class="container mt-0">
+    <form method="POST" action="#" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="table-responsive table-container">
+            <table class="table table-bordered table-wrapper">
+                <thead>
+                    <tr>
+                        <th class="rowview">Breakdown</th>
+                        <th class="rowview1">TTM {{balance_sheet.date|date:'d-m-Y'}}</th>
+                        <th class="rowview2">Definition</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: rgb(0, 0, 0);"><b>Total Assets</b></td>
+                        <td><input type="number" class="form-control1"id="totalAssets" name="totalAssets" placeholder="00.00" readonly></td>
+                        <td>The sum of all assets owned by a company, both current and non-current.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Current Assets</td>
+                        <td><input type="number" class="form-control1" id="currentAssets" name="currentAssets" placeholder="00.00" readonly></td>
+                        <td>Assets expected to be converted into cash or used up within one year.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Cash, Cash Equivalents & Short Term Investments</td>
+                        <td><input type="number" class="form-control1" name="cashEquivalentsShotTerm" id="cashEquivalentsShotTerm" placeholder="00.00" readonly></td>
+                        <td>Liquid assets that can be easily converted to cash within three months.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Cash And Cash Equivalents</td>
+                        <td><input type="number" id="cashAndCashEquivalents" class="form-control1" name="cashAndCashEquivalents"  id="cashEquivalentsAndInvestments" placeholder="00.00" readonly></td>
+                        <td>Actual currency and highly liquid investments readily convertible to cash.</td>
+                    </tr>
+                    <tr class="indent-level-4" style="font-style: italic", style="color: grey";>
+                        <td>Cash</td>
+                        <td><input type="number" id="cash" class="form-control" name="cash" oninput="calculate()"></td>
+                        <td>Currency and coins held by the company.</td>
+                    </tr>
+                    <tr class="indent-level-4">
+                        <td>Cash Equivalents</td>
+                        <td><input type="number" id="cash_equivalents" class="form-control" name="cash_equivalents" oninput="calculate()"></td>
+                        <td>Short-term, highly liquid investments that can be quickly converted to cash.</td>
+                    </tr>
+                    
+                    <tr class="indent-level-3">
+                        <td>Other Short Term Investments</td>
+                        <td><input type="number" id="short_term_investments" name="short_term_investments" class="form-control" oninput="calculate()" step="0.01"></td>
+                        <td>Investments expected to be sold or converted into cash within a year.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Receivables</td>
+                        <td><input type="number" class="form-control1" name="receivables" id="receivable" placeholder="00.00" readonly></td>
+                        <td>Money owed to a company by its customers or other entities.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Accounts Receivable</td>
+                        <td><input type="number" class="form-control1" name="accountsReceivable" id="accountsReceivable" placeholder="00.00" ></td>
+                        <td>Amounts customers owe for credit sales.</td>
+                    </tr>
+                    <tr class="indent-level-4">
+                        <td>Gross Accounts Receivable</td>
+                        <td><input type="number" class="form-control" name="grossAccountsReceivable" id="grossAccountsReceivable" oninput="calculate()"></td>
+                        <td>The total amount owed by customers before deducting allowances.</td>
+                    </tr>
+                    <tr class="indent-level-4">
+                        <td>Allowance For Doubtful Accounts Receivable</td>
+                        <td><input type="number" class="form-control" name="allowanceForDoubtful" id="allowanceForDoubtful" oninput="calculate()"></td>
+                        <td>A reserve for estimated uncollectible accounts.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Other Receivables</td>
+                        <td><input type="number" class="form-control" name="otherReceivables" id="otherReceivables" oninput="calculate()"></td>
+                        <td>Receivables other than accounts receivable, such as interest or tax refunds.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Inventory</td>
+                        <td><input type="number" class="form-control1" name="inventory" id="inventory" placeholder="00.00" readonly></td>
+                        <td>Goods available for sale and raw materials used to produce them.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Raw Materials</td>
+                        <td><input type="number" class="form-control" name="rawMaterials" id="rawMaterials" oninput="calculate()"></td>
+                        <td>Basic materials used in the production process.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Work in Process</td>
+                        <td><input type="number" class="form-control" name="workInProcess"  id="workInProcess" oninput="calculate()"></td>
+                        <td>Goods that are in the process of being manufactured but are not yet complete.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Finished Goods</td>
+                        <td><input type="number" class="form-control" name="finishedGoods" id="finishedGoods" oninput="calculate()"></td>
+                        <td>Completed products ready for sale.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Hedging Assets Current</td>
+                        <td><input type="number" class="form-control" id="hedgingAssetsCurrent" name="hedgingAssetsCurrent" oninput="calculate()"></td>
+                        <td>Assets used to offset potential losses from other investments.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Other Current Assets</td>
+                        <td><input type="number" class="form-control" id="otherCurrentAssets" name="otherCurrentAssets" oninput="calculate()"></td>
+                        <td>Miscellaneous assets expected to be converted to cash within a year.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Total non-current assets</td>
+                        <td><input type="number" class="form-control1" id="totalNon_CurrentAssets" name="totalNon_CurrentAssets"  placeholder="00.00"></td>
+                        <td>Long-term investments not expected to be liquidated within a year.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Net PPE</td>
+                        <td><input type="number" class="form-control1" id="netPPE" name="netPPE" placeholder="00.00" readonly></td>
+                        <td>Property, Plant, and Equipment minus accumulated depreciation.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Gross PPE</td>
+                        <td><input type="number" class="form-control1" name="grossPPE" id="grossPPE" placeholder="00.00"></td>
+                        <td>The total cost of property, plant, and equipment before depreciation.</td>
+                    </tr>
+                    <tr class="indent-level-4">
+                        <td>Land And Improvements</td>
+                        <td><input type="number" class="form-control" id="land_and_improvements" name="land_and_improvements" oninput="calculate()"></td>
+                        <td>Land And Improvements: Land owned by the company and enhancements made to it.</td>
+                    </tr>
+                    <tr class="indent-level-4">
+                        <td>Buildings And Improvements</td>
+                        <td><input type="number" class="form-control" id="buildings_and_improvements" name="buildings_and_improvements" oninput="calculate()"></td>
+                        <td>Structures and modifications that increase their value.</td>
+                    </tr>
+                    <tr class="indent-level-4">
+                        <td>Machinery Furniture Equipment</td>
+                        <td><input type="number" class="form-control" id="machinery_furniture_equipment" name="machinery_furniture_equipment" oninput="calculate()"></td>
+                        <td>Capital assets used in the production process and office equipment.</td>
+                    </tr>
+                    <tr class="indent-level-4">
+                        <td>Other Properties</td>
+                        <td><input type="number" class="form-control" id="other_properties" name="other_properties" oninput="calculate()"></td>
+                        <td>Additional properties owned by the company not classified under other categories.</td>
+                    </tr>                   
+                    <tr class="indent-level-4">
+                        <td>Leases</td>
+                        <td><input type="number" class="form-control" id="leases" name="leases" oninput="calculate()"></td>
+                        <td>Long-term rental agreements for property or equipment.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Accumulated Depreciation</td>
+                        <td><input type="number" class="form-control" id="accumulated_depreciation" name="accumulated_depreciation" oninput="calculate()"></td>
+                        <td>The total depreciation expense that has been recorded against an asset.</td>
+                    </tr>                    
+                    <tr class="indent-level-2">
+                        <td>Goodwill And Other Intangible Assets</td>
+                        <td><input type="number" class="form-control1" name="goodwillAssets" id="goodwillAssets" placeholder="00.00"></td>
+                        <td>Non-physical assets with long-term value, like trademarks and patents.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Goodwill</td>
+                        <td><input type="number" class="form-control" name="goodwill" id="goodwill" oninput="calculate()"></td>
+                        <td>The excess value paid over the fair market value of assets during an acquisition.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Other Intangible Assets</td>
+                        <td><input type="number" class="form-control" name="other_intangible_assets" id="other_intangible_assets" oninput="calculate()"></td>
+                        <td>Non-physical assets excluding goodwill, such as patents and copyrights.
+                        </td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Investments And Advances</td>
+                        <td><input type="number" class="form-control1" name="investAdvance" id="investAdvance" placeholder="00.00"></td>
+                        <td>Investments And Advances: Long-term financial investments and prepayments.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Long Term Equity Investment</td>
+                        <td><input type="number" class="form-control" name="long_term_equity_investment" id="long_term_equity_investment" oninput="calculate()"></td>
+                        <td>Investments in other companies' equity meant to be held for the long term.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Other Non Current Assets</td>
+                        <td><input type="number" class="form-control" name="other_non_current_assets" id="other_non_current_assets" oninput="calculate()"></td>
+                        <td>Miscellaneous long-term assets not classified elsewhere.</td>
+                    </tr>
+
+                    <tr>
+                        <td>Total Liabilities Net Minority Interest</td>
+                        <td><input type="number" class="form-control1" id="total_Liabilities_net" name="total_Liabilities_net" placeholder="00.00"></td>
+                        <td>All obligations the company owes, excluding minority interest.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Current Liabilities</td>
+                        <td><input type="number" class="form-control1" id="current_Liabilities" name="current_Liabilities" placeholder="00.00" readonly></td>
+                        <td>Obligations due within one year.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Payables And Accrued Expenses</td>
+                        <td><input type="number" class="form-control1" id="payables_Accrued" name="payables_Accrued" placeholder="00.00"></td>
+                        <td>Amounts the company owes to suppliers and expenses incurred but not yet paid.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Accounts Payable</td>
+                        <td><input type="number" class="form-control" id="accounts_payable" name="accounts_payable" oninput="totalcalculate()"></td>
+                        <td>Money owed to suppliers for purchases made on credit.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Income Tax Payable</td>
+                        <td><input type="number" class="form-control" id="income_tax_payable" name="income_tax_payable" oninput="totalcalculate()"></td>
+                        <td>Taxes owed to the government that have not yet been paid.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Pension & Other Post Retirement Benefit Plans Current</td>
+                        <td><input type="number" class="form-control" id="pension_and_other_post_retirement_benefit_plans_current" name="pension_and_other_post_retirement_benefit_plans_current" oninput="totalcalculate()"></td>
+                        <td>Current portion of liabilities for employee benefits.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Current Debt And Capital Lease Obligation</td>
+                        <td><input type="number" class="form-control1" id="current_debt_and_Capital_lease" name="current_debt_and_Capital_lease" readonly placeholder="00"></td>
+                        <td>Debt and lease payments due within one year.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Current Debt</td>
+                        <td><input type="number" class="form-control" id="current_debt" name="current_debt" oninput="totalcalculate()"></td>
+                        <td>Short-term borrowing due within a year.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Capital Lease Obligation</td>
+                        <td><input type="number" class="form-control" id="capital_lease_obligation" name="capital_lease_obligation" oninput="totalcalculate()"></td>
+                        <td>Current portion of a long-term lease agreement.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Current Deferred Liabilities</td>
+                        <td><input type="number" class="form-control1" id="current_deferred_liabilities" name="current_deferred_liabilities"  placeholder="00" readonly></td>
+                        <td>Liabilities that have been incurred but not yet recognized as expenses.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Current Deferred Revenue</td>
+                        <td><input type="number" class="form-control" id="current_deferred_revenue" name="current_deferred_revenue" oninput="totalcalculate()"></td>
+                        <td>Money received for goods or services not yet delivered.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Other Current Liabilities</td>
+                        <td><input type="number" class="form-control" id="other_current_liabilities" name="other_current_liabilities" oninput="totalcalculate()"></td>
+                        <td>Miscellaneous short-term liabilities.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Total Non Current Liabilities Net Minority Interest</td>
+                        <td><input type="number" class="form-control1" id="total_non_current_liabilities_net_minority" name="total_non_current_liabilities_net_minority" placeholder="00" readonly></td>
+                        <td>Long-term obligations excluding minority interest.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Long Term Debt And Capital Lease Obligation</td>
+                        <td><input type="number" class="form-control1" id="long_term_debt_and_capital_lease_obligation" name="long_term_debt_and_capital_lease_obligation" placeholder="00" readonly></td>
+                        <td>Debt and lease payments due beyond one year.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Long Term Debt</td>
+                        <td><input type="number" class="form-control" id="long_term_debt" name="long_term_debt" oninput="totalcalculate()"></td>
+                        <td>Loans and financial obligations not due within the next year.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Long Term Capital Lease Obligation</td>
+                        <td><input type="number" class="form-control" id="long_term_capital_lease_obligation" name="long_term_capital_lease_obligation" oninput="totalcalculate()"></td>
+                        <td>Long-term portion of lease agreements.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Non Current Deferred Liabilities</td>
+                        <td><input type="number" class="form-control1" id="non_current_deferred_liabilities" name="non_current_deferred_liabilities" placeholder="00" readonly></td>
+                        <td>Long-term liabilities that have been incurred but not yet recognized.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Non Current Deferred Taxes Liabilities</td>
+                        <td><input type="number" class="form-control" id="non_current_deferred_taxes_liabilities" name="non_current_deferred_taxes_liabilities" oninput="totalcalculate()"></td>
+                        <td>Taxes accrued but not due within the next year.</td>
+                    </tr>
+
+                    <tr class="indent-level-3">
+                        <td>Non Current Deferred Revenue</td>
+                        <td><input type="number" class="form-control" id="non_current_deferred_revenue" name="non_current_deferred_revenue" oninput="totalcalculate()"></td>
+                        <td>Revenue received for goods or services to be delivered beyond one year.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Trade and Other Payables Non Current</td>
+                        <td><input type="number" class="form-control" id="trade_and_other_payables_non_current" name="trade_and_other_payables_non_current" oninput="totalcalculate()"></td>
+                        <td>Long-term payables related to business operations.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Other Non Current Liabilities</td>
+                        <td><input type="number" class="form-control" id="other_non_current_liabilities" name="other_non_current_liabilities" oninput="totalcalculate()"></td>
+                        <td>Miscellaneous long-term liabilities.</td>
+                    </tr>
+                    <tr>
+                        <td>Total Equity Gross Minority Interest </td>
+                        <td><input type="number" class="form-control1" id="total_equity_gross_minority_interest" name="total_equity_gross_minority_interest" placeholder="00" readonly></td>
+                        <td>Total equity, including the ownership interest of minority shareholders.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Stockholders' Equity</td>
+                        <td><input type="number" class="form-control1" id="stockholders_equity" name="stockholders_equity" placeholder="00" readonly></td>
+                        <td>Owners' claim on the company's assets after liabilities are deducted.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Capital Stock</td>
+                        <td><input type="number" class="form-control1" id="capital_stock" name="capital_stock" placeholder="00" readonly></td>
+                        <td>The amount of money invested by shareholders.</td>
+                    </tr>
+                    <tr class="indent-level-3">
+                        <td>Common Stock</td>
+                        <td><input type="number" class="form-control" id="common_stock" name="common_stock" oninput="total()"></td>
+                        <td>Shares entitling their holder to dividends and voting rights.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Retained Earnings</td>
+                        <td><input type="number" class="form-control" id="retained_earnings" name="retained_earnings" value="{{ retained_earnings }}" oninput="total()" ></td>
+                        <td>Profits reinvested in the business instead of being paid out as dividends.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Gains/ (Losses) Not Affecting Retained Earnings</td>
+                        <td><input type="number" class="form-control" id="gains_or_losses_not_affecting_retained_earnings" name="gains_or_losses_not_affecting_retained_earnings" oninput="total()" ></td>
+                        <td>Changes in equity not resulting from net income.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Other Equity Adjustments</td>
+                        <td><input type="number" class="form-control" id="other_equity_adjustments" name="other_equity_adjustments" oninput="total()"></td>
+                        <td>Miscellaneous adjustments to equity not captured in other categories.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- Button to Add More Advisors -->
+        <div class="row mt-5">
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary" id="submit_income_statement">Submit</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+function calculate(){
+    var cash = parseFloat(document.getElementById('cash').value) || 0;
+    var cashEquivalents = parseFloat(document.getElementById('cash_equivalents').value) || 0;
+    
+    var cashandcash=cash+cashEquivalents;
+    document.getElementById('cashAndCashEquivalents').value=cashandcash
+
+    var shortTermInvestments = parseFloat(document.getElementById('short_term_investments').value) || 0;
+    var short=cashandcash+shortTermInvestments
+
+    document.getElementById('cashEquivalentsShotTerm').value=short
+
+    var grossaccountsreceivables=parseFloat(document.getElementById('grossAccountsReceivable').value) || 0;
+    var allowanceForDoubtful=parseFloat(document.getElementById('allowanceForDoubtful').value) || 0;
+    accountsreceivable=grossaccountsreceivables-allowanceForDoubtful;
+    document.getElementById('accountsReceivable').value=accountsreceivable
+
+    var otherReceivables=parseFloat(document.getElementById('otherReceivables').value) || 0;
+
+    var receivables=accountsreceivable+otherReceivables;
+    document.getElementById('receivable').value=receivables
+
+    var rawMaterials=parseFloat(document.getElementById('rawMaterials').value) || 0;
+    var progresswork=parseFloat(document.getElementById('workInProcess').value) || 0;
+    var goodsfinished=parseFloat(document.getElementById('finishedGoods').value) || 0;
+
+    var inventory = rawMaterials + progresswork + goodsfinished;
+    document.getElementById('inventory').value=inventory
+
+    var hedgingAssetsCurrent=parseFloat(document.getElementById('hedgingAssetsCurrent').value) || 0;
+    var  other=parseFloat(document.getElementById('otherCurrentAssets').value) || 0;
+
+    var currentassests=short+receivables+inventory+hedgingAssetsCurrent+other
+    document.getElementById('currentAssets').value=currentassests
+
+    const landAndImprovements = parseFloat(document.getElementById('land_and_improvements').value) || 0;
+    const buildingsAndImprovements = parseFloat(document.getElementById('buildings_and_improvements').value) || 0;
+    const machineryFurnitureEquipment = parseFloat(document.getElementById('machinery_furniture_equipment').value) || 0;
+    const otherProperties = parseFloat(document.getElementById('other_properties').value) || 0;
+    const leases = parseFloat(document.getElementById('leases').value) || 0;
+    const accumulatedDepreciation = parseFloat(document.getElementById('accumulated_depreciation').value) || 0;
+    var grossppe=landAndImprovements+buildingsAndImprovements+machineryFurnitureEquipment+otherProperties+leases;
+    document.getElementById('grossPPE').value=grossppe;
+
+    var accumulated=parseFloat(document.getElementById('accumulated_depreciation').value) || 0;
+    var netppe=grossppe-accumulated;
+    document.getElementById('netPPE').value=netppe
+
+    var goodwill=parseFloat(document.getElementById('goodwill').value) || 0;
+    var other=parseFloat(document.getElementById('other_intangible_assets').value) || 0;
+
+    var goodwillandother= goodwill+other;
+    document.getElementById('goodwillAssets').value=goodwillandother
+    var longterm=parseFloat(document.getElementById('long_term_equity_investment').value) ||0;
+            
+    document.getElementById('investAdvance').value=longterm
+    var othernoncurrentassests=parseFloat(document.getElementById('other_non_current_assets').value) || 0;
+
+    var totalnoncurrent=netppe+goodwillandother+longterm+othernoncurrentassests
+
+    document.getElementById('totalNon_CurrentAssets').value=totalnoncurrent
+
+    var total=currentassests+totalnoncurrent;
+    document.getElementById('totalAssets').value=total
+}
+
+function totalcalculate(){
+    var accounts=parseFloat(document.getElementById('accounts_payable').value) || 0;
+    var incometax=parseFloat(document.getElementById('income_tax_payable').value) || 0;
+
+    var payable=accounts+incometax;
+    document.getElementById('payables_Accrued').value=payable
+
+    var accounts=parseFloat(document.getElementById('accounts_payable').value) || 0;
+    
+
+    var pension=parseFloat(document.getElementById('pension_and_other_post_retirement_benefit_plans_current').value) || 0;
+
+    var debtcurrent=parseFloat(document.getElementById('current_debt').value) || 0;
+    var capital=parseFloat(document.getElementById('capital_lease_obligation').value) || 0;
+
+    var currentdebt=debtcurrent+capital;
+    document.getElementById('current_debt_and_Capital_lease').value=currentdebt
+
+    var defferedrevenue=parseFloat(document.getElementById('current_deferred_revenue').value) || 0;
+    document.getElementById('current_deferred_liabilities').value=defferedrevenue
+    var noncurrent=parseFloat(document.getElementById('other_current_liabilities').value) || 0;
+    var currentlia=payable+pension+currentdebt+defferedrevenue+noncurrent
+    document.getElementById('current_Liabilities').value=currentlia 
+
+    
+
+
+    var longtermdebt = parseFloat(document.getElementById('long_term_debt').value) || 0;
+    var longtermcapital = parseFloat(document.getElementById('long_term_capital_lease_obligation').value) || 0;
+    var noncurrentdeferredtaxes = parseFloat(document.getElementById('non_current_deferred_taxes_liabilities').value) || 0;
+    var noncurrentdeferredrevenue = parseFloat(document.getElementById('non_current_deferred_revenue').value) || 0;
+    var tradeandotherpayables = parseFloat(document.getElementById('trade_and_other_payables_non_current').value) || 0;
+    var othernoncurrentliabilities = parseFloat(document.getElementById('other_non_current_liabilities').value) || 0;
+
+    var debtlongterm = longtermcapital + longtermdebt;
+    document.getElementById('long_term_debt_and_capital_lease_obligation').value = debtlongterm;
+
+    currentdeffered=noncurrentdeferredtaxes+noncurrentdeferredrevenue;
+    document.getElementById('non_current_deferred_liabilities').value = currentdeffered;
+
+    current1=debtlongterm+currentdeffered+tradeandotherpayables+othernoncurrentliabilities;
+    document.getElementById('total_non_current_liabilities_net_minority').value=current1
+    var totalliabnetminority=currentlia+current1;
+    document.getElementById('total_Liabilities_net').value=totalliabnetminority
+
+}
+
+
+
+function total(){
+    var common=parseFloat(document.getElementById('common_stock').value)|| 0;
+    var retained=parseFloat(document.getElementById('retained_earnings').value) || 0;
+    var gain=parseFloat(document.getElementById('gains_or_losses_not_affecting_retained_earnings').value) || 0;
+    var equity=parseFloat(document.getElementById('other_equity_adjustments').value) || 0;
+
+    document.getElementById('capital_stock').value=common;
+    capitalstock=common+retained+gain+equity
+    document.getElementById('stockholders_equity').value=capitalstock
+    document.getElementById('total_equity_gross_minority_interest').value=capitalstock;
+}
+
+</script>
+
+{% endblock content %}

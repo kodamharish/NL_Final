@@ -1,0 +1,478 @@
+{% extends './base.html' %}
+{% block content %}
+<style>
+  html,
+  body {
+    font-family: 'Arial MT Rounded';
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .split-screen {
+    display: flex;
+    height: 100vh;
+  }
+
+  .left {
+    flex: 0 0 70%;
+    background: url('https://static.vecteezy.com/system/resources/previews/002/792/620/non_2x/abstract-geometric-light-blue-hexagonal-design-background-vector.jpg') no-repeat center center;
+    background-size: cover;
+    /* Ensure the background image covers the entire area */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    margin-top: -45px !important;
+  }
+
+  .login-form {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  .login-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .login-header h2 {
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .login-header p {
+    color: #444;
+    font-size: 0.9rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #333;
+    font-size: 0.9rem;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    border-bottom: 2px solid #fff;
+    background-color: transparent;
+    color: #333;
+    transition: border-color 0.3s;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    background-color: transparent;
+  }
+
+  .btn-custom {
+    border-radius: 5px;
+    padding: 0.6rem 1rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    font-size: 0.9rem;
+  }
+
+  .btn-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgb(249, 247, 247);
+    background-color: #0056b3;
+    color: #fff;
+    /* Ensure text color remains white on hover */
+  }
+
+  .social-login {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .social-icon {
+    font-size: 1.2rem;
+    margin: 0 0.8rem;
+    color: #333;
+    transition: color 0.3s;
+  }
+
+  .social-icon:hover {
+    color: #007bff;
+  }
+
+  .right {
+    flex: 0 0 30%;
+    background: linear-gradient(135deg, rgb(36, 141, 197), rgb(11, 58, 70));
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    color: #ffffff;
+  }
+
+  .signup-message {
+    text-align: center;
+  }
+
+  .signup-message h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+  }
+
+  .signup-message p {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-height: 600px) {
+    .login-header h2 {
+      font-size: 1.5rem;
+    }
+
+    .login-header p {
+      font-size: 0.8rem;
+    }
+
+    .form-group {
+      margin-bottom: 0.8rem;
+    }
+
+    .social-login {
+      margin-top: 1rem;
+    }
+  }
+  .register-box {
+            
+            width: 500px;
+            height: 100vh;
+            padding: 40px;
+            background: linear-gradient(135deg, rgb(36, 141, 197), rgb(11, 58, 70));
+            color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: -30px !important;
+            margin-top: -35px !important;
+        }
+
+        h2 {
+            font-size: 24px;
+            text-align: center;
+            /*   */
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .form-row .did-floating-label-content {
+            flex: 1;
+        }
+
+        .did-floating-label-content {
+            position: relative;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .did-floating-label {
+            color: #fff;
+            font-size: 13px;
+            font-weight: normal;
+            position: absolute;
+            pointer-events: none;
+            left: 15px;
+            top: 11px;
+            padding: 0 5px;
+            background: transparent;
+            transition: 0.2s ease all;
+        }
+
+        .did-floating-input {
+            font-size: 14px;
+            width: 100%;
+            height: 36px;
+            padding: 0 20px;
+            /* background: rgba(255, 255, 255, 0.01); */
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            background-color: transparent;
+        }
+
+        .did-floating-input:focus {
+            outline: none;
+            border-color: rgba(187, 188, 190, 0.6);
+        }
+
+        .did-floating-input.filled ~ .did-floating-label {
+            top: -8px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .did-floating-input option {
+    color: black;
+  }
+        /* Password toggle icon */
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            background-color: #007bff;
+            border-color: #007bff;
+            padding: 10px;
+        }
+
+        .register-box button {
+            background-color:transparent;
+            color: white;
+            /* border: 1px solid rgba(255, 255, 255, 0.6); */
+            width: 50%;
+            padding: 10px;
+            margin-left: 100px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: block;
+            border: 1px solid white;
+      
+        }
+
+        /* .register-box button:hover {
+            background-color: rgba(25, 243, 47, 0.4);
+            color: white;
+            transform: 0.3s ease;
+            width: 100%;
+            font-size: 14px;
+            display: block;
+            margin-left: 0px;
+            padding: 10px;
+        } */
+        .password-error-message {
+    font-size: 15px; /* Adjust font size as needed */
+    color: red; /* Error message color */
+    margin-top: 5px; /* Space above the error message */
+    margin-left: 100px;
+}
+.email-error-message {
+    font-size: 12px; /* Adjust font size as needed */
+    color: red; /* Error message color */
+    margin-top: 5px; /* Space above the error message */
+    margin-left: 100px;
+}
+.did-floating-label-content select:focus + .did-floating-label,
+  .did-floating-label-content select:not([value=""]) + .did-floating-label {
+    top: -10px;
+    left: 10px;
+    font-size: 12px;
+    color: white; /* Keeps label white when focused or filled */
+  }
+.h2{
+  margin-bottom: 0px !important;
+  padding-bottom: none;
+}
+
+</style>
+
+<div class="split-screen">
+  <div class="left">
+    <div class="login-form">
+      <div class="login-header">
+        <h1>Welcome Back</h1>
+        <p>Please sign in to your account</p>
+      </div>
+      <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="username"><b>Username</b></label>
+          <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password"><b>Password</b></label>
+          <input type="password" class="form-control" id="password" name="password" required>
+          
+        
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="remember_me" name="remember_me">
+            <label class="form-check-label" for="remember_me">Remember me</label>
+          </div>
+          <a href="{% url 'forgot_password_1' %}" class="text-danger" style="font-size: 0.9rem;"><b>Forgot
+              Password?</b></a>
+        </div>
+        <button type="submit" class="btn btn-custom w-100 mb-3">Log In</button>
+      </form>
+
+      {% for msg in messages %}
+      <p class="text-danger text-center mt-2 fw-bold" style="font-size: 0.9rem;">{{ msg }}</p>
+      {% endfor %}
+
+     
+    </div>
+  </div>
+  <!-- <div class="right"> -->
+    <div class="register-box">
+      <h2 style="font-size: 40px;">New here?</h2>
+      <p style="text-align: center;" style="padding-top: 0px;">Sign up and discover great opportunities.</p>
+      <form method="POST" enctype="multipart/form-data" action="{% url 'signup' %}">
+        {% csrf_token %}
+
+        <div class="form-row">
+          <div class="did-floating-label-content">
+              <input type="text" class="did-floating-input" name="first_name" placeholder="" required>
+              <label class="did-floating-label">First Name</label>
+          </div>
+          <div class="did-floating-label-content">
+              <input type="text" class="did-floating-input" name="last_name" placeholder="" required>
+              <label class="did-floating-label">Last Name</label>
+          </div>
+      </div>
+    
+      <div class="did-floating-label-content">
+          <input type="text" class="did-floating-input" name="company_name" placeholder="" required>
+          <label class="did-floating-label">Company Name</label>
+      </div>
+      <div class="did-floating-label-content">
+        <select class="did-floating-input" name="company_type" required>
+          <option value="" disabled selected>Select Company Type</option>
+          <option value="startup">Startup</option>
+          <option value="investor">Investor</option>
+          <option value="enablers">Enablers (Professional, Incubators Etc.)</option>
+          <option value="others">Others</option>
+        </select>
+       
+      </div>
+      
+      <div class="did-floating-label-content">
+        <input type="text" class="did-floating-input" id="username-email" name="username_email" placeholder="" required>
+        <label class="did-floating-label">Username:Email</label>
+        <div class="email-error-message" style="display:none;color:red;"></div>
+    </div>
+      <div class="form-row password-container">
+        <div class="did-floating-label-content">
+            <input type="password" class="did-floating-input" id="register-password" name="password1" placeholder="" required>
+            <label class="did-floating-label">Password</label>
+            <i class="fas fa-eye toggle-password" data-toggle="#register-password"></i>
+        </div>
+        <div class="did-floating-label-content">
+            <input type="password" class="did-floating-input" id="register-confirm-password" name="confirm_password" placeholder="" required>
+            <label class="did-floating-label">Confirm Password</label>
+            <i class="fas fa-eye toggle-password" data-toggle="#register-confirm-password"></i>
+        </div>
+        
+    </div>
+    <div class="password-error-message" style="display:none;color:red;"></div>
+    
+      
+
+          <button type="submit" class="mt-3">Register</button>
+      </form>
+  </div>
+
+  </div>
+<!-- </div> -->
+
+<script>
+  // Toggle Password Visibility
+  document.querySelectorAll('.toggle-password').forEach(item => {
+      item.addEventListener('click', function() {
+          const input = document.querySelector(this.getAttribute('data-toggle'));
+          if (input.getAttribute('type') === 'password') {
+              input.setAttribute('type', 'text');
+              this.classList.remove('fa-eye');
+              this.classList.add('fa-eye-slash');
+          } else {
+              input.setAttribute('type', 'password');
+              this.classList.remove('fa-eye-slash');
+              this.classList.add('fa-eye');
+          }
+      });
+  });
+
+  // Keep label floating when input is filled
+  document.querySelectorAll('.did-floating-input').forEach(input => {
+      input.addEventListener('input', function() {
+          if (this.value.trim() !== '') {
+              this.classList.add('filled');
+          } else {
+              this.classList.remove('filled');
+          }
+      });
+  });
+
+  document.getElementById('register-confirm-password').addEventListener('input', function() {
+    const password = document.getElementById('register-password').value;
+    const confirmPassword = document.getElementById('register-confirm-password').value;
+    const errorMessageDiv = document.querySelector('.password-error-message');
+
+    // Check if both fields have been input before validating
+    if (password && confirmPassword) {
+        if (password !== confirmPassword) {
+            errorMessageDiv.textContent = 'Passwords do not match!';
+            errorMessageDiv.style.display = 'block';
+        } else if (!passwordPolicy(password)) {
+            errorMessageDiv.textContent = 'Password does not meet the policy requirements!';
+            errorMessageDiv.style.display = 'block';
+        } else {
+            errorMessageDiv.style.display = 'none';
+        }
+    }
+});
+
+function passwordPolicy(password) {
+    // Define the default password policy
+    // Password should be at least 8 characters long, contain at least one number, one lowercase and one uppercase letter
+    const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    return regex.test(password);
+}
+document.getElementById('username-email').addEventListener('blur', function() {
+    const input = this.value;
+    const errorMessageDiv = document.querySelector('.email-error-message');
+    
+    // Email validation regex pattern
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (input && !emailPattern.test(input)) {
+        errorMessageDiv.textContent = 'Please enter a valid email address.';
+        errorMessageDiv.style.display = 'block';
+    } else {
+        errorMessageDiv.style.display = 'none';
+    }
+});
+
+
+</script>
+{% endblock content %}

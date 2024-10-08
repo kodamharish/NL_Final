@@ -1,0 +1,805 @@
+{% include 'admin/company_profile.html' %}
+{% load static %}
+{% block content %}
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+       body {
+        position: relative;
+        overflow: hidden;  /* No scrolling on the body */
+        height: 100vh; /* Ensure full viewport height for the body */
+        margin: 0;
+        padding: 0;
+    }
+    
+    .small-plus-button {
+    font-size: 4rem;
+    color: black;
+    text-align: center;
+    cursor: pointer;
+    position: absolute;
+    top: 70px; /* Align with the breadcrumb */
+    right: 70px; /* Adjust this value to control space between breadcrumb and button */
+    z-index: 10000;
+}
+
+
+        .entry-form {
+            margin-top: 20px;
+            
+        }
+        #entryForm {
+    display: block;
+    /* padding: 20px;  Ensure enough space inside the form */
+    height: 700px;
+    overflow-y: auto;
+    font-family: 'Arial MT Rounded'
+}
+
+
+        .product-list {
+            margin-top: 20px;
+        }
+
+        .product-card {
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    font-family: 'Arial MT Rounded';
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap; /* Add this to ensure proper wrapping */
+    width: 100%; /* Ensure the card takes up full width */
+    margin-top: -20px;
+    margin-left: -23px;
+}
+
+        .form-container {
+            display: flex;
+            flex: 1;
+            width: 90%;
+            margin-left: 10px;
+        }
+
+        .form-column {
+            flex: 1;
+            margin-right: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-column:last-child {
+            margin-right: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            color: grey;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            border: none;
+            border-bottom: 1px solid grey;
+            border-radius: 0;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 0.5rem;
+            background-color: transparent;
+            transition: background-color 0s;
+            font-size: 16px;
+            margin-top: 2px;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .form-control[readonly] {
+            border: none;
+        }
+
+        .card-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-left: 20px;
+        }
+
+        .delete-button, .edit-button {
+            margin-bottom: 5px;
+        }
+
+        .submit-button {
+    position: relative;
+    z-index: 1000;  /* Adjust this value to ensure the button is above other elements */
+    bottom: 20px;
+    right: -500px;
+    display: block;  /* Ensure it's visible */
+}
+
+
+
+
+        .divider {
+            border-top: 1px solid grey;
+            margin: 10px 0;
+        }
+
+        .inline-inputs {
+            display: flex;
+            align-items: center;
+        }
+
+        .inline-inputs label {
+            margin-right: 5px;
+        }
+
+        .inline-inputs input {
+            width: 150px;
+            margin-right: 5px;
+        }
+
+        .d-flex {
+            display: flex;
+            align-items: center;
+        }
+
+        .editable .form-control {
+            border-bottom: 1px solid grey;
+            background-color: white !important;
+        }
+
+        /* Custom Styles for Display Mode */
+        .display-mode .form-control {
+            border: none;
+            background-color: transparent;
+            font-size: 16px; /* Example font size */
+            color: #333; /* Example font color */
+        }
+
+        .display-mode .form-group label {
+            font-size: 12px; /* Example label font size */
+            font-weight: normal; /* Example label font weight */
+        }
+
+        .display-mode .form-control {
+            margin-top: -20px;
+            margin-left: 0px;
+            padding-left: 0px;
+        }
+
+        .display-mode .card-buttons {
+            position: static;
+            margin-left: 0;
+        }
+
+        /* Inline Editing Styles */
+        .editing .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+
+        .editing .form-group label {
+            margin-bottom: 5px;
+            color: grey;
+            font-size: 14px;
+        }
+
+        .editing .form-control {
+            border-bottom: 1px solid grey;
+            background-color: white;
+            font-size: 16px;
+        }
+
+        .editing .form-column {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .editing .form-column:last-child {
+            margin-right: 0;
+        }
+        .scrollable-content {
+        max-height: calc(100vh - 65px);  /* Full height minus top margins or paddings */
+        overflow-y: auto;  /* Enable vertical scrolling */
+        overflow-x: hidden;  /* Disable horizontal scrolling */
+        padding-top: 0px;  /* Optional padding inside the content area */
+        margin-top: 0px;
+    }
+
+    /* Hide the scrollbar, optional for design */
+    .scrollable-content::-webkit-scrollbar {
+        width: 0px;  /* Narrow scrollbar width */
+    }
+
+    .scrollable-content::-webkit-scrollbar-thumb {
+        background-color: #888;  /* Scrollbar color */
+    }
+
+    .scrollable-content::-webkit-scrollbar-thumb:hover {
+        background-color: #555;  /* Hover effect on scrollbar */
+    }
+.sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh; 
+    width: 230px; 
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: 66px;
+}
+
+.content-area {
+    margin-left: 260px;  
+    width: calc(100% - 260px);
+    min-height: 100vh;  
+    display: flex;
+    flex-direction: column; 
+}
+
+.breadcrumb {
+    font-size: 18px;
+    color: black;
+    flex: 1;
+    margin-top: 25px;
+    margin-left: 260px;
+    font-family: 'Arial MT Rounded';
+    position: relative; /* Add this to position the breadcrumb */
+}
+        .container::-webkit-scrollbar {
+            width: 0px;
+            background: transparent; /* For Chrome/Safari/Webkit */
+        }
+    
+        .container {
+            scrollbar-width: none; /* For Firefox */
+            -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+        }
+       
+    
+        .bold-text {
+            font-weight: bold;
+        }
+        .card-buttons {
+    display: flex; /* Aligns the buttons in a row */
+    gap: 10px; /* Adds space between the buttons */
+    justify-content: flex-start; /* Align buttons to the left, adjust as needed */
+    align-items: center; /* Vertically aligns the buttons in the center */
+}
+
+.edit-button, .delete-button {
+    margin: 0; /* Remove default margin that might affect layout */
+    background-color: white;
+    color: black;
+    outline: none !important;
+    box-shadow: none !important; /* Remove the box shadow */
+    border: none !important; /* Remove the border */
+}
+ .delete-button {
+    margin: 0; /* Remove default margin that might affect layout */
+    background-color: white;
+    color: red;
+    outline: none !important;
+    box-shadow: none !important; /* Remove the box shadow */
+    border: none !important; /* Remove the border */
+}
+.btn-custom {
+      background-color: transparent; /* Set background color */
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      display: flex;
+      align-items: center; /* Center the image and text vertically */
+      gap: 10px; /* Gap between image and text */
+      margin-left: 1460px;
+      margin-top: -25px;
+      padding: 0;
+      position: fixed;
+    }
+    .btn-custom img {
+    width: 35px; /* Ensure the image has a proper size */
+    height: 35px;
+    margin: 0;
+    padding: 0;
+    display: inline-block; /* Make sure it's displayed properly */
+    position: fixed;
+}
+.btn-edit img {
+    width: 29px; /* Ensure the image has a proper size */
+    height: 29px;
+    margin: 0;
+    padding: 0;
+    display: inline-block; /* Make sure it's displayed properly */
+}
+
+.btn-edit {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0; /* Avoid extra padding around the icon */
+    outline: none;
+}
+.btn-delete img {
+    width: 29px; /* Ensure the image has a proper size */
+    height: 29px;
+    margin: 0;
+    padding: 0;
+    display: inline-block; /* Make sure it's displayed properly */
+}
+
+.btn-delete {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0; /* Avoid extra padding around the icon */
+    outline: none;
+}
+    </style>
+
+<body>
+    <div class="breadcrumb">
+        <span>My Companies</span> &ndash; <span>{{ company.name }}</span> &ndash; <span class="bold-text">Products and Services</span>
+    </div>
+    <div class="btn btn-custom" onclick="toggleForm()">
+        <img src="{% static 'images/add.png' %}" alt="Add">
+    </div>
+    <div class="scrollable-content">
+       
+
+        <div id="entryForm" class="entry-form">
+            <div class="form-container">
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="name">Product Title</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="industry">Industry / Sector</label>
+                        <input type="text" class="form-control" id="industry" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="type_of_business">Type of Business</label>
+                        <input type="text" class="form-control" id="type_of_business" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="problem_solved">Problems Solved</label>
+                        <input type="text" class="form-control" id="problem_solved" required>
+                    </div>
+                </div>
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="launch_date">Launch Date</label>
+                        <input type="date" class="form-control" id="launch_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Three Year Revenue & Profit</label>
+                        <div class="inline-inputs">
+                            <label>Current Year (YTD):</label>
+                        </div>
+                        <div class="inline-inputs">
+                            <label>Revenue= </label>
+                            <input type="text" class="form-control" id="current_year_revenue" required>
+                            <label>P/L =</label>
+                            <input type="text" class="form-control" id="current_year_pl" required>
+                        </div>
+                        <div class="inline-inputs">
+                            <label>Previous Year:</label>
+                        </div>
+                        <div class="inline-inputs">
+                            <label>Revenue= </label>
+                            <input type="text" class="form-control" id="previous_year_revenue" required>
+                            <label>P/L=</label>
+                            <input type="text" class="form-control" id="previous_year_pl" required>
+                        </div>
+                        <div class="inline-inputs">
+                            <label>A year before:</label>
+                        </div>
+                        <div class="inline-inputs">
+                            <label>Revenue= </label>
+                            <input type="text" class="form-control" id="a_year_before_revenue" required>
+                            <label>P/L=</label>
+                            <input type="text" class="form-control" id="a_year_before_pl" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customers">Customers</label>
+                        <input type="text" class="form-control" id="customers" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="competitors">Competitors</label>
+                        <input type="text" class="form-control" id="competitors" required>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary submit-button" onclick="saveProduct()">Add Product</button>
+
+        </div>
+
+        <!-- <div id="productList" class="product-list"></div> -->
+        <div id="productList" class="product-list" style="display: none;"></div>
+    </div>
+</div>
+
+
+<script>
+    let products = [];
+let editIndex = -1;
+
+// Fetch and display products from the server when the page loads
+
+
+
+async function fetchProducts() {
+    try {
+        const response = await fetch("{% url 'pitch_and_product' company.company_id %}", {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch products');
+        }
+
+        const data = await response.json();
+
+        // Check if products exist
+        if (data.products.length > 0) {
+            // If products exist, display them
+            products = data.products;
+            displayProducts(); // Call your displayProducts function to render the products
+            document.getElementById('entryForm').style.display = 'none'; // Hide form
+        } else {
+            // If no products, show the form
+            document.getElementById('entryForm').style.display = 'block'; // Show form
+            document.getElementById('productList').style.display = 'none'; // Hide product list
+        }
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        alert('An error occurred while fetching products.');
+    }
+}
+
+// Call fetchProducts when the page loads
+fetchProducts();
+
+// Function to display products in the list
+
+
+function displayProducts() {
+    const productList = document.getElementById('productList');
+    productList.innerHTML = ''; // Clear the product list
+
+    products.forEach((product, index) => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card display-mode'; // Use the same classes for styling
+        productCard.innerHTML = `
+            <div class="form-container">
+                <div class="form-column">
+                    <div class="form-group">
+                        <label>Product Title</label>
+                        <div class="form-control">${product.name}</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <div class="form-control">${product.description}</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Industry / Sector</label>
+                        <div class="form-control">${product.industry}</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Type of Business</label>
+                        <div class="form-control">${product.type_of_business}</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Problems Solved</label>
+                        <div class="form-control">${product.problem_solved}</div>
+                    </div>
+                </div>
+                <div class="form-column">
+                    <div class="form-group">
+                        <label>Launch Date</label>
+                        <div class="form-control">${product.launch_date}</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Three Year Revenue & Profit</label>
+                        <div class="form-control">Current Year Revenue: ${product.current_year_revenue}, Profit: ${product.current_year_pl}</div>
+                        <div class="form-control">Previous Year Revenue: ${product.previous_year_revenue}, Profit: ${product.previous_year_pl}</div>
+                        <div class="form-control">A Year Before Revenue: ${product.a_year_before_revenue}, Profit: ${product.a_year_before_pl}</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Customers</label>
+                        <div class="form-control">${product.customers}</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Competitors</label>
+                        <div class="form-control">${product.competitors}</div>
+                    </div>
+                </div>
+            </div>
+           <div class="card-buttons">
+    <button class="btn btn-edit" onclick="editProduct(${index})">
+        <img src="{% static 'images/edit.png' %}">
+    </button>
+    <button class="btn btn-delete" onclick="deleteProduct(${index})">
+         <img src="{% static 'images/delete.png' %}">
+    </button>
+</div>
+
+
+        `;
+        productList.appendChild(productCard); // Add the product card to the list
+    });
+
+    // Show the product list and hide the form
+    document.getElementById('productList').style.display = 'block';
+    document.getElementById('entryForm').style.display = 'none';
+}
+
+
+window.addEventListener('load', function() {
+    // Adjust layout here if necessary, after all content has loaded
+    document.querySelector('.scrollable-content').style.marginLeft = '250px'; // Example adjustment
+});
+
+
+function resetForm() {
+    // Clear all form fields
+    document.getElementById('name').value = '';
+    document.getElementById('description').value = '';
+    document.getElementById('industry').value = '';
+    document.getElementById('type_of_business').value = '';
+    document.getElementById('problem_solved').value = '';
+    document.getElementById('launch_date').value = '';
+    document.getElementById('current_year_revenue').value = '';
+    document.getElementById('current_year_pl').value = '';
+    document.getElementById('previous_year_revenue').value = '';
+    document.getElementById('previous_year_pl').value = '';
+    document.getElementById('a_year_before_revenue').value = '';
+    document.getElementById('a_year_before_pl').value = '';
+    document.getElementById('customers').value = '';
+    document.getElementById('competitors').value = '';
+
+    // Reset the button text to "Add Product"
+    document.querySelector('.submit-button').innerText = 'Add Product';
+
+    // Hide the form
+    document.getElementById('entryForm').style.display = 'none';
+
+    // Show the product list again
+    //document.getElementById('productList').style.display = 'block';
+}
+
+// Save new or edited product
+
+
+
+
+
+async function saveProduct() {
+    // Collect values from the form fields
+    const name = document.getElementById('name').value;
+    const description = document.getElementById('description').value;
+    const industry = document.getElementById('industry').value;
+    const type_of_business = document.getElementById('type_of_business').value;
+    const problem_solved = document.getElementById('problem_solved').value;
+    const launch_date = document.getElementById('launch_date').value;
+    const current_year_revenue = document.getElementById('current_year_revenue').value;
+    const current_year_pl = document.getElementById('current_year_pl').value;
+    const previous_year_revenue = document.getElementById('previous_year_revenue').value;
+    const previous_year_pl = document.getElementById('previous_year_pl').value;
+    const a_year_before_revenue = document.getElementById('a_year_before_revenue').value;
+    const a_year_before_pl = document.getElementById('a_year_before_pl').value;
+    const customers = document.getElementById('customers').value;
+    const competitors = document.getElementById('competitors').value;
+
+    // Create product object
+    const product = {
+        name,
+        description,
+        industry,
+        type_of_business,
+        problem_solved,
+        launch_date,
+        current_year_revenue,
+        current_year_pl,
+        previous_year_revenue,
+        previous_year_pl,
+        a_year_before_revenue,
+        a_year_before_pl,
+        customers,
+        competitors
+    };
+
+    // Determine whether to create (POST) or update (PUT)
+    const method = editIndex >= 0 ? 'PUT' : 'POST';
+    const url = "{% url 'pitch_and_product' company.company_id %}";  // Ensure this URL is correct
+
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',  // Ensure CSRF token is sent for POST/PUT
+            },
+            body: JSON.stringify({ ...product, id: editIndex >= 0 ? products[editIndex].id : null })  // Include product ID for updates
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to save the product.');
+        }
+
+        if (method === 'POST') {
+            products.unshift({ ...product, id: data.id });  // Add new product to the list
+        } else {
+            products[editIndex] = { ...product, id: products[editIndex].id };  // Update existing product in the list
+        }
+
+        // Display updated product list
+        displayProducts();
+
+        // Hide the form and reset
+        resetForm();
+
+        // Reset the edit index
+        editIndex = -1;
+
+    } catch (error) {
+        console.error('Error saving product:', error);
+        alert('An error occurred while saving the product.');
+    }
+}
+
+
+
+
+// Edit product
+
+
+
+
+
+
+
+function editProduct(index) {
+    // Set the edit index so we know we are in edit mode
+    editIndex = index;
+    const product = products[index];
+
+    // Populate the form fields with the product data, handle undefined values
+    document.getElementById('name').value = product.name || '';
+    document.getElementById('description').value = product.description || '';
+    document.getElementById('industry').value = product.industry || '';
+    document.getElementById('type_of_business').value = product.type_of_business || '';
+    document.getElementById('problem_solved').value = product.problem_solved || '';
+    document.getElementById('launch_date').value = product.launch_date || '';
+    document.getElementById('current_year_revenue').value = product.current_year_revenue || '';
+    document.getElementById('current_year_pl').value = product.current_year_pl || '';
+    document.getElementById('previous_year_revenue').value = product.previous_year_revenue || '';
+    document.getElementById('previous_year_pl').value = product.previous_year_pl || '';
+    document.getElementById('a_year_before_revenue').value = product.a_year_before_revenue || '';
+    document.getElementById('a_year_before_pl').value = product.a_year_before_pl || '';
+    document.getElementById('customers').value = product.customers || '';
+    document.getElementById('competitors').value = product.competitors || '';
+
+    // Change the button text from "Add Product" to "Save Product"
+    document.querySelector('.submit-button').innerText = 'Save Product';
+
+    // Ensure the form is visible
+    document.getElementById('entryForm').style.display = 'block';  // Show the form
+
+    // Optionally hide the product list if needed
+    document.getElementById('productList').style.display = 'none';
+
+    // Scroll to the form if needed
+    window.scrollTo(0, document.getElementById('entryForm').offsetTop);
+}
+
+
+
+// Delete product
+
+async function deleteProduct(index) {
+    const product = products[index];
+
+    if (!product.id) {
+        console.error('Product ID is undefined');
+        return;
+    }
+
+    // Immediately remove product from UI
+    products.splice(index, 1);
+    displayProducts();
+
+    try {
+        // Send DELETE request to the server
+        await fetch("{% url 'pitch_and_product' company.company_id %}", {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({ id: product.id })
+        });
+
+        console.log('Product with ID ${product.id} deleted from database.');
+    } catch (error) {
+        console.error('Error deleting product from the database:', error);
+        alert('An error occurred while deleting the product from the database.');
+        // Revert the UI change if the delete request fails
+        products.splice(index, 0, product);  // Reinsert the deleted product back into the array
+        displayProducts();  // Re-render the UI to show the reverted product
+    }
+}
+// Toggle form visibility
+function toggleForm() {
+    const entryForm = document.getElementById('entryForm');
+    entryForm.style.display = (entryForm.style.display === 'none' || entryForm.style.display === '') ? 'block' : 'none';
+
+    // Hide the product list when showing the form
+    document.getElementById('productList').style.display = 'none';
+}
+
+
+
+function toggleForm2() {
+    // Show the form
+    document.getElementById('entryForm').style.display = 'block';
+
+    // Hide the product list
+    document.getElementById('productList').style.display = 'none';
+
+    // Clear any previous values in the form (optional, if you're resetting the form)
+    resetForm();
+
+    // Optionally change the submit button text back to "Add Product" in case it was in "Edit" mode
+    document.querySelector('.submit-button').innerText = 'Add Product';
+
+    // Reset edit index to prevent editing behavior
+    editIndex = -1;
+}
+
+// Initialize the page
+fetchProducts(); // Load products when the page is loaded
+
+ // Initialize the page
+ displayProducts();
+ if (products.length === 0) {
+    document.getElementById('entryForm').style.display = 'block';  // Make sure form is displayed
+    document.querySelector('.submit-button').style.display = 'block';  // Ensure button is not hidden
+}
+
+
+
+
+
+</script>
+        
+</body>
+{% endblock content %}

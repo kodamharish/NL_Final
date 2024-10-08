@@ -1,0 +1,337 @@
+{% include 'admin/company_profile.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Profile</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    html, body {
+    overflow-y: hidden; /* This hides the scrollbar */
+    height: 100%; /* Ensures the entire body height is considered */
+}
+
+body::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, and other WebKit-based browsers */
+}
+.btn-custom {
+      background-color: transparent; /* Set background color */
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      display: flex;
+      align-items: center; /* Center the image and text vertically */
+      gap: 10px; /* Gap between image and text */
+      margin-left: 1200px !important;
+    }.btn-custom img {
+      width: 35px;
+      height: 35px;
+    }
+
+        .container {
+            max-width: 80%;
+            padding: 40px;
+            height: 600px;
+            margin-left: 220px;
+            margin-top: -100px !important;
+            scrollbar-width: none; 
+            font-family: 'Arial MT Rounded' !important;
+            
+        }
+        .container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .breadcrumb {
+            font-size: 0.9em;
+            color: grey;
+        }
+        .info-block {
+            margin-bottom: none;
+            border:none !important;
+        }
+        .label-and-value {
+            display: block;
+        }
+        label {
+            flex: 0 0 100px;
+            color: rgb(160, 158, 158);
+            font-size: 12px;
+            margin-right: 2px; 
+            margin-bottom: 0px !important;
+        }
+        .editable {
+            padding: 0;
+            font-weight: regular;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            text-align: left;
+            border-bottom: 1px solid transparent;
+            outline: none;
+            cursor: text;
+            flex: 1;
+            word-wrap: break-word;
+            margin-top: -8px;
+        }
+        .editable[contenteditable="true"] {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 2px;
+        }
+        .editable[contenteditable="false"] {
+            border-bottom: none !important;
+            padding-bottom: 2px;
+        }
+        .revenue-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .revenue-block {
+            display: flex;
+            align-items: center;
+            width: 45%;
+        }
+        .revenue-block span {
+            margin-right: 5px;
+        }
+        .editable {
+            min-width: 100px;
+            border-bottom: none; /* Create underline for the editable fields */
+        }
+        .actions {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #edit-btn {
+    background-color: white;
+    color: black;
+    margin-top: 0px;
+    outline: none !important;
+    box-shadow: none !important; /* Remove the box shadow */
+    border: none !important; /* Remove the border */
+    padding: 0; /* Adjust padding if necessary */
+    margin-right: -55px;
+}
+
+        #save-btn {
+            background-color: white;
+            color: green;
+            display: none;
+            margin-top: 0px;
+            outline: none !important;
+            box-shadow: none !important; /* Remove the box shadow */
+            border: none !important; /* Remove the border */
+            padding: 0; /* Adjust padding if necessary */
+            margin-right: -55px;
+        }
+        .breadcrumb{
+            font-size: 18px;
+            color: black;
+            flex:1;
+            margin-top: 25px;
+            margin-left: 260px;
+            font-family: 'Arial MT Rounded';
+        }
+        .actions {
+            margin-left: auto;
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+        .p {
+        margin-bottom: 5px; /* Adjust this value as needed */
+        }
+        .a {
+    text-decoration: none;
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="breadcrumb">
+        <span>My Companies</span> &ndash; <span>{{ company.name }}</span> &ndash; <span class="bold-text">Profile</span>
+    </div>
+    <div class="container mt-4">
+        <header class="header">
+            <div class="actions text-end">
+                <button id="edit-btn" class="btn btn-custom"><img src="{% static 'images/edit.png' %}"></button>
+                
+                <button id="save-btn" class="btn btn-custom"> <img src="{% static 'images/save.png' %}"></button>
+            </div>
+        </header >
+        <main class="row">
+            <section class="col-md-6">
+                <div class="info-block">
+                    <label for="company-name">Company Name:</label>
+                    <p id="company-name" class="editable">{{ company.name }}</p>
+                </div>
+                <div class="info-block">
+                    <label for="founded-in">Founded In:(Year)</label>
+                    <p id="founded-in" class="editable">{{ company.date_of_incorporation }}</p>
+                </div>
+                <div class="info-block">
+                    <label for="business-type">Type of Business:</label>
+                    <p id="business-type" class="editable">{{ company.business_type }}</p>
+                </div>
+                <div class="info-block">
+                    <label for="number-of-employees">Number of Employees:</label>
+                    <p id="number-of-employees" class="editable">{{ company.no_of_employees }}</p>
+                </div>
+                <div class="info-block">
+                    <label for="address">Address:</label>
+                    <p id="address" class="editable">{{ company.location }}</p>
+                </div>
+                <div class="info-block label-and-value">
+                    <label for="website">Website:</label>
+                    <p id="website" class="editable">{{ company.website_url }}</p>
+                </div>
+                <div class="info-block label-and-value">
+                    <label for="linkedin">LinkedIn:</label>
+                    <p id="linkedin" class="editable">{{ company.linkedin_url }}</p>
+                </div>
+                <div class="info-block label-and-value">
+                    <label for="email">Email:</label>
+                    <p id="email" class="editable">{{ company.email }}</p>
+                </div>
+                <div class="info-block label-and-value">
+                    <label for="phone">Contact Number:</label>
+                    <p id="phone" class="editable">{{ company.phone }}</p>
+                </div>
+            </section>
+            <section class="col-md-6">
+                <div class="info-block">
+                    <label for="company-vision">Company Vision:</label>
+                    <p id="company-vision" class="editable">{{ company.vision }}</p>
+                </div>
+                <div class="info-block">
+                    <label for="products-services">Products & Services:</label>
+                    <p id="products-services" class="editable">{{ company.products }}</p>
+                </div>
+                <div class="info-block">
+                    <label for="key-competitors">Key Competitors:</label>
+                    <p id="key-competitors" class="editable">{{ company.competitor }}</p>
+                </div>
+                <div class="info-block" style="margin-bottom: 15px;">
+                    <label for="revenue-profit">Three Year Revenue & Profit:</label>
+                    <p></p>
+                    <p> Current year revenue</p>
+                    <!-- Current Year -->
+                    <div class="revenue-row">
+                        <div class="revenue-block">
+                            <span>Revenue = </span>
+                            <span id="revenue_current_year" class="editable" contenteditable="true">{{ company.current_revenue }}</span>
+                        </div>
+                        <div class="revenue-block">
+                            <span>P/L = </span>
+                            <span id="profit_current_year" class="editable" contenteditable="true">{{ company.current_pl }}</span>
+                        </div>
+                    </div>
+                    <p> Previous year revenue</p>
+                    <!-- Previous Year -->
+                    <div class="revenue-row">
+                        <div class="revenue-block">
+                            <span>Revenue = </span>
+                            <span id="revenue_previous_year" class="editable" contenteditable="true">{{ company.previous_revenue }}</span>
+                        </div>
+                        <div class="revenue-block">
+                            <span>P/L = </span>
+                            <span id="profit_previous_year" class="editable" contenteditable="true">{{ company.previous_pl }}</span>
+                        </div>
+                    </div>
+                    <p > A year before previous year revenue</p>
+                    <!-- A Year Before -->
+                    <div class="revenue-row" style="margin-bottom: 5px;">
+                        <div class="revenue-block">
+                            <span>Revenue = </span>
+                            <span id="revenue_year_before" class="editable" contenteditable="true">{{ company.a_yearbefore_revenue }}</span>
+                        </div>
+                        <div class="revenue-block">
+                            <span>P/L = </span>
+                            <span id="profit_year_before" class="editable" contenteditable="true">{{ company.a_yearbefore_pl }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-block">
+                    <label for="number-of-customers">Number of Customers:</label>
+                    <p id="number-of-customers" class="editable">{{ company.customers }}</p>
+                </div>
+                <div class="info-block">
+                    <label for="additional-info">Additional Information:</label>
+                    <p id="additional-info" class="editable">{{ company.additional }}</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+   
+    <script>
+        document.getElementById('edit-btn').addEventListener('click', function() {
+            document.querySelectorAll('.editable').forEach(function(editable) {
+                editable.setAttribute('contenteditable', 'true');
+                editable.style.borderBottom = '1px solid #ccc'; // Add underline to show editability
+            });
+            document.getElementById('edit-btn').style.display = 'none';
+            document.getElementById('save-btn').style.display = 'inline-block';
+        });
+
+        document.getElementById('save-btn').addEventListener('click', async function() {
+            const url = "{% url 'basic_information' company.company_id %}";
+
+            // Collect data from the editable fields
+            const data = {};
+            document.querySelectorAll('.editable').forEach(function(el) {
+                const id = el.id;
+                let content = el.textContent.trim();
+
+                if (id) {
+                    data[id] = content;
+                }
+            });
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('Details saved successfully!');
+                    document.querySelectorAll('.editable').forEach(function(el) {
+                        el.setAttribute('contenteditable', 'false');
+                        el.style.borderBottom = 'none'; // Remove underline after save
+                    });
+                    document.getElementById('edit-btn').style.display = 'inline-block';
+                    document.getElementById('save-btn').style.display = 'none';
+                } else {
+                    const errorData = await response.json();
+                    alert('Error: ' + errorData.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
+{% endblock content %}

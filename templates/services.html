@@ -1,0 +1,330 @@
+{% extends './base.html' %}
+
+{% block content %}
+<style>
+    html, body {
+        font-family: 'Arial MT Rounded';
+    line-height: 1.8;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-image: url('https://wallpapercave.com/wp/wp2460326.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh; 
+}
+
+    nav {
+        background-color: #fff; /* or any color you prefer */
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 60px 20px;
+        background-color: rgba(244, 247, 246, 0.13); /* Semi-transparent background */
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 48px;
+        color: #2c3e50;
+        margin-bottom: 60px;
+        position: relative;
+    }
+
+    .section-title::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, #d3f2fd, #0478ca);
+        margin: 20px auto 0;
+    }
+
+    .services-overview {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 80px;
+    }
+
+    .services-text {
+        flex: 1;
+        padding-right: 50px;
+        color: #1e6ca7;
+    }
+
+    .services-image {
+        flex: 1;
+        text-align: right;
+    }
+
+    .services-image img {
+        max-width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .key-services {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-bottom: 80px;
+    }
+
+    .key-service-item {
+        background: #fff;
+        border-radius: 10px;
+        padding: 30px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .key-service-item:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+    .key-service-item i {
+        font-size: 48px;
+        color: #3498db;
+        margin-bottom: 20px;
+    }
+
+    .key-service-item h3 {
+        font-size: 24px;
+        margin-bottom: 15px;
+        color: #2c3e50;
+    }
+
+    .service-models {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .service-model {
+        width: calc(50% - 15px);
+        margin-bottom: 30px;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    }
+
+    .model-image {
+        height: 250px;
+        overflow: hidden;
+    }
+
+    .model-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .service-model:hover .model-image img {
+        transform: scale(1.1);
+    }
+
+    .model-content {
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .model-content h3 {
+        font-size: 24px;
+        margin-bottom: 15px;
+        color: #2c3e50;
+    }
+
+    .model-content p {
+        margin-bottom: 20px;
+        flex-grow: 1;
+        text-align: justify;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background: linear-gradient(90deg, #d3f2fd, #0478ca);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+        align-self: flex-start;
+    }
+
+    .btn:hover {
+        background: linear-gradient(90deg, #0478ca, #d3f2fd);
+    }
+
+    @media (max-width: 1024px) {
+        .services-overview {
+            flex-direction: column;
+        }
+        .services-text, .services-image {
+            width: 100%;
+            padding-right: 0;
+            margin-bottom: 30px;
+        }
+        .service-model {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .service-model {
+            width: 100%;
+        }
+    }
+    footer {
+    background-color: #364452; /* Dark background */
+    color: white; /* White text color */
+    padding: 20px 0; /* Padding for top and bottom */
+}
+
+footer h5 {
+    color:#5ca2e8; /* Blue color for headings */
+    font-size: 40px !important;
+    padding-bottom: 2px !important;
+}
+footer p{
+  line-height: 2px;
+}
+
+footer a {
+    color: white; /* White text for links */
+}
+
+footer a:hover {
+    color: #364452; /* Light grey on hover for links */
+}
+
+/* Icons styling */
+footer .fab {
+    font-size: 16px; /* Icon size */
+    /* line-height: 1rem; */
+}
+</style>
+
+<section class="container">
+    <h1 class="section-title">Our Expert Financial Services</h1>
+
+    <div class="services-overview">
+        <div class="services-text">
+            <h2>Empowering Your Financial Future</h2>
+            <p>With decades of combined experience, our team offers a comprehensive range of financial services tailored to meet your unique needs. From corporate finance to asset management, we're here to guide you towards financial success.</p>
+        </div>
+        <div class="services-image">
+            <img src="https://pinnacle-business.com/wp-content/uploads/2018/08/financial.jpg" alt="Financial Services Overview">
+        </div>
+    </div>
+
+    <p><b>With decades of combined experience, our team encompasses a diverse range of expertise across various sectors of the financial industry. Our services include:</b></p>
+
+    <div class="key-services">
+        <div class="key-service-item">
+            <i class="fas fa-chart-line"></i>
+            <h3>Corporate Finance</h3>
+            <p>Expert advice on mergers and acquisitions, capital raising, and strategic financial planning.</p>
+        </div>
+        <div class="key-service-item">
+            <i class="fas fa-coins"></i>
+            <h3>Asset Management</h3>
+            <p>Tailored investment strategies designed to preserve and grow wealth.</p>
+        </div>
+        <div class="key-service-item">
+            <i class="fas fa-search-dollar"></i>
+            <h3>Market Research</h3>
+            <p>In-depth market insights to inform investment decisions.</p>
+        </div>
+        <div class="key-service-item">
+            <i class="fas fa-shield-alt"></i>
+            <h3>Risk Management</h3>
+            <p>Comprehensive risk assessment and mitigation strategies.</p>
+        </div>
+    </div>
+
+    <h2 class="section-title">Our Service Models</h2>
+
+    <p><b>Some of our key service models also include:</b></p>
+
+    <div class="service-models">
+        <div class="service-model">
+            <div class="model-image">
+                <img src="https://4cornerscfo.com/wp-content/uploads/2023/09/shutterstock_1818068249-920x400.jpg" alt="Virtual CFO">
+            </div>
+            <div class="model-content">
+                <h3>Virtual CFO</h3>
+                <p>Our Virtual CFO Model provides startups and growing businesses with high-level financial expertise on a flexible basis. This model offers strategic financial planning, budgeting, and cash flow management without the cost of a full-time CFO. By leveraging advanced technology and real-time data, we deliver insightful financial analysis and guidance, empowering our clients to make informed decisions and drive their business forward.</p>
+                <a href="#" class="btn">Learn More</a>
+            </div>
+        </div>
+        <div class="service-model">
+            <div class="model-image">
+                <img src="https://images.ctfassets.net/wp1lcwdav1p1/3CTBL1hSCQjACVz3rnT9bn/87d8b7648ec959051aa1b72c0589e6a0/Businessman-pointing-at-executive-during-meeting-641970902_7952x5304.jpeg?w=1500&h=680&q=60&fit=fill&f=faces&fm=jpg&fl=progressive" alt="Management Consultant">
+            </div>
+            <div class="model-content">
+                <h3>Management Consultant</h3>
+                <p>Through our Management Consultant Model, we offer comprehensive advisory services that help businesses optimize their operations and enhance their strategic initiatives. Our team of seasoned consultants brings deep industry knowledge and expertise to address complex challenges, streamline processes, and identify growth opportunities. This model ensures that our clients achieve operational excellence and sustained competitive advantage.</p>
+                <a href="#" class="btn">Learn More</a>
+            </div>
+        </div>
+        <div class="service-model">
+            <div class="model-image">
+                <img src="https://cdn.create.vista.com/api/media/small/166639502/stock-photo-businessmen-shaking-hands" alt="M&A Model">
+            </div>
+            <div class="model-content">
+                <h3>M&A Model</h3>
+                <p>In our M&A Model, we provide expert guidance and support throughout the merger and acquisition process. From identifying potentials to conducting due diligence to negotiating terms and facilitating post-merger integration, our M&A team ensures a seamless and successful transaction for our clients. By leveraging our extensive network, market insights, and strategic expertise, we help businesses identify and capitalize on M&A opportunities that align with their growth objectives.</p>
+                <a href="#" class="btn">Learn More</a>
+            </div>
+        </div>
+        <div class="service-model">
+            <div class="model-image">
+                <img src="https://www.liveabout.com/thmb/N2YJ43wCGoOYw2YZ0_7mwUUrNqc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/new-manager-pt-1-56a5dc8b5f9b58b7d0dec90a.jpg" alt="Asset Manager">
+            </div>
+            <div class="model-content">
+                <h3>Asset Manager</h3>
+                <p>The Asset Manager Model focuses on helping clients maximize the value of their assets through strategic management and investment strategies. Our team provides tailored solutions for portfolio management, asset allocation, and performance monitoring. By leveraging our expertise and advanced analytical tools, clients can achieve optimal asset growth, mitigate risks, and enhance their overall financial health.</p>
+                <a href="#" class="btn">Learn More</a>
+            </div>
+        </div>
+    </div>
+</section>
+<footer class="bg-dark text-light pt-4 pb-2">
+    <div class="container" style="background-color: transparent;">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>ABOUT</h5>
+                <p>PRODUCT OF MANARTHA SOLUTIONS</p>
+                <p>© 2021. All Rights Reserved</p>
+            </div>
+            <div class="col-md-4">
+                <h5>CONTACT</h5>
+                <p>BENGALURU, INDIA</p>
+                <p>info@numberleader.com</p>
+            </div>
+              <div class="col-md-4">
+                  <a href="#" class="text-light me-2"><i class="fab fa-facebook-f"></i></a>
+                  <a href="#" class="text-light me-2"><i class="fab fa-twitter"></i></a>
+                  <a href="#" class="text-light me-2"><i class="fab fa-google-plus-g"></i></a><br>
+                  <a href="#" class="text-light me-2" style="text-decoration: none;">Privacy Policy</a>
+                </div>
+              </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+{% endblock content %}

@@ -1,0 +1,1780 @@
+{% include 'admin/company_profile.html' %}
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    :root {
+        --row-height: 20px !important;
+        --font-size: 14px;
+        --first-column-width: 400px !important;
+        --indentation: 20px;
+        --double-indentation: 40px;
+        --triple-indentation: 60px;
+        --quad-indentation: 80px;
+        --column-width: 220px !important;
+    }
+
+    body {
+        
+        font-size: var(--font-size);
+        color: black;
+        overflow: hidden;
+    }
+
+    .container {
+        margin-left: 245px;
+        max-width: 90%;
+        position: relative;
+        height: calc(100vh - 135px);
+        overflow-y: auto;
+        max-height: 100%;
+        margin-top: 25px !important;
+        font-family: 'Arial MT Rounded';
+    }
+
+    .content {
+        margin: 40px auto;
+        padding-top: 30px;
+        padding-left: 200px;
+    }
+
+    .table-wrapper {
+        position: relative;
+        width: 100%;
+        overflow-x: auto;
+        flex-grow: 1;
+        max-width: 80% !important;
+        margin-right: 0px;
+        overflow-y: auto; /* Add vertical scrollbar */
+        scrollbar-width: none;  /* Hide scrollbar for Firefox */
+        -ms-overflow-style: none; 
+    }
+    .table-wrapper::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, WebKit */
+}
+
+    table {
+        width: 100%;
+        table-layout: relative;
+        border-collapse: collapse;
+        font-family: 'Arial MT Rounded';
+        font-size: var(--font-size);
+        width: calc(var(--first-column-width) + 4 * var(--column-width));
+        /* coloumn-width:var(--column-width) !important; */
+        
+    }
+
+    th, td {
+        vertical-align: middle;
+        text-align: right; 
+        padding: 12px;
+        height: var(--row-height);
+        font-size: var(--font-size);
+        line-height: 1.2;
+        overflow: hidden;
+        white-space: nowrap; /* Prevent text wrap */
+        /* text-overflow: ellipsis; */
+        transition: background-color 0.3s ease;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+       
+        position: sticky !important;
+        top: 0;
+        z-index: 0;
+        text-align: center !important;
+    }
+    th:first-child {
+        position: sticky;
+        left: 0;
+        background-color: white;
+        z-index: 3;
+        width: 350px !important;
+        text-align: left;
+    }
+
+        td:first-child, th:first-child {
+        width: var(--first-column-width); /* 350px fixed width */
+        white-space: nowrap; /* Prevent text wrap */
+        text-overflow: ellipsis; /* Ellipsis for overflow */
+    }
+
+    td:first-child {
+        position: sticky;
+        left: 0;
+        background-color: white;
+        z-index: 3;
+        width: 350px !important;
+        text-align: left;
+    }
+    .td{
+        text-align: right !important;
+    }
+
+
+    .table tbody tr:hover {
+        background-color: #f0f0f0;
+    }
+
+    .indent-level-1 td:first-child {
+        padding-left: var(--indentation) !important;
+    }
+
+    .indent-level-2 td:first-child {
+        padding-left: var(--double-indentation) !important;
+    }
+
+    .indent-level-3 td:first-child {
+        padding-left: var(--triple-indentation) !important;
+    }
+
+    .indent-level-4 td:first-child {
+        padding-left: var(--quad-indentation) !important;
+    }
+
+    .expandable-icon {
+        cursor: pointer;
+        margin-left: 5px;
+    }
+
+    .expandable-icon::before {
+        content: "\25B6";
+        display: inline-block;
+        transform: rotate(90deg);
+    }
+
+    .collapse.show .expandable-icon::before {
+        content: "\25BC";
+        transform: rotate(0deg);
+    }
+    .btn-plus {
+        /* font-size: 24px; */
+        color: #000000;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding-left: 0px;
+        margin-top: -18px;
+        font-weight: bold; 
+        margin-right: 40px;
+    }
+
+    /* .btn-plus:hover {
+        color: #0056b3;
+    } */
+
+    tr.hidden {
+        display: none;
+    }
+
+    .table-container {
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: auto;
+        scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer and Edge */
+    width: 100%;
+}
+
+.table-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, WebKit */
+}
+
+    /* Remove vertical lines inside the table */
+    table, th, td {
+        border-left: none;
+        border-right: none;
+    }
+
+    .editable input {
+        border: none;            /* Remove all borders */
+        border-bottom: 1px solid #000; /* Add only bottom border */
+        text-align: right;        /* Align text to the right */
+        background: transparent;  /* Make background transparent */
+        outline: none;            /* Remove focus outline */
+        padding: 0;
+        width: 100%;              /* Make input fields fill the cell */
+        box-shadow: none !important; /* Remove any default box shadow */
+        -webkit-box-shadow: none !important; /* For WebKit browsers */
+        -moz-box-shadow: none !important; /* For Mozilla-based browsers */
+        border-radius: 0px !important;
+    }
+
+    .editable input:focus {
+        outline: none;            /* Remove focus outline */
+        box-shadow: none !important; /* Remove any box shadow on focus */
+        -webkit-box-shadow: none !important; /* For WebKit browsers */
+        -moz-box-shadow: none !important; /* For Mozilla-based browsers */
+    }
+    .btn btn-primary,btn-success{
+        margin-top: -10px;
+    }
+    .table-card-wrapper {
+    display: flex;
+    justify-content: space-between; /* Ensure even space between table and card */
+    align-items: flex-start; /* Align the card and table at the top */
+    width: 90%; /* Make the wrapper take full width */
+}
+    .btn-success {
+        
+        color: green;
+        background-color: white;
+        padding-left: 0px;
+        margin-top: -18px;
+        font-weight: bold; 
+        margin-right: 50px;
+        outline: None !important;
+        border: none !important;
+        
+    }
+    .btn-success:hover {
+        
+        color: green;
+        background-color: white;
+        padding-left: 0px;
+        margin-top: -18px;
+        font-weight: bold; 
+        margin-right: 50px;
+        outline: None !important;
+        border: none !important;
+        margin-left: 20px;
+        
+    }
+    .card{
+        /* flex:1; */
+        /* margin-left: 0px; */
+        margin-left: -40px;
+        margin-right: -20px;
+        max-width: 20%;
+        overflow-y: auto;
+        scrollbar-width: none;  /* Hide scrollbar for Firefox */
+        -ms-overflow-style: none; 
+        max-height: 550px;
+        border-left: 1px solid black;
+        border-bottom: 0px;
+        border-right: 0px;
+        border-top: 0px;
+        border-radius: 0px;
+        width: 250px;
+        
+
+    }
+    .card::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, WebKit */
+}
+    .form-group{
+    padding-left: 0px;
+    margin-left: 0px;
+}
+.form-control{
+    border-bottom: 1px black solid;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-radius: 0px;
+}
+.card-title{
+    padding-bottom: 20px;
+    text-align: center;
+}
+.liquidity{
+    text-align: center;
+    color:black;
+}
+.label{
+    font-family: 'Arial MT Rounded';
+    font-size: 12px;
+    color: grey;
+    text-decoration: none;
+    
+}
+.lable-value{
+    font-family: 'Arial MT Rounded';
+    font-size: 16px;
+    text-decoration: bold;
+    margin-top: -8px;
+}
+.btn-group ms-3{
+    margin-left: 100px !important;
+}
+.row h6 {
+        font-size: 18px /* Update font size for header */
+        
+    }
+
+.btn-custom {
+      background-color: transparent; /* Set background color */
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      display: flex;
+      align-items: center; /* Center the image and text vertically */
+      gap: 10px; /* Gap between image and text */
+      margin-top: -10px !important;
+      margin-left: -210px;
+     
+    }.btn-custom img {
+      width: 35px;
+      height: 35px;
+    }
+    #plus{
+        margin-top: -10px;
+     }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="container mt-5">
+    {% for msg in messages %}
+    <p class="text-danger text-center mt-2 fw-bold" style="font-size: 14px;">{{ msg }}</p>
+    {% endfor %}
+    <div class="row" style="align-items: center;">
+        <div class="col-md-6 d-flex align-items-center">
+            <h6 class="mb-6" style="color: black; text-wrap: nowrap;" style="font-size: 14px; ">
+                Corporate Finance -
+                {% if request.resolver_match.url_name == 'planning_budgeting_balance_sheet_table' %}
+                Planning & Budgeting
+                {% elif request.resolver_match.url_name == 'forecasting_balance_sheet_table' %}
+                Forecasting
+                {% endif %}
+                - <b>Balance Sheet</b>
+            </h6>
+            <div class="btn-group ms-3" >
+                <button class="btn btn-primary">Monthly</button>
+                <button class="btn btn-primary">Quarterly</button>
+                <button class="btn btn-primary">Annually</button>
+            </div>
+        </div>
+
+       
+        <div class="col-md-4 text-end d-flex justify-content-end align-items-center">
+            
+            <a href="#" class="btn btn-custom" id="plus" data-bs-toggle="modal" data-bs-target="#balance_sheet"><img src="{% static 'images/add.png' %}"></a>
+            <button id="editButton" class="btn btn-custom " style="position: relative; left: 50px; margin-top: -3px;"><img src="{% static 'images/edit.png' %}"></button>
+            <button id="saveButton" class="btn btn-custom  d-none" style="position: relative; left: 50px; margin-top: -3px;"> <img src="{% static 'images/save.png' %}"></button>
+            <!-- The Modal -->
+            <div class="modal" id="balance_sheet">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title"></h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body text-center">
+                            <form method="POST" action="#" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="inline">
+                                    <div style="margin-right:15px;">
+                                        <input type="radio" class="form-check-input" id="monthly"
+                                            name="select_type_of_data" value="monthly">
+                                        <label class="form-check-label" for="monthly">Monthly</label>
+                                    </div>
+                                    <div style="margin-right:15px;">
+                                        <input type="radio" class="form-check-input" id="quarterly"
+                                            name="select_type_of_data" value="quarterly">
+                                        <label class="form-check-label" for="quarterly">Quarterly</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" class="form-check-input" id="yearly"
+                                            name="select_type_of_data" value="yearly">
+                                        <label class="form-check-label" for="yearly">Yearly</label>
+                                    </div>
+                                </div>
+                                <div id="dropdown-container" class="mt-3"></div>
+                                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                            </form>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-container mt-1">
+        <div class="table-card-wrapper">
+        <div class="table-wrapper">
+            <table class="cell">
+                <thead>
+                    <tr>
+                        <th class="rowview">Breakdown</th>
+                        {% for balance_sheet in balance_sheets %}
+                        <th class="rowview1">{{balance_sheet.end_date|date:'d-m-Y'}}
+                            <span class="period-type" style="display: none;">{{ balance_sheet.monthly_or_quarterly_or_yearly }}</span>
+                           </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Total Assets Section -->
+                    <tr>
+                        <td>Total Assets <span class="expandable-icon" onclick="toggle(this, '#MS01a');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td id="total_assets-{{ forloop.counter }}"  data-field-name="total_assets">{{balance_sheet.total_assets}}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01a" class="hidden indent-level-1">
+                        <td>Current Assets <span class="expandable-icon" onclick="toggle(this, '#MS01b');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="current-assets-"  data-field-name="current-assets" id="current-assets-{{ forloop.counter }}">{{ balance_sheet.current_assets }}</td>
+                        {% endfor %}
+                    </tr>
+                    
+                    <tr id="MS01b" class="hidden indent-level-2">
+                        <td>Cash, Cash Equivalents & Short Term Investments <span class="expandable-icon"
+                                onclick="toggle(this, '#MS01c');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="cash-cash-equivalents-and-short-term"  data-field-name="cash-cash-equivalents-and-short-term" id="cash-cash-equivalents-and-short-term-{{ forloop.counter }}">{{ balance_sheet.cash_cash_equivalents_and_short_term_investments }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01c" class="hidden indent-level-3">
+                        <td>Cash And Cash Equivalents <span class="expandable-icon" onclick="toggle(this, '#MS01d');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="cash-cash-equivalents-column"  data-field-name="cash-and-cash-equivalents" id="cash-and-cash-equivalents-{{ forloop.counter }}">{{ balance_sheet.cash_and_cash_equivalents }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01d" class="hidden indent-level-4">
+                        <td>Cash</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable cash-column"  data-field-name="cash" id="cash-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.cash }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01d" class="hidden indent-level-4">
+                        <td>Cash Equivalents</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable cash-equivalents-column"  data-field-name="cash-equivalents" id="cash-equivalents-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.cash_equivalents }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01c" class="hidden indent-level-3">
+                        <td>Other Short Term Investments</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable short-term-investments-column"  data-field-name="other-short-term-investments" id="other-short-term-investments-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.other_short_term_investments }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Receivables -->
+                   <!-- Receivables -->
+                    <tr id="MS01b" class="hidden indent-level-2">
+                        <td>Receivables <span class="expandable-icon" onclick="toggle(this, '#MS01e');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="receivables-column"  data-field-name="receivables" id="receivables-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.receivables }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01e" class="hidden indent-level-3">
+                        <td>Accounts Receivable <span class="expandable-icon" onclick="toggle(this, '#MS01f');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="accounts-receivable-column"  data-field-name="accounts-receivable" id="accounts-receivable-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.accounts_receivable }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01f" class="hidden indent-level-4">
+                        <td>Gross Accounts Receivable</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable gross-accounts-receivable-column"  data-field-name="gross-accounts-receivable" id="gross-accounts-receivable-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.gross_accounts_receivable }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01f" class="hidden indent-level-4">
+                        <td>Allowance For Doubtful Accounts Receivable</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable allowance-doubtful-column"   data-field-name="allowance-for-doubtful-accounts-receivable"id="allowance-for-doubtful-accounts-receivable-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.allowance_for_doubtful_accounts_receivable }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01e" class="hidden indent-level-3">
+                        <td>Other Receivables</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable other-receivables-column"  data-field-name="other-receivables" id="other-receivables-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.other_receivables }}</td>
+                        {% endfor %}
+                    </tr>
+
+
+                    <!-- Inventory -->
+                    <tr id="MS01b" class="hidden indent-level-2">
+                        <td>Inventory <span class="expandable-icon" onclick="toggle(this, '#MS01g');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="inventory-column"  data-field-name="inventory" id="inventory-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.inventory }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01g" class="hidden indent-level-3">
+                        <td>Raw Materials</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable raw-materials-column"  data-field-name="raw-materials" id="raw-materials-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.raw_materials }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01g" class="hidden indent-level-3">
+                        <td>Work In Process</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable work-process-column"  data-field-name="work-process" id="work-process-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.work_in_process }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="MS01g" class="hidden indent-level-3">
+                        <td>Finished Goods</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable finished-goods-column"  data-field-name="finished-goods" id="finished-goods-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.finished_goods }}</td>
+                        {% endfor %}
+                    </tr>
+
+
+                    <!-- Hedging Assets Current -->
+                    <tr id="MS01b" class="hidden indent-level-2">
+                        <td>Hedging Assets Current</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable hedging-assets-column"  data-field-name="hedging-assets" id="hedging-assets-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.hedging_current_assets }}</td>
+                        {% endfor %}
+                    </tr>
+                    
+                    <!-- Other Current Assets -->
+                    <tr id="MS01b" class="hidden indent-level-2">
+                        <td>Other Current Assets</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable other-current-assets-column"  data-field-name="other-current-assets" id="other-current-assets-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.other_current_assets }}</td>
+                        {% endfor %}
+                    </tr>
+
+
+                    <tr id="MS01a" class="hidden indent-level-1">
+                        <td>Total non-current assets <span class="expandable-icon" onclick="toggle(this, '#LI01');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class=" total_non_current_assets_column"  data-field-name="total_non_current_assets" id="total_non_current_assets-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.total_non_current_assets }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <tr id="LI01" class="hidden indent-level-1">
+                        <td>Net PPE <span class="expandable-icon" onclick="toggle(this, '#LI011a');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class=" net_ppe_column"  data-field-name="net_ppe" id="net_ppe-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.net_ppe }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI011a" class="hidden indent-level-2">
+                        <td>Gross PPE <span class="expandable-icon" onclick="toggle(this, '#LI011c');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="gross_ppe-column"  data-field-name="gross_ppe" id="gross_ppe-{{ forloop.counter }}">{{ balance_sheet.gross_ppe }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI011c" class="hidden indent-level-3">
+                        <td>Land And Improvements</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable land_and_improvements-column"  data-field-name="land_and_improvements" id="land_and_improvements-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.land_and_improvements }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI011c" class="hidden indent-level-3">
+                        <td>Buildings And Improvements</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable buildings_and_improvements-column"  data-field-name="buildings_and_improvements" id="buildings_and_improvements-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.buildings_and_improvements }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI011c" class="hidden indent-level-3">
+                        <td>Machinery Furniture Equipment</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable machinery_furniture_equipment-column"  data-field-name="machinery_furniture_equipment" id="machinery_furniture_equipment-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.machinery_furniture_equipment }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI011c" class="hidden indent-level-3">
+                        <td>Other Properties</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable other_properties-column"  data-field-name="other_properties" id="other_properties-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.other_properties }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI011c" class="hidden indent-level-3">
+                        <td>Leases</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable leases-column"  data-field-name="leases" id="leases-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.leases }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI011a" class="hidden indent-level-2">
+                        <td>Accumulated Depreciation <span></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable accumulated_depreciation-column"  data-field-name="accumulated_depreciation" id="accumulated_depreciation-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.accumulated_depreciation }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <tr id="LI01" class="hidden indent-level-1">
+                        <td>Goodwill And Other Intangible Assets <span class="expandable-icon" onclick="toggle(this, '#LI011d');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class=" goodwill_and_other_intangible_assets_column"  data-field-name="goodwill_and_other_intangible_assets" id="goodwill_and_other_intangible_assets-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.goodwill_and_other_intangible_assets }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI011d" class="hidden indent-level-2">
+                        <td>Goodwill <span></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable goodwill-column"  data-field-name="goodwill" id="goodwill-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.goodwill }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI011d" class="hidden indent-level-2">
+                        <td>Other Intangible Assets <span></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable other-intangible-assets-column"  data-field-name="other_intangible_assets" id="other_intangible_assets-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.other_intangible_assets }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI01" class="hidden indent-level-1">
+                        <td>Investments And Advances <span class="expandable-icon" onclick="toggle(this, '#LI011e');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class=" investments_and_advances_column"  data-field-name="investments_and_advances" id="investments_and_advances-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.investments_and_advances }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI011e" class="hidden indent-level-2">
+                        <td>Long Term Equity Investment <span></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable long-term-equity-investment-column"  data-field-name="long_term_equity_investment" id="long_term_equity_investment-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.long_term_equity_investment }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI01" class="hidden indent-level-1">
+                        <td>Other Non Current Assets <span></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable other_non_current_assets_column"  data-field-name="other_non_current_assets" id="other_non_current_assets-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.other_non_current_assets }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Total Liabilities Net Minority Interest -->
+                    <tr>
+                        <td>Total Liabilities Net Minority Interest <span class="expandable-icon" onclick="toggle(this, '#LI01a');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class=" total-liabilities-column"  data-field-name="total-liabilities-net-minority-interest" id="total-liabilities-net-minority-interest-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.total_liabilities_net_minority_interest }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI01a" class="hidden indent-level-1">
+                        <td>Current Liabilities <span class="expandable-icon" onclick="toggle(this, '#LI01b');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class=" current-liabilities-column"  data-field-name="current-liabilities" id="current-liabilities-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.current_liabilities }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI01b" class="hidden indent-level-2">
+                        <td>Payables And Accrued Expenses <span class="expandable-icon" onclick="toggle(this, '#LI01c');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class=" payables-accrued-column"  data-field-name="payables-and-accrued-expenses" id="payables-and-accrued-expenses-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.payables_and_accrued_expenses }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI01c" class="hidden indent-level-3">
+                        <td>Accounts Payable</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable accounts-payable-column"  data-field-name="accounts-payable" id="accounts-payable-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.accounts_payable }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI01c" class="hidden indent-level-3">
+                        <td>Income Tax Payable</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable income-tax-payable-column"  data-field-name="income-tax-payable" id="income-tax-payable-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.income_tax_payable }}</td>
+                        {% endfor %}
+                    </tr>
+                    
+
+                    <!-- Pension & Other Post Retirement Benefit Plans Current -->
+                    <tr id="LI01b" class="hidden indent-level-2">
+                        <td>Pension & Other Post Retirement Benefit Plans Current</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable pension-post-retirement-column"  data-field-name="pension-post-retirement" id="pension-post-retirement-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.pension_and_other_post_retirement_benefit_plans_current }}</td>
+                        {% endfor %}
+                    </tr>
+                    <!-- Current Debt And Capital Lease Obligation -->
+                    <tr id="LI01b" class="hidden indent-level-2">
+                        <td>Current Debt And Capital Lease Obligation <span class="expandable-icon" onclick="toggle(this, '#LI01d');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="current-debt-and-capital-lease-obligation-column"  data-field-name="current-debt-and-capital-lease-obligation" id="current-debt-and-capital-lease-obligation-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.current_debt_and_capital_lease_obligation }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI01d" class="hidden indent-level-3">
+                        <td>Current Debt</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable current-debt-column"  data-field-name="current-debt" id="current-debt-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.current_debt }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI01d" class="hidden indent-level-3">
+                        <td>Capital Lease Obligation</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable capital-lease-column"  data-field-name="capital-lease" id="capital-lease-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.capital_lease_obligation }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Current Deferred Liabilities -->
+                    <tr id="LI01b" class="hidden indent-level-2">
+                        <td>Current Deferred Liabilities <span class="expandable-icon" onclick="toggle(this, '#LI01e');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class=" deferred-liabilities-column"  data-field-name="current-deferred-liabilities" id="current-deferred-liabilities-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.current_deferred_liabilities }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI01e" class="hidden indent-level-3">
+                        <td>Current Deferred Revenue</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable deferred-revenue-column"  data-field-name="current-deferred-revenue" id="current-deferred-revenue-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.current_deferred_revenue }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Other Current Liabilities -->
+                    <tr id="LI01b" class="hidden indent-level-2">
+                        <td>Other Current Liabilities</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable other-current-liabilities-column"  data-field-name="other-current-liabilities" id="other-current-liabilities-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.other_current_liabilities }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Total Non-Current Liabilities Net Minority Interest -->
+                    <tr id="LI01a" class="hidden indent-level-1">
+                        <td>Total Non-Current Liabilities Net Minority Interest <span class="expandable-icon" onclick="toggle(this, '#LI02a');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="total-non-current-liabilities-column"  data-field-name="total-non-current-liabilities-net-minority-interest" id="total-non-current-liabilities-net-minority-interest-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.total_non_current_liabilities_net_minority_interest }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI02a" class="hidden indent-level-2">
+                        <td>Long Term Debt And Capital Lease Obligation <span class="expandable-icon" onclick="toggle(this, '#LI02b');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class=" long-term-debt-and-capital-lease-obligation"  data-field-name="long-term-debt-and-capital-lease-obligation"  id="long-term-debt-and-capital-lease-obligation-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.long_term_debt_and_capital_lease_obligation }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI02b" class="hidden indent-level-3">
+                        <td>Long Term Debt</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable long-term-debt-column"  data-field-name="long-term-debt" id="long-term-debt-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.long_term_debt }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI02b" class="hidden indent-level-3">
+                        <td>Long Term Capital Lease Obligation</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable long-term-capital-lease-column"  data-field-name="long-term-capital-lease-obligation" id="long-term-capital-lease-obligation-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.long_term_capital_lease_obligation }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Non-Current Deferred Liabilities -->
+                    <tr id="LI02a" class="hidden indent-level-2">
+                        <td>Non-Current Deferred Liabilities <span class="expandable-icon" onclick="toggle(this, '#LI02c');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class=" non-current-deferred-liabilities-column"  data-field-name="non-current-deferred-liabilities" id="non-current-deferred-liabilities-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.non_current_deferred_liabilities }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI02c" class="hidden indent-level-3">
+                        <td>Non-Current Deferred Taxes Liabilities</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable non-current-deferred-taxes-column"  data-field-name="non-current-deferred-taxes-liabilities" id="non-current-deferred-taxes-liabilities-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.non_current_deferred_taxes_liabilities }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="LI02c" class="hidden indent-level-3">
+                        <td>Non-Current Deferred Revenue</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable non-current-deferred-revenue-column"  data-field-name="non-current-deferred-revenue" id="non-current-deferred-revenue-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.non_current_deferred_revenue }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Trade and Other Payables Non-Current -->
+                    <tr id="LI02a" class="hidden indent-level-2">
+                        <td>Trade and Other Payables Non-Current</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable trade-other-payables-column"  data-field-name="trade-and-other-payables-non-current" id="trade-and-other-payables-non-current-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.trade_and_other_payables_non_current }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Other Non-Current Liabilities -->
+                    <tr id="LI02a" class="hidden indent-level-2">
+                        <td>Other Non-Current Liabilities</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable other-non-current-liabilities-column"  data-field-name="other-non-current-liabilities" id="other-non-current-liabilities-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.other_non_current_liabilities }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Total Equity Gross Minority Interest -->
+                    <tr>
+                        <td>Total Equity Gross Minority Interest <span class="expandable-icon" onclick="toggle(this, '#EQ01a');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class=" total-equity-column"  data-field-name="total-equity-gross-minority-interest" id="total-equity-gross-minority-interest-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.total_equity_gross_minority_interest }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="EQ01a" class="hidden indent-level-1">
+                        <td>Stockholders' Equity <span class="expandable-icon" onclick="toggle(this, '#EQ01b');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class=" stockholders-equity-column"  data-field-name="stockholders-equity" id="stockholders-equity-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.stockholders_equity }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="EQ01b" class="hidden indent-level-2">
+                        <td>Capital Stock <span class="expandable-icon" onclick="toggle(this, '#EQ01c');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="capital-stock-column"  data-field-name="capital-stock" id="capital-stock-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.capital_stock }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="EQ01c" class="hidden indent-level-3">
+                        <td>Common Stock</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable common-stock-column"  data-field-name="common-stock" id="common-stock-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.common_stock }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Retained Earnings -->
+                    <tr id="EQ01b" class="hidden indent-level-2">
+                        <td>Retained Earnings <span class="expandable-icon" onclick="toggle(this, '#EQ01d');"></span></td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="retained-earnings-column"  data-field-name="retained-earnings" id="retained-earnings-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.retained_earnings }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="EQ01d" class="hidden indent-level-3">
+                        <td>Gains/(Losses) Not Affecting Retained Earnings</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable gains-losses-column" data-field-name="gains_losses_not_affecting_retained_earnings" id="gains-losses-not-affecting-retained-earnings-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.gains_or_losses_not_affecting_retained_earnings }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr id="EQ01d" class="hidden indent-level-3">
+                        <td>Other Equity Adjustments</td>
+                        {% for balance_sheet in balance_sheets %}
+                        <td class="editable other-equity-adjustments-column"  data-field-name="other-equity-adjustments" id="other-equity-adjustments-{{ forloop.counter }}" oninput="calculatetotal()">{{ balance_sheet.other_equity_adjustments }}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row"  style="margin-top: -20px; text-align: end; color: grey;"><p>Currency in INR</p></div>
+                <h5 class="card-title">Ratios</h5>
+                <div class="form-group">
+                    <div class="row align-items-center" style="margin-bottom: 10px;">
+                        <div class="col-md-6" style="text-align: right; ">
+                            <label for="period">Select Period</label>
+                        </div>
+                        <div class="col-md-6">
+                            <select id="period" class="form-control">
+                                <option value="" disabled selected>Choose Period</option>
+                                {% for balance_sheet in balance_sheets %}
+                                    <option value="{{ balance_sheet.id }}">{{ balance_sheet.end_date|date:'d-m-Y' }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+        
+                <h6 class="liquidity">Liquidity Ratios</h6>
+                <div class="info-block">
+                    <label for="current_ratio" class="label">Current Ratio</label>
+                    <p id="current_ratio" class="lable-value"></p>
+                </div>
+                <div class="info-block">
+                    <label for="quick_ratio" class="label">Quick Ratio</label>
+                    <p id="quick_ratio" class="lable-value"></p>
+                </div>
+                <div class="info-block">
+                    <label for="cash_ratio" class="label">Cash Ratio</label>
+                    <p id="cash_ratio" class="lable-value"></p>
+                </div>
+                <div class="info-block">
+                    <label for="working_capital" class="label">Working Capital</label>
+                    <p id="working_capital" class="lable-value"></p>
+                </div>
+        
+                <h6 class="liquidity">Solvency Ratios</h6>
+                <div class="info-block">
+                    <label for="debt_equity_ratio" class="label">Debt to Equity Ratio</label>
+                    <p id="debt_equity_ratio" class="lable-value"></p>
+                </div>
+                <div class="info-block">
+                    <label for="debt_ratio" class="label">Debt Ratio</label>
+                    <p id="debt_ratio" class="lable-value"></p>
+                </div>
+                <div class="info-block">
+                    <label for="equity_ratio" class="label">Equity Ratio</label>
+                    <p id="equity_ratio" class="lable-value"></p>
+                </div>
+                <div class="info-block">
+                    <label for="debt_capital_ratio" class="label">Debt to Capital Ratio</label>
+                    <p id="debt_capital_ratio" class="lable-value"></p>
+                </div>
+        
+                <h6 class="liquidity">Activity/ Efficiency Ratios</h6>
+                <div class="info-block">
+                    <label for="operating_cash_flow_ratio" class="label">Operating Cash Flow Ratio</label>
+                    <p id="operating_cash_flow_ratio" class="lable-value"></p>
+                </div>
+                <div class="info-block">
+                    <label for="debt_service_coverage_ratio" class="label">Debt Service Coverage Ratio</label>
+                    <p id="debt_service_coverage_ratio" class="lable-value"></p>
+                </div>
+            </div>
+        </div>
+        
+</div>
+</div>
+
+<script>
+    function toggle(button, targetId) {
+        var targetRows = document.querySelectorAll(targetId);
+        var isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+        button.setAttribute('aria-expanded', !isExpanded);
+        targetRows.forEach(row => {
+            if (isExpanded) {
+                row.classList.add('hidden');
+            } else {
+                row.classList.remove('hidden');
+            }
+        });
+    }
+
+    // Collapse all by default when the page is loaded
+    window.onload = function() {
+        document.querySelectorAll('.expandable-icon').forEach(icon => {
+            icon.setAttribute('aria-expanded', 'false');
+            var targetId = icon.getAttribute('onclick').split("'")[1];
+            document.querySelectorAll(targetId).forEach(row => row.classList.add('hidden'));
+        });
+    }
+     // Embed the Python-generated JSON data into JavaScript variables
+    const months = JSON.parse('{{ months_json|escapejs }}');
+    const quarters = JSON.parse('{{ quarters_json|escapejs }}');
+    const years = JSON.parse('{{ years_json|escapejs }}');
+
+    // JavaScript to handle dropdown options based on selected radio button
+    const radioButtons = document.querySelectorAll('input[name="select_type_of_data"]');
+    const dropdownContainer = document.getElementById('dropdown-container');
+
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', function () {
+            dropdownContainer.innerHTML = ''; // Clear the container
+
+            if (this.value === 'yearly') {
+                // Create Year Dropdown
+                const yearWrapper = document.createElement('div');
+                yearWrapper.classList.add('inline-container');
+
+                const yearLabel = document.createElement('label');
+                yearLabel.setAttribute('for', 'year-select');
+                yearLabel.textContent = 'Select Year:';
+
+                const yearSelect = document.createElement('select');
+                yearSelect.name = 'year';
+                yearSelect.id = 'year-select';
+                yearSelect.classList.add('form-select');
+                createOptions(years, yearSelect);
+
+                yearWrapper.appendChild(yearLabel); // Add the year label to the wrapper
+                yearWrapper.appendChild(yearSelect); // Add the year dropdown to the wrapper
+                dropdownContainer.appendChild(yearWrapper); // Add the year wrapper to the container
+
+            } else {
+                // Create Year Dropdown
+                const yearWrapper = document.createElement('div');
+                yearWrapper.classList.add('inline-container');
+
+                const yearLabel = document.createElement('label');
+                yearLabel.setAttribute('for', 'year-select');
+                yearLabel.textContent = 'Select Year:';
+
+                const yearSelect = document.createElement('select');
+                yearSelect.name = 'year';
+                yearSelect.id = 'year-select';
+                yearSelect.classList.add('form-select');
+                createOptions(years, yearSelect);
+
+                yearWrapper.appendChild(yearLabel); // Add the year label to the wrapper
+                yearWrapper.appendChild(yearSelect); // Add the year dropdown to the wrapper
+                dropdownContainer.appendChild(yearWrapper); // Add the year wrapper to the container
+
+                // Create Month/Quarter Dropdown
+                const mainWrapper = document.createElement('div');
+                mainWrapper.classList.add('inline-container');
+
+                const mainLabel = document.createElement('label');
+                mainLabel.setAttribute('for', 'main-select');
+
+                const mainSelect = document.createElement('select');
+
+                mainSelect.id = 'main-select';
+                mainSelect.classList.add('form-select');
+
+                if (this.value === 'monthly') {
+                    mainLabel.textContent = 'Select Month:';
+                    mainSelect.name = 'month';
+                    createOptions(months, mainSelect);
+                } else if (this.value === 'quarterly') {
+                    // Convert quarters object to an array of strings in the format "Q1 Jan,Feb,Mar"
+                    const quartersArray = Object.entries(quarters).map(([key, value]) => `${key} ${value}`);
+                    mainLabel.textContent = 'Select Quarter:';
+                    mainSelect.name = 'quarter';
+
+                    createOptions(quartersArray, mainSelect);
+                }
+
+                mainWrapper.appendChild(mainLabel); // Add the main label to the wrapper
+                mainWrapper.appendChild(mainSelect); // Add the main dropdown to the wrapper
+                dropdownContainer.appendChild(mainWrapper); // Add the main wrapper to the container
+            }
+        });
+    });
+
+    
+    document.getElementById('period').addEventListener('change', function() {
+        const selectedPeriodId = this.value;
+
+        // Parse the serialized JSON from Django context
+        const balancesheetRatios = JSON.parse('{{ balancesheetratios_json|escapejs }}');
+        console.log(balancesheetRatios)
+
+        // Find the ratios for the selected period
+        const selectedRatios = balancesheetRatios.find(function(ratio) {
+            return ratio.balancesheet_id === parseInt(selectedPeriodId);
+        });
+
+        // Update the HTML elements with the corresponding values
+        // Update the HTML elements with the corresponding values
+if (selectedRatios) {
+    document.getElementById('current_ratio').textContent = (selectedRatios.current_ratio !== null && selectedRatios.current_ratio !== undefined) ? selectedRatios.current_ratio : 'N/A';
+    document.getElementById('quick_ratio').textContent = (selectedRatios.quick_ratio !== null && selectedRatios.quick_ratio !== undefined) ? selectedRatios.quick_ratio : 'N/A';
+    document.getElementById('cash_ratio').textContent = (selectedRatios.cash_ratio !== null && selectedRatios.cash_ratio !== undefined) ? selectedRatios.cash_ratio : 'N/A';
+    document.getElementById('working_capital').textContent = (selectedRatios.working_capital !== null && selectedRatios.working_capital !== undefined) ? selectedRatios.working_capital : 'N/A';
+    document.getElementById('debt_equity_ratio').textContent = (selectedRatios.debt_equity_ratio !== null && selectedRatios.debt_equity_ratio !== undefined) ? selectedRatios.debt_equity_ratio : 'N/A';
+    document.getElementById('debt_ratio').textContent = (selectedRatios.debt_ratio !== null && selectedRatios.debt_ratio !== undefined) ? selectedRatios.debt_ratio : 'N/A';
+    document.getElementById('equity_ratio').textContent = (selectedRatios.equity_ratio !== null && selectedRatios.equity_ratio !== undefined) ? selectedRatios.equity_ratio : 'N/A';
+    document.getElementById('debt_capital_ratio').textContent = (selectedRatios.debt_capital_ratio !== null && selectedRatios.debt_capital_ratio !== undefined) ? selectedRatios.debt_capital_ratio : 'N/A';
+    document.getElementById('operating_cash_flow_ratio').textContent = (selectedRatios.operating_cash_flow_ratio !== null && selectedRatios.operating_cash_flow_ratio !== undefined) ? selectedRatios.operating_cash_flow_ratio : 'N/A';
+    document.getElementById('debt_service_coverage_ratio').textContent = (selectedRatios.debt_service_coverage_ratio !== null && selectedRatios.debt_service_coverage_ratio !== undefined) ? selectedRatios.debt_service_coverage_ratio : 'N/A';
+} else {
+    // Handle case where no matching ratios are found
+    document.getElementById('current_ratio').textContent = 'N/A';
+    document.getElementById('quick_ratio').textContent = 'N/A';
+    document.getElementById('cash_ratio').textContent = 'N/A';
+    document.getElementById('working_capital').textContent = 'N/A';
+    document.getElementById('debt_equity_ratio').textContent = 'N/A';
+    document.getElementById('debt_ratio').textContent = 'N/A';
+    document.getElementById('equity_ratio').textContent = 'N/A';
+    document.getElementById('debt_capital_ratio').textContent = 'N/A';
+    document.getElementById('operating_cash_flow_ratio').textContent = 'N/A';
+    document.getElementById('debt_service_coverage_ratio').textContent = 'N/A';
+}
+
+    });
+
+
+
+
+    function createOptions(options, selectElement) {
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.textContent = option;
+            selectElement.appendChild(opt);
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+    setupInitialTableView();
+    setupEditAndSaveButtons();
+    setupPeriodFilter();
+});
+
+let editedColumns = new Set();
+
+function setupInitialTableView() {
+    // Collapse all expandable sections on page load
+    document.querySelectorAll('.expandable-icon').forEach(icon => {
+        const targetId = icon.getAttribute('onclick').split("'")[1];
+        document.querySelectorAll(targetId).forEach(row => row.classList.add('hidden'));
+    });
+
+    filterTable('monthly'); // Show only monthly data by default
+}
+
+function setupEditAndSaveButtons() {
+    const editButton = document.getElementById('editButton');
+    const saveButton = document.getElementById('saveButton');
+
+    editButton.addEventListener('click', function () {
+        toggleEditMode(true);
+    });
+
+    saveButton.addEventListener('click', function () {
+        const columnData = collectEditedColumnData();
+        if (columnData.length === 0) {
+            alert('No changes detected.');
+        } else {
+            sendEditedData(columnData);
+        }
+    });
+}
+
+function toggleEditMode(isEditing) {
+    document.getElementById('editButton').classList.toggle('d-none', isEditing);
+    document.getElementById('saveButton').classList.toggle('d-none', !isEditing);
+
+    document.querySelectorAll('.editable').forEach(cell => {
+        if (isEditing) {
+            const value = cell.innerText.trim();
+            cell.innerHTML = `<input type="text" class="form-control" value="${value}" data-initial-value="${value}" />`;
+            const input = cell.querySelector('input');
+            input.addEventListener('input', () => handleInputChange(cell));
+        } else {
+            const input = cell.querySelector('input');
+            if (input) {
+                cell.innerText = input.value; // Assign the updated value back to the cell
+            }
+        }
+    });
+}
+
+function handleInputChange(cell) {
+    const input = cell.querySelector('input');
+    if (input) {
+        const initialValue = input.getAttribute('data-initial-value');
+        const currentValue = input.value.trim();
+        const columnIndex = cell.cellIndex;
+
+        if (initialValue !== currentValue) {
+            editedColumns.add(columnIndex); // Track edited columns by index
+        }
+    }
+}
+
+function collectEditedColumnData() {
+    const editedData = [];
+
+    editedColumns.forEach(columnIndex => {
+        const columnValues = collectColumnValues(columnIndex);
+        if (columnValues) {
+            editedData.push(columnValues);
+        }
+    });
+
+    return editedData;
+}
+
+
+
+
+
+function getEndDate1(columnIndex) {
+    const endDateElement = document.querySelector(`th.rowview1:nth-child(${columnIndex + 1})`);
+    return endDateElement ? endDateElement.innerText.trim() : null;  // Ensure endDate is properly retrieved
+
+    console.log(`EndDate for column ${columnIndex}: ${getEndDate(columnIndex)}`);
+
+}
+function getEndDate(columnIndex) {
+    const endDateElement = document.querySelector(`th.rowview1:nth-child(${columnIndex + 1})`);
+    if (endDateElement) {
+        let endDate = endDateElement.innerText.trim();
+        // Convert dd-mm-yyyy to yyyy-mm-dd for consistency
+        let [day, month, year] = endDate.split('-');
+        return `${year}-${month}-${day}`;
+    }
+    console.log(`End date not found for columnIndex ${columnIndex}`);
+    return null;
+}
+
+function getPeriodType(columnIndex) {
+    const periodTypeElement = document.querySelector(`th.rowview1:nth-child(${columnIndex + 1}) .period-type`);
+    if (periodTypeElement) {
+        return periodTypeElement.innerText.trim();
+    }
+    console.log(`Period type not found for columnIndex ${columnIndex}`);
+    return 'undefined';
+}
+
+function collectColumnValues(columnIndex) {
+    const cells = document.querySelectorAll(`tbody td:nth-child(${columnIndex + 1})`);
+    const columnValues = [];
+
+    cells.forEach((cell, rowIndex) => {
+        const input = cell.querySelector('input');
+        const value = input ? input.value.trim() : cell.innerText.trim();
+        const fieldName = cell.dataset.fieldName || '';
+
+        columnValues.push({
+            fieldName,
+            value,
+        });
+    });
+
+    const endDate = getEndDate(columnIndex);
+    const periodType = getPeriodType(columnIndex);
+
+    console.log(`Collected data for column ${columnIndex}: `, columnValues, endDate, periodType);
+
+    if (!endDate) {
+        console.error(`End date not found for column ${columnIndex}`);
+    }
+
+    if (!periodType) {
+        console.error(`Period type not found for column ${columnIndex}`);
+    }
+
+    columnValues.push({
+        endDate,
+        periodType,
+    });
+
+    return { columnIndex, values: columnValues };
+}
+
+
+
+
+function sendEditedData(editedData) {
+    const jsonData = JSON.stringify({ editedData });
+
+    fetch("{% url 'save_edited_data' company.company_id %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: jsonData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        alert('Data saved successfully!');
+        toggleEditMode(false);
+        editedColumns.clear(); // Clear the set after saving
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to save data.');
+    });
+}
+
+function setupPeriodFilter() {
+    document.querySelector('.btn-group').addEventListener('click', event => {
+        if (event.target.tagName === 'BUTTON') {
+            const period = event.target.textContent.trim().toLowerCase();
+            filterTable(period);
+        }
+    });
+}
+
+function filterTable(period) {
+    const headers = document.querySelectorAll('th .period-type');
+    headers.forEach((header, index) => {
+        const periodType = header.textContent.trim().toLowerCase();
+        if (periodType === period) {
+            showColumn(index + 1);
+        } else {
+            hideColumn(index + 1);
+        }
+    });
+
+    showColumn(0); // Always show the Breakdown column
+}
+
+function showColumn(index) {
+    document.querySelectorAll(`th:nth-child(${index + 1}), td:nth-child(${index + 1})`).forEach(el => {
+        el.style.display = '';
+    });
+}
+
+function hideColumn(index) {
+    document.querySelectorAll(`th:nth-child(${index + 1}), td:nth-child(${index + 1})`).forEach(el => {
+        el.style.display = 'none';
+    });
+}
+
+
+
+function setupInputListeners() {
+    document.querySelectorAll('.editable input').forEach(input => {
+        input.addEventListener('input', function () {
+            calculateTotals();
+        });
+    });
+}
+
+function calculatetotal1() {
+    calculateCashTotals();
+    calculateReceivablesTotals();
+    calculateInventoryTotals();
+    calculatePPE();
+    calculateCurrentAssets();
+    calculateNonCurrentAssets();
+    calculateCurrentLiabilities();
+    calculateStockholdersEquity();
+    calculateGoodwillTotals();
+    calculateInvestmentsTotals();
+    calculateNonCurrentAssetsTotals();
+    calculateTotalAssets();
+    calculatePayablesAndAccruedExpenses();
+    calculateDebtAndLeaseObligation();
+    calculateDeferredLiabilities();
+    calculateLongTermDebtAndCapitalLease();
+    calculateNonCurrentDeferredLiabilities();
+    calculatetotalCurrentLiabilities();
+    calculatecommonstock();
+    calculateStockholdersEquity();
+    calculatetotalequity();
+}
+
+
+function calculatetotal() {
+    calculateCashTotals();
+    calculateReceivablesTotals();
+    calculateInventoryTotals();
+    calculatePPE();
+    calculateCurrentAssets();
+    calculateNonCurrentAssets();
+    calculateCurrentLiabilities();
+    calculateStockholdersEquity();
+    calculateGoodwillTotals();
+    calculateInvestmentsTotals();
+    calculateNonCurrentAssetsTotals();
+    calculateTotalAssets();
+    calculatePayablesAndAccruedExpenses();
+    calculateDebtAndLeaseObligation();
+    calculateDeferredLiabilities();
+    calculateLongTermDebtAndCapitalLease();
+    calculateNonCurrentDeferredLiabilities();
+    calculatetotalCurrentLiabilities();
+    calculatecommonstock();
+    calculateStockholdersEquity();
+    calculatetotalequity();
+    calculateGrossPPE();
+    calculateAccountsReceivable();
+    calculateTotalNonCurrentLiabilities();
+    calculateTotalLiabilitiesNetMinorityInterest();
+}
+
+
+function calculateCashTotals() {
+    const cashColumns = document.querySelectorAll('.cash-column');
+    const cashEquivalentsColumns = document.querySelectorAll('.cash-equivalents-column');
+    const shortTermInvestmentsColumns = document.querySelectorAll('.short-term-investments-column');
+
+    cashColumns.forEach((cashCell, index) => {
+        const cash = getCellValue(cashCell);
+        const cashEquivalents = getCellValue(cashEquivalentsColumns[index]);
+        const shortTermInvestments = getCellValue(shortTermInvestmentsColumns[index]);
+
+        const cashTotal = cash + cashEquivalents;
+        const cashAndShortTermTotal = cashTotal + shortTermInvestments;
+
+        updateCellValue(`cash-and-cash-equivalents-${index + 1}`, cashTotal);
+        updateCellValue(`cash-cash-equivalents-and-short-term-${index + 1}`, cashAndShortTermTotal);
+    });
+}
+
+function calculateReceivablesTotals() {
+    const accountsReceivableColumns = document.querySelectorAll('.accounts-receivable-column');
+    const otherReceivablesColumns = document.querySelectorAll('.other-receivables-column');
+
+    accountsReceivableColumns.forEach((accountsReceivableCell, index) => {
+        const accountsReceivable = getCellValue(accountsReceivableCell);
+        const otherReceivables = getCellValue(otherReceivablesColumns[index]);
+
+        const totalReceivables = accountsReceivable + otherReceivables;
+        updateCellValue(`receivables-${index + 1}`, totalReceivables);
+    });
+}
+
+function calculateInventoryTotals() {
+    const rawMaterialsColumns = document.querySelectorAll('.raw-materials-column');
+    const workProcessColumns = document.querySelectorAll('.work-process-column');
+    const finishedGoodsColumns = document.querySelectorAll('.finished-goods-column');
+
+    rawMaterialsColumns.forEach((rawMaterialsCell, index) => {
+        const rawMaterials = getCellValue(rawMaterialsCell);
+        const workProcess = getCellValue(workProcessColumns[index]);
+        const finishedGoods = getCellValue(finishedGoodsColumns[index]);
+
+        const inventoryTotal = rawMaterials + workProcess + finishedGoods;
+        updateCellValue(`inventory-${index + 1}`, inventoryTotal);
+    });
+}
+
+
+function calculateGoodwillTotals() {
+    const goodwillColumns = document.querySelectorAll('.goodwill-column');
+    const otherIntangibleAssetsColumns = document.querySelectorAll('.other-intangible-assets-column');
+    
+    goodwillColumns.forEach((goodwillCell, index) => {
+        const goodwill = getCellValue(goodwillCell);
+        const otherIntangibleAssets = getCellValue(otherIntangibleAssetsColumns[index]);
+
+        const totalGoodwillAndOtherIntangibles = goodwill + otherIntangibleAssets;
+
+        // Update the total for each row in the "Goodwill And Other Intangible Assets" column
+        updateCellValue(`goodwill_and_other_intangible_assets-${index + 1}`, totalGoodwillAndOtherIntangibles);
+    });
+}
+
+function calculateInvestmentsTotals() {
+    const longTermEquityColumns = document.querySelectorAll('.long-term-equity-investment-column');
+    
+    longTermEquityColumns.forEach((longTermEquityCell, index) => {
+        const longTermEquityInvestment = getCellValue(longTermEquityCell);
+
+        // In this case, there's only one field contributing to the total
+        const totalInvestmentsAndAdvances = longTermEquityInvestment;
+
+        // Update the total for each row in the "Investments And Advances" column
+        updateCellValue(`investments_and_advances-${index + 1}`, totalInvestmentsAndAdvances);
+    });
+}
+
+function calculatePPE() {
+    const grossPPEColumns = document.querySelectorAll('.gross_ppe-column');
+    const accumulatedDepreciationColumns = document.querySelectorAll('.accumulated_depreciation-column');
+
+    grossPPEColumns.forEach((grossPPECell, index) => {
+        const grossPPE = getCellValue(grossPPECell);
+        const accumulatedDepreciation = getCellValue(accumulatedDepreciationColumns[index]);
+
+        const netPPE = grossPPE - accumulatedDepreciation;
+        updateCellValue(`net_ppe-${index + 1}`, netPPE);
+    });
+}
+
+function calculateNonCurrentAssetsTotals() {
+    const netPPEColumns = document.querySelectorAll('.net-ppe-column');
+    const goodwillAndOtherIntangiblesColumns = document.querySelectorAll('.goodwill_and_other_intangible_assets_column');
+    const investmentsAndAdvancesColumns = document.querySelectorAll('.investments_and_advances_column');
+    const otherNonCurrentAssetsColumns = document.querySelectorAll('.other-non-current-assets-column');
+
+    netPPEColumns.forEach((netPPECell, index) => {
+        const netPPE = getCellValue(netPPECell);
+        const goodwillAndOtherIntangibles = getCellValue(goodwillAndOtherIntangiblesColumns[index]);
+        const investmentsAndAdvances = getCellValue(investmentsAndAdvancesColumns[index]);
+        const otherNonCurrentAssets = getCellValue(otherNonCurrentAssetsColumns[index]);
+
+        const totalNonCurrentAssets = netPPE + goodwillAndOtherIntangibles + investmentsAndAdvances + otherNonCurrentAssets;
+
+        // Update the total for each row in the "Total Non-Current Assets" column
+        updateCellValue(`total_non_current_assets-${index + 1}`, totalNonCurrentAssets);
+    });
+}
+
+function calculateCurrentAssets() {
+    const cashShortTermColumns = document.querySelectorAll('.cash-cash-equivalents-and-short-term');
+    const receivablesColumns = document.querySelectorAll('.receivables-column');
+    const inventoryColumns = document.querySelectorAll('.inventory-column');
+    const hedgingAssetsColumns = document.querySelectorAll('.hedging-assets-column');
+    const otherCurrentAssetsColumns = document.querySelectorAll('.other-current-assets-column');
+
+    cashShortTermColumns.forEach((cashShortTermCell, index) => {
+        const cashShortTerm = getCellValue(cashShortTermCell);
+        const receivables = getCellValue(receivablesColumns[index]);
+        const inventory = getCellValue(inventoryColumns[index]);
+        const hedgingAssets = getCellValue(hedgingAssetsColumns[index]);
+        const otherCurrentAssets = getCellValue(otherCurrentAssetsColumns[index]);
+
+        const currentAssetsTotal = cashShortTerm + receivables + inventory + hedgingAssets + otherCurrentAssets;
+        updateCellValue(`current-assets-${index + 1}`, currentAssetsTotal);
+    });
+}
+
+function calculateNonCurrentAssets() {
+    const netPPEColumns = document.querySelectorAll('.net_ppe_column');
+    const goodwillIntangibleColumns = document.querySelectorAll('.goodwill_and_other_intangible_assets_column');
+    const investmentsAdvancesColumns = document.querySelectorAll('.investments_and_advances_column');
+    const otherNonCurrentAssetsColumns = document.querySelectorAll('.other_non_current_assets_column');
+
+    netPPEColumns.forEach((netPPECell, index) => {
+        const netPPE = getCellValue(netPPECell);
+        const goodwillIntangible = getCellValue(goodwillIntangibleColumns[index]);
+        const investmentsAdvances = getCellValue(investmentsAdvancesColumns[index]);
+        const otherNonCurrentAssets = getCellValue(otherNonCurrentAssetsColumns[index]);
+
+        const totalNonCurrentAssets = netPPE + goodwillIntangible + investmentsAdvances + otherNonCurrentAssets;
+        updateCellValue(`total_non_current_assets-${index + 1}`, totalNonCurrentAssets);
+    });
+}
+
+function calculateTotalAssets() {
+    const currentAssetsColumns = document.querySelectorAll('.current-assets-');
+    const totalNonCurrentAssetsColumns = document.querySelectorAll('.total_non_current_assets_column');
+
+    currentAssetsColumns.forEach((currentAssetsCell, index) => {
+        const currentAssets = getCellValue(currentAssetsCell);
+        const totalNonCurrentAssets = getCellValue(totalNonCurrentAssetsColumns[index]);
+
+        const totalAssets = currentAssets + totalNonCurrentAssets;
+
+        // Update the total for each row in the "Total Assets" column
+        updateCellValue(`total_assets-${index + 1}`, totalAssets);
+    });
+}
+
+function calculatePayablesAndAccruedExpenses() {
+    const accountsPayableColumns = document.querySelectorAll('.accounts-payable-column');
+    const incomeTaxPayableColumns = document.querySelectorAll('.income-tax-payable-column');
+
+    accountsPayableColumns.forEach((accountsPayableCell, index) => {
+        const accountsPayable = getCellValue(accountsPayableCell);
+        const incomeTaxPayable = getCellValue(incomeTaxPayableColumns[index]);
+
+        const totalPayablesAndAccrued = accountsPayable + incomeTaxPayable;
+
+        // Update the total for each row in the "Payables And Accrued Expenses" column
+        updateCellValue(`payables-and-accrued-expenses-${index + 1}`, totalPayablesAndAccrued);
+    });
+}
+
+function calculateDebtAndLeaseObligation() {
+    const currentDebtColumns = document.querySelectorAll('.current-debt-column');
+    const capitalLeaseColumns = document.querySelectorAll('.capital-lease-column');
+
+    currentDebtColumns.forEach((currentDebtCell, index) => {
+        const currentDebt = getCellValue(currentDebtCell);
+        const capitalLease = getCellValue(capitalLeaseColumns[index]);
+
+        const totalDebtAndLease = currentDebt + capitalLease;
+
+        // Update the total for each row in the "Current Debt And Capital Lease Obligation" column
+        updateCellValue(`current-debt-and-capital-lease-obligation-${index + 1}`, totalDebtAndLease);
+    });
+}
+
+function calculateCurrentLiabilities() {
+    // Auto-calculated fields
+    const payablesAccruedColumns = document.querySelectorAll('.payables-accrued-column');
+    const currentDebtColumns = document.querySelectorAll('.current-debt-and-capital-lease-obligation-column');
+    const deferredLiabilitiesColumns = document.querySelectorAll('.deferred-liabilities-column');
+
+    // Input fields
+    const pensionColumns = document.querySelectorAll('.pension-post-retirement-column');
+    const otherCurrentLiabilitiesColumns = document.querySelectorAll('.other-current-liabilities-column');
+
+    // Iterate through each row to calculate the current liabilities
+    payablesAccruedColumns.forEach((payablesAccruedCell, index) => {
+        const payablesAccrued = getCellValue(payablesAccruedCell); // Auto-calculated
+        const currentDebt = getCellValue(currentDebtColumns[index]); // Auto-calculated
+        const deferredLiabilities = getCellValue(deferredLiabilitiesColumns[index]); // Auto-calculated
+        
+        const pension = getCellValue(pensionColumns[index]); // Input field
+        const otherCurrentLiabilities = getCellValue(otherCurrentLiabilitiesColumns[index]); // Input field
+
+        // Calculate the total current liabilities
+        const currentLiabilitiesTotal = payablesAccrued + pension + currentDebt + deferredLiabilities + otherCurrentLiabilities;
+
+        // Update the corresponding current liabilities cell
+        updateCellValue(`current-liabilities-${index + 1}`, currentLiabilitiesTotal);
+    });
+}
+
+function calculateDeferredLiabilities() {
+    // Collect input fields for manual entries
+    const deferredRevenueColumns = document.querySelectorAll('.deferred-revenue-column');
+
+    // Iterate through each row to calculate the current deferred liabilities
+    deferredRevenueColumns.forEach((deferredRevenueCell, index) => {
+        const deferredRevenue = getCellValue(deferredRevenueCell); // Input field for Current Deferred Revenue
+
+        // Current Deferred Liabilities is the same as Current Deferred Revenue in this case
+        const currentDeferredLiabilities = deferredRevenue;
+
+
+        // Update the corresponding Current Deferred Liabilities cell
+        updateCellValue(`current-deferred-liabilities-${index + 1}`, currentDeferredLiabilities);
+    });
+}
+
+
+function calculateLongTermDebtAndCapitalLease() {
+    // Collect input fields for manual entries
+    const longTermDebtColumns = document.querySelectorAll('.long-term-debt-column');
+    const longTermCapitalLeaseColumns = document.querySelectorAll('.long-term-capital-lease-column');
+
+    // Iterate through each row to calculate the long-term debt and capital lease obligation
+    longTermDebtColumns.forEach((longTermDebtCell, index) => {
+        const longTermDebt = getCellValue(longTermDebtCell); // Input field for Long Term Debt
+        const longTermCapitalLease = getCellValue(longTermCapitalLeaseColumns[index]); // Input field for Long Term Capital Lease Obligation
+
+        // Calculate the total Long Term Debt and Capital Lease Obligation
+        const totalLongTermDebtAndLease = longTermDebt + longTermCapitalLease;
+
+        // Update the corresponding Long Term Debt and Capital Lease Obligation cell
+        updateCellValue(`long-term-debt-and-capital-lease-obligation-${index + 1}`, totalLongTermDebtAndLease);
+    });
+}
+
+function calculateNonCurrentDeferredLiabilities() {
+    // Collect input fields for manual entries
+    const deferredTaxesColumns = document.querySelectorAll('.non-current-deferred-taxes-column');
+    const deferredRevenueColumns = document.querySelectorAll('.non-current-deferred-revenue-column');
+
+    // Iterate through each row to calculate the non-current deferred liabilities
+    deferredTaxesColumns.forEach((deferredTaxesCell, index) => {
+        const deferredTaxes = getCellValue(deferredTaxesCell); // Input field for Non-Current Deferred Taxes Liabilities
+        const deferredRevenue = getCellValue(deferredRevenueColumns[index]); // Input field for Non-Current Deferred Revenue
+
+        // Calculate the total Non-Current Deferred Liabilities
+        const totalNonCurrentDeferredLiabilities = deferredTaxes + deferredRevenue;
+
+      
+
+        // Update the corresponding Non-Current Deferred Liabilities cell
+        updateCellValue(`non-current-deferred-liabilities-${index + 1}`, totalNonCurrentDeferredLiabilities);
+    });
+}
+
+function calculatetotalCurrentLiabilities() {
+    // Auto-calculated fields (examples, adjust as per your actual IDs or classes)
+    const payablesColumns = document.querySelectorAll('.payables-accrued-column');
+    const currentDebtColumns = document.querySelectorAll('.current-debt-and-capital-lease-obligation-column');
+    const deferredLiabilitiesColumns = document.querySelectorAll('.deferred-liabilities-column');
+
+    // Input fields
+    const otherCurrentLiabilitiesColumns = document.querySelectorAll('.other-current-liabilities-column');
+    const pensionColumns = document.querySelectorAll('.pension-post-retirement-column');
+
+    // Calculate total based on the number of rows
+    payablesColumns.forEach((cell, index) => {
+        const payables = getCellValue(payablesColumns[index]);
+        const currentDebt = getCellValue(currentDebtColumns[index]);
+        const deferredLiabilities = getCellValue(deferredLiabilitiesColumns[index]);
+
+        const otherCurrentLiabilities = getCellValue(otherCurrentLiabilitiesColumns[index]);
+        const pension = getCellValue(pensionColumns[index]);
+
+        const totalCurrentLiabilities = payables + currentDebt + deferredLiabilities + otherCurrentLiabilities + pension;
+
+        // Assuming you have a specific column to display the total current liabilities
+        updateCellValue(`total-current-liabilities-${index + 1}`, totalCurrentLiabilities);
+    });
+}
+
+
+
+function calculateTotalNonCurrentLiabilities() {
+    const longTermDebtCapitalLeaseColumns = document.querySelectorAll('.long-term-debt-and-capital-lease-obligation'); // Auto-calculated: Long Term Debt And Capital Lease Obligation
+    const nonCurrentDeferredLiabilitiesColumns = document.querySelectorAll('.non-current-deferred-liabilities-column'); // Auto-calculated: Non-Current Deferred Liabilities
+    const tradeOtherPayablesColumns = document.querySelectorAll('.trade-other-payables-column'); // Input: Trade and Other Payables Non-Current
+    const otherNonCurrentLiabilitiesColumns = document.querySelectorAll('.other-non-current-liabilities-column'); // Input: Other Non-Current Liabilities
+
+    // Loop through each row to calculate Total Non-Current Liabilities Net Minority Interest
+    longTermDebtCapitalLeaseColumns.forEach((longTermDebtCell, index) => {
+        const longTermDebtCapitalLease = getCellValue(longTermDebtCell); // Get Long Term Debt and Capital Lease Obligation
+        const nonCurrentDeferredLiabilities = getCellValue(nonCurrentDeferredLiabilitiesColumns[index]); // Get Non-Current Deferred Liabilities
+        const tradeOtherPayables = getCellValue(tradeOtherPayablesColumns[index]); // Get Trade and Other Payables Non-Current
+        const otherNonCurrentLiabilities = getCellValue(otherNonCurrentLiabilitiesColumns[index]); // Get Other Non-Current Liabilities
+
+        const totalNonCurrentLiabilities = longTermDebtCapitalLease + nonCurrentDeferredLiabilities + tradeOtherPayables + otherNonCurrentLiabilities; // Calculate Total Non-Current Liabilities
+
+        // Update the Total Non-Current Liabilities Net Minority Interest cell with the calculated value
+        updateCellValue(`total-non-current-liabilities-net-minority-interest-${index + 1}`, totalNonCurrentLiabilities);
+    });
+}
+
+function calculateTotalLiabilitiesNetMinorityInterest() {
+    const currentLiabilitiesColumns = document.querySelectorAll('.current-liabilities-column'); // Current Liabilities
+    const totalNonCurrentLiabilitiesColumns = document.querySelectorAll('.total-non-current-liabilities-column'); // Total Non-Current Liabilities Net Minority Interest
+
+    // Loop through each row to calculate Total Liabilities Net Minority Interest
+    currentLiabilitiesColumns.forEach((currentLiabilitiesCell, index) => {
+        const currentLiabilities = getCellValue(currentLiabilitiesCell); // Get Current Liabilities value
+        const totalNonCurrentLiabilities = getCellValue(totalNonCurrentLiabilitiesColumns[index]); // Get Total Non-Current Liabilities value
+
+        const totalLiabilitiesNetMinorityInterest = currentLiabilities + totalNonCurrentLiabilities; // Calculate Total Liabilities Net Minority Interest
+
+        // Update the Total Liabilities Net Minority Interest cell with the calculated value
+        updateCellValue(`total-liabilities-net-minority-interest-${index + 1}`, totalLiabilitiesNetMinorityInterest);
+    });
+}
+
+
+function calculateAccountsReceivable() {
+    const grossAccountsReceivableColumns = document.querySelectorAll('.gross-accounts-receivable-column'); // Gross Accounts Receivable
+    const allowanceDoubtfulColumns = document.querySelectorAll('.allowance-doubtful-column'); // Allowance For Doubtful Accounts Receivable
+
+    // Loop through each row to calculate Accounts Receivable
+    grossAccountsReceivableColumns.forEach((grossAccountsCell, index) => {
+        const grossAccountsReceivable = getCellValue(grossAccountsCell); // Get Gross Accounts Receivable value
+        const allowanceDoubtful = getCellValue(allowanceDoubtfulColumns[index]); // Get Allowance For Doubtful Accounts Receivable value
+
+        const accountsReceivable = grossAccountsReceivable + allowanceDoubtful; // Calculate Accounts Receivable
+
+        // Update the Accounts Receivable cell with the calculated value
+        updateCellValue(`accounts-receivable-${index + 1}`, accountsReceivable);
+    });
+}
+
+
+function calculateGrossPPE() {
+    const landAndImprovementsColumns = document.querySelectorAll('.land_and_improvements-column'); // Land and Improvements
+    const buildingsAndImprovementsColumns = document.querySelectorAll('.buildings_and_improvements-column'); // Buildings and Improvements
+    const machineryFurnitureColumns = document.querySelectorAll('.machinery_furniture_equipment-column'); // Machinery Furniture Equipment
+    const otherPropertiesColumns = document.querySelectorAll('.other_properties-column'); // Other Properties
+    const leasesColumns = document.querySelectorAll('.leases-column'); // Leases
+
+    // Loop through each row to calculate Gross PPE
+    landAndImprovementsColumns.forEach((landCell, index) => {
+        const landAndImprovements = getCellValue(landCell); // Get Land and Improvements value
+        const buildingsAndImprovements = getCellValue(buildingsAndImprovementsColumns[index]); // Get Buildings and Improvements value
+        const machineryFurniture = getCellValue(machineryFurnitureColumns[index]); // Get Machinery Furniture Equipment value
+        const otherProperties = getCellValue(otherPropertiesColumns[index]); // Get Other Properties value
+        const leases = getCellValue(leasesColumns[index]); // Get Leases value
+
+        const grossPPE = landAndImprovements + buildingsAndImprovements + machineryFurniture + otherProperties + leases; // Calculate Gross PPE
+
+        // Update the Gross PPE cell with the calculated value
+        updateCellValue(`gross_ppe-${index + 1}`, grossPPE);
+    });
+}
+
+// Adding event listeners to input fields to trigger the calculation
+document.querySelectorAll('.other-current-liabilities-column input, .pension-post-retirement-column input').forEach(input => {
+    input.addEventListener('input', calculateCurrentLiabilities);
+});
+
+// Ensure this function is called when there are changes to input fields
+document.querySelectorAll('.trade-other-payables-column input, .other-non-current-liabilities-column input').forEach(input => {
+    input.addEventListener('input', () => {
+        calculatetotal(); // Trigger recalculation when input fields are changed
+    });
+});
+
+function calculatecommonstock() {
+    const commonstock = document.querySelectorAll('.common-stock-column');
+  
+
+    commonstock.forEach((cashCell, index) => {
+        const cash = getCellValue(cashCell);
+       
+
+        updateCellValue(`capital-stock-${index + 1}`, cash);
+        
+    });
+}
+
+function calculateStockholdersEquity() {
+    const netPPEColumns = document.querySelectorAll('.capital-stock-column');
+    const goodwillAndOtherIntangiblesColumns = document.querySelectorAll('.retained-earnings-column');
+    const investmentsAndAdvancesColumns = document.querySelectorAll('.gains-losses-column');
+    const otherNonCurrentAssetsColumns = document.querySelectorAll('.other-equity-adjustments-column');
+
+    netPPEColumns.forEach((netPPECell, index) => {
+        const netPPE = getCellValue(netPPECell);
+        const goodwillAndOtherIntangibles = getCellValue(goodwillAndOtherIntangiblesColumns[index]);
+        const investmentsAndAdvances = getCellValue(investmentsAndAdvancesColumns[index]);
+        const otherNonCurrentAssets = getCellValue(otherNonCurrentAssetsColumns[index]);
+
+        const totalNonCurrentAssets = netPPE + goodwillAndOtherIntangibles + investmentsAndAdvances + otherNonCurrentAssets;
+
+        // Update the total for each row in the "Total Non-Current Assets" column
+        updateCellValue(`stockholders-equity-${index + 1}`, totalNonCurrentAssets);
+    });
+}
+function calculatetotalequity() {
+    const commonstock = document.querySelectorAll('.stockholders-equity-column');
+  
+
+    commonstock.forEach((cashCell, index) => {
+        const cash = getCellValue(cashCell);
+       
+
+        updateCellValue(`total-equity-gross-minority-interest-${index + 1}`, cash);
+        
+    });
+}
+
+
+function getCellValue(cell) {
+    const input = cell.querySelector('input');
+    const value = input ? input.value : cell.innerText;
+    return parseFloat(value.trim()) || 0;
+}
+
+function updateCellValue(cellId, value) {
+    const cell = document.getElementById(cellId);
+    if (cell) {
+        cell.innerText = value.toFixed(2);
+    } else {
+        console.warn(`Cell with ID ${cellId} not found.`);
+    }
+}
+
+</script>
+{% endblock content %}

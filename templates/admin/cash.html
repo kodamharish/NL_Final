@@ -1,0 +1,593 @@
+{% include 'admin/company_profile.html' %}
+
+{% block styles %}
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --row-height: 10px;
+            --font-size: 14px;
+            --first-column-width: 250px;
+            --indentation: 25px;
+            --double-indentation: 50px;
+            --green-bg: green;
+            --yellow-bg: yellow;
+            --grey-bg: grey;
+            --text-color: white;
+            --table-width: 60%;
+            --card-width: 35%;
+        }
+    
+        body {
+            overflow: hidden; /* Hide scrollbars for the entire body */
+        }
+    
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    
+        .content-wrapper {
+            display: flex;
+        }
+    
+        .table-wrapper {
+            max-height: 70vh; /* Set max height for vertical scrolling */
+            max-width: 100%; /* Ensure horizontal scrolling works */
+            overflow: scroll; /* Enable both horizontal and vertical scrolling */
+            scrollbar-width: none; /* For Firefox, hides scrollbar */
+        }
+    
+        /* Hide scrollbars for webkit browsers (Chrome, Safari) */
+        .table-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+    
+        .table {
+            table-layout: relative;
+            width: 950px; /* Ensure the table has a large enough width to cause scrolling */
+            
+        }
+    
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: left;
+            border-top: none;
+            padding: 12px;
+            height: var(--row-height);
+            font-size: var(--font-size);
+            line-height: 1;
+            overflow: hidden;
+            font-family: 'Arial MT Rounded';
+        }
+    
+        .table th:first-child, .table td:first-child {
+            position: sticky;
+            left: 0;
+            background-color: white;
+            z-index: 3; /* Ensure the first column stays on top */
+            width: var(--first-column-width);
+        }
+    
+        .sub-row {
+            background-color: #f9f9f9;
+        }
+    
+        .sub-row td:first-child {
+            padding-left: var(--indentation) !important;
+        }
+    
+        .sub-row .sub-row td:first-child {
+            padding-left: var(--double-indentation) !important;
+        }
+    
+        .expandable-icon {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+    
+        .expandable-icon::before {
+            content: "\25B6";
+            display: inline-block;
+            transform: rotate(90deg);
+        }
+    
+        .collapse.show .expandable-icon::before {
+            content: "\25BC";
+            transform: rotate(0deg);
+        }
+    
+        .table-hover tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+    
+        .green-bg {
+            background-color: var(--green-bg);
+            color: var(--text-color);
+        }
+    
+        .yellow-bg {
+            background-color: var(--yellow-bg);
+            color: var(--text-color);
+        }
+    
+        .grey-bg {
+            background-color: var(--grey-bg);
+            color: var(--text-color);
+        }
+    
+        .card {
+            width: 600px;
+            height: auto;
+            background-color: #ffff;
+            margin-left: 20px;
+            padding: 15px;
+            border-left: 1px solid black;
+            border-right: none;
+            border-top: none;
+            border-bottom: none;
+            font-family: 'Arial MT Rounded';
+            padding-left: 40px;
+            margin-left: 10px;
+            border-radius: 0px;
+        }
+        .container{
+            margin-left: 120px;
+            padding-top: -20px !important;
+            margin-top: 0px;
+            
+        }
+        .table-wrapper,
+        .card {
+            display: inline-block;
+            vertical-align: top;
+            padding-top: -20px;
+        }
+        .label {
+            font-size: 12px;
+            font-family: 'Arial MT Rounded';
+            color: grey !important;
+        }
+        .form-control {
+            color: grey;
+        }
+        .breadcrumb{
+            display: flex;
+            align-items: left;
+            font-size: 14px;
+            margin-top: 10px;
+            margin-left: 250px;
+            font-family: 'Arial MT Rounded' !important;
+            padding-bottom: 0px;
+            
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+        .error{
+            margin-left: 500px;
+            margin-top: 10px;
+            font-size: 20px;
+        }
+        .modal-dialog {
+    max-width: 40%; /* Adjust as needed */
+    max-height: 90vh; /* Make sure the modal doesn't grow too large */
+    overflow-y: auto; /* Enable vertical scrolling inside the modal if content overflows */
+    overflow-x: hidden; /* Prevent horizontal scrolling in the modal */
+}
+
+/* Ensure the page background content doesn't move when modal is open */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Constrain modal-body */
+.modal-body {
+    max-height: calc(100vh - 200px); /* Adjust this value to suit your design */
+    overflow-y: auto; /* Add scrolling for long content */
+}
+
+
+.add-button {
+    margin-right: 50px;
+    font-size: 25px; /* Adjust the margin as needed */
+}
+
+.fas.fa-plus {
+    margin-top: 0; /* Reset any existing margin */
+}
+.breadcrumb-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+
+    </style>
+    
+{% endblock styles %}
+
+{% block content %}
+<div class="error">
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</div>
+
+
+{% if manual_entry_option %}
+            <div class="text-center">
+                <p class="text-danger text-center mt-2 fw-bold" style="font-size: 0.9rem;">
+                    <!-- {% if missing_data == 'current' %}
+                        Income Statement and Balance Sheet for the current period are missing.
+                    {% elif missing_data == 'previous' %}
+                        No previous entry exists in Balance Sheet or Income Statement for the previous {{ period_type }}.
+                    {% endif %} -->
+                </p>
+                <button class="btn btn-primary" onclick="manualEntry()">Manual Entry</button>
+                <button class="btn btn-secondary" onclick="enterPLBS()">Enter P&L or BS</button>
+            </div>
+        {% endif %}
+
+
+
+        <div class="breadcrumb-container">
+            <div class="breadcrumb">
+                <span>Corporate Finance</span> &ndash; <span>Planning & Budgeting</span> &ndash; <span class="bold-text">Cash Flow</span>
+            </div>
+            <a href="#" class="add-button "><i class="fas fa-plus" data-bs-toggle="modal" data-bs-target="#cash_flow"></i></a>
+        </div>
+        
+
+
+<div class="container  mt-1">
+    <div class="row">
+
+        
+        <div class="col-md-4">
+        </div>
+        <div class="add-button-container">
+            
+            <!-- The Modal -->
+            <div class="modal" id="cash_flow">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title"></h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <!-- Modal Body -->
+                        <div class="modal-body text-center">
+                            <form method="POST" action="#" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <!-- Period Selection -->
+                                <div class="inline mb-4">
+                                    <label>Select the Period for Cash Flow:</label>
+                                    <div style="margin-right:15px;">
+                                        <input type="radio" class="form-check-input" id="monthly" name="select_type_of_data" value="monthly" onclick="showDropdown()">
+                                        <label class="form-check-label" for="monthly">Monthly</label>
+                                    </div>
+                                    <div style="margin-right:15px;">
+                                        <input type="radio" class="form-check-input" id="quarterly" name="select_type_of_data" value="quarterly" onclick="showDropdown()">
+                                        <label class="form-check-label" for="quarterly">Quarterly</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" class="form-check-input" id="yearly" name="select_type_of_data" value="yearly" onclick="showDropdown()">
+                                        <label class="form-check-label" for="yearly">Yearly</label>
+                                    </div>
+                                </div>
+            
+                                <div id="dropdown-container" class="mt-3" style="display: none;"></div>
+            
+                                <!-- First Year of Operations Question (Initially hidden) -->
+                                <div id="first-year-question" class="mt-4" style="display:none;">
+                                    <label>Is this the First Period of operations?</label>
+                                    <div style="margin-right:15px;">
+                                        <input type="radio" class="form-check-input" id="first_year_yes" name="first_year" value="yes">
+                                        <label class="form-check-label" for="first_year_yes">Yes</label>
+                                    </div>
+                                    <div style="margin-right:15px;">
+                                        <input type="radio" class="form-check-input" id="first_year_no" name="first_year" value="no">
+                                        <label class="form-check-label" for="first_year_no">No</label>
+                                    </div>
+                                </div>
+            
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                            </form>
+                        </div>
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+<div class="container mt-5">
+    <div class="header-container">
+    </div>
+
+    <div class="content-wrapper">
+        <div class="table-wrapper">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Breakdown</th>
+                        <th>TTM</th>
+                        <th>6/30/2024</th>
+                        <th>6/30/2023</th>
+                        <th>6/30/2022</th>
+                        <th>6/30/2021</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Operating Cash Flow Section -->
+                    <tr class="green-bg" data-bs-toggle="collapse" data-bs-target="#operatingCashFlowDetails" aria-expanded="false" aria-controls="operatingCashFlowDetails">
+                        <td>Operating Cash Flow <span class="expandable-icon"></span></td>
+                        <td>120,000,000</td>
+                        <td>115,000,000</td>
+                        <td>100,000,000</td>
+                        <td>90,000,000</td>
+                        <td>80,000,000</td>
+                    </tr>
+                    <tr id="operatingCashFlowDetails" class="collapse sub-row yellow-bg">
+                        <td>Net Income from Continuing Operations</td>
+                        <td>90,000,000</td>
+                        <td>85,000,000</td>
+                        <td>75,000,000</td>
+                        <td>65,000,000</td>
+                        <td>55,000,000</td>
+                    </tr>
+                    <tr id="operatingCashFlowDetails" class="collapse sub-row yellow-bg">
+                        <td>Depreciation & Amortization</td>
+                        <td>20,000,000</td>
+                        <td>18,000,000</td>
+                        <td>15,000,000</td>
+                        <td>12,000,000</td>
+                        <td>10,000,000</td>
+                    </tr>
+                    <tr id="operatingCashFlowDetails" class="collapse sub-row">
+                        <td>Change in Working Capital <span class="expandable-icon"></span></td>
+                        <td>10,000,000</td>
+                        <td>12,000,000</td>
+                        <td>10,000,000</td>
+                        <td>8,000,000</td>
+                        <td>6,000,000</td>
+                    </tr>
+                    <!-- Subitems under Change in Working Capital -->
+                    <tr id="operatingCashFlowDetails" class="collapse sub-row grey-bg">
+                        <td>Changes in Receivables</td>
+                        <td>5,000,000</td>
+                        <td>4,500,000</td>
+                        <td>4,000,000</td>
+                        <td>3,500,000</td>
+                        <td>3,000,000</td>
+                    </tr>
+                    <tr id="operatingCashFlowDetails" class="collapse sub-row grey-bg">
+                        <td>Change in Inventory</td>
+                        <td>2,000,000</td>
+                        <td>2,500,000</td>
+                        <td>3,000,000</td>
+                        <td>2,500,000</td>
+                        <td>2,000,000</td>
+                    </tr>
+                    <tr id="operatingCashFlowDetails" class="collapse sub-row grey-bg">
+                        <td>Change in Hedging Assets Current</td>
+                        <td>1,000,000</td>
+                        <td>900,000</td>
+                        <td>800,000</td>
+                        <td>700,000</td>
+                        <td>600,000</td>
+                    </tr>
+                    <!-- More subitems for Change in Working Capital -->
+
+                    <!-- Investing Cash Flow Section -->
+                    <tr class="green-bg" data-bs-toggle="collapse" data-bs-target="#investingCashFlowDetails" aria-expanded="false" aria-controls="investingCashFlowDetails">
+                        <td>Investing Cash Flow <span class="expandable-icon"></span></td>
+                        <td>60,000,000</td>
+                        <td>55,000,000</td>
+                        <td>50,000,000</td>
+                        <td>45,000,000</td>
+                        <td>40,000,000</td>
+                    </tr>
+                    <tr id="investingCashFlowDetails" class="collapse sub-row yellow-bg">
+                        <td>Cash Flow from Continuing Investing Activities <span class="expandable-icon"></span></td>
+                        <td>30,000,000</td>
+                        <td>28,000,000</td>
+                        <td>25,000,000</td>
+                        <td>22,000,000</td>
+                        <td>20,000,000</td>
+                    </tr>
+                    <!-- Subitems under Cash Flow from Continuing Investing Activities -->
+                    <tr id="investingCashFlowDetails" class="collapse sub-row grey-bg">
+                        <td>Net PPE Purchase and Sale</td>
+                        <td>15,000,000</td>
+                        <td>14,500,000</td>
+                        <td>14,000,000</td>
+                        <td>13,500,000</td>
+                        <td>13,000,000</td>
+                    </tr>
+                    <tr id="investingCashFlowDetails" class="collapse sub-row grey-bg">
+                        <td>Goodwill and Other Intangible Assets</td>
+                        <td>5,000,000</td>
+                        <td>4,500,000</td>
+                        <td>4,000,000</td>
+                        <td>3,500,000</td>
+                        <td>3,000,000</td>
+                    </tr>
+                    <!-- Financing Cash Flow Section -->
+                    <tr class="green-bg" data-bs-toggle="collapse" data-bs-target="#financingCashFlowDetails" aria-expanded="false" aria-controls="financingCashFlowDetails">
+                        <td>Financing Cash Flow <span class="expandable-icon"></span></td>
+                        <td>40,000,000</td>
+                        <td>38,000,000</td>
+                        <td>35,000,000</td>
+                        <td>30,000,000</td>
+                        <td>25,000,000</td>
+                    </tr>
+                    <tr id="financingCashFlowDetails" class="collapse sub-row yellow-bg">
+                        <td>Cash Flow from Continuing Financing Activities <span class="expandable-icon"></span></td>
+                        <td>20,000,000</td>
+                        <td>18,000,000</td>
+                        <td>17,000,000</td>
+                        <td>15,000,000</td>
+                        <td>12,000,000</td>
+                    </tr>
+                    <!-- Subitems under Cash Flow from Continuing Financing Activities -->
+                    <tr id="financingCashFlowDetails" class="collapse sub-row grey-bg">
+                        <td>Long Term Debt and Capital Lease Obligation</td>
+                        <td>15,000,000</td>
+                        <td>14,000,000</td>
+                        <td>13,000,000</td>
+                        <td>12,000,000</td>
+                        <td>10,000,000</td>
+                    </tr>
+                    <tr id="financingCashFlowDetails" class="collapse sub-row grey-bg">
+                        <td>Common Stock Issuance/(Payments)</td>
+                        <td>5,000,000</td>
+                        <td>4,500,000</td>
+                        <td>4,000,000</td>
+                        <td>3,500,000</td>
+                        <td>3,000,000</td>
+                    </tr>
+                    <!-- Additional rows for other sections -->
+                    <tr class="green-bg">
+                        <td>End Cash Position</td>
+                        <td>50,000,000</td>
+                        <td>48,000,000</td>
+                        <td>45,000,000</td>
+                        <td>40,000,000</td>
+                        <td>35,000,000</td>
+                    </tr>
+                    <tr class="green-bg">
+                        <td>Changes in Cash</td>
+                        <td>10,000,000</td>
+                        <td>9,000,000</td>
+                        <td>8,000,000</td>
+                        <td>7,000,000</td>
+                        <td>6,000,000</td>
+                    </tr>
+                    <tr class="green-bg">
+                        <td>Beginning Cash Position</td>
+                        <td>40,000,000</td>
+                        <td>39,000,000</td>
+                        <td>37,000,000</td>
+                        <td>33,000,000</td>
+                        <td>29,000,000</td>
+                    </tr>
+                    <!-- Free Cash Flow Section -->
+                    <tr class="green-bg">
+                        <td>Free Cash Flow</td>
+                        <td>30,000,000</td>
+                        <td>28,000,000</td>
+                        <td>25,000,000</td>
+                        <td>22,000,000</td>
+                        <td>20,000,000</td>
+                    </tr>
+                    <tr class="green-bg">
+                        <td>Capital Expenditure</td>
+                        <td>10,000,000</td>
+                        <td>9,000,000</td>
+                        <td>8,000,000</td>
+                        <td>7,000,000</td>
+                        <td>6,000,000</td>
+                    </tr>
+                    <tr class="green-bg">
+                        <td>Repayment of Debt</td>
+                        <td>5,000,000</td>
+                        <td>4,000,000</td>
+                        <td>3,000,000</td>
+                        <td>2,000,000</td>
+                        <td>1,500,000</td>
+                    </tr>
+                    <tr class="green-bg">
+                        <td>Issuance/(Repurchase) of Capital Stock</td>
+                        <td>3,000,000</td>
+                        <td>2,800,000</td>
+                        <td>2,500,000</td>
+                        <td>2,000,000</td>
+                        <td>1,800,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Card next to the table -->
+        <div class="card">
+            <div class="form-group" style="position: relative; margin-bottom: 20px;">
+                <label for="period" style="position: absolute; top: -20px; left: 0;">Select Period</label>
+                <select id="period" class="form-control">
+                    <option value="" disabled selected>Choose Period</option>
+                    <option value="6/30/2024">6/30/2024</option>
+                    <option value="6/30/2023">6/30/2023</option>
+                    <option value="6/30/2022">6/30/2022</option>
+                    <option value="6/30/2021">6/30/2021</option>
+                </select>
+            </div>
+            <div class="info-block">
+                <label for="Operating_Cash_Flow_Ratio">Operating Cash Flow Ratio</label>
+                <p id="Operating_Cash_Flow_Ratio" class="editable"></p>
+            </div>
+            <div class="info-block">
+                <label for="Debt Service Coverage Ratio">Debt Service Coverage Ratio</label>
+                <p id="founded-in" class="editable">{{ company.date_of_incorporation }}</p>
+            </div>
+            <div class="info-block">
+                <label for="Current Ratio">Current Ratio</label>
+                <p id="business-type" class="editable">{{ company.business_type }}</p>
+            </div>
+            <div class="info-block">
+                <label for="number-of-employees">Number of Employees:</label>
+                <p id="number-of-employees" class="editable">{{ company.no_of_employees }}</p>
+            </div>
+            <div class="info-block">
+                <label for="address">Address:</label>
+                <p id="address" class="editable">{{ company.location }}</p>
+            </div>
+            <div class="info-block label-and-value">
+                <label for="website">Website:</label>
+                <p id="website" class="editable">{{ company.website_url }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    function toggle(button, targetId) {
+        var targetRows = document.querySelectorAll(targetId);
+        var isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+        button.setAttribute('aria-expanded', !isExpanded);
+        targetRows.forEach(row => {
+            if (isExpanded) {
+                row.classList.add('hidden');
+            } else {
+                row.classList.remove('hidden');
+            }
+        });
+    }
+
+    // Collapse all by default when the page is loaded
+    window.onload = function() {
+        document.querySelectorAll('.expandable-icon').forEach(icon => {
+            icon.setAttribute('aria-expanded', 'false');
+            var targetId = icon.getAttribute('onclick').split("'")[1];
+            document.querySelectorAll(targetId).forEach(row => row.classList.add('hidden'));
+        });
+    }
+</script>
+{% endblock content %}

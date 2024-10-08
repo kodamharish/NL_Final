@@ -1,0 +1,552 @@
+
+
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 20px;
+            font-family: 'Arial MT Rounded '!important;
+        }
+        .table-container {
+            margin-top: 30px;
+            margin-left: 130px;
+            font-family: 'Arial MT Rounded';
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-family: 'Arial MT Rounded';
+        }
+        th, td {
+            text-align: center;
+            padding: 10px;
+            vertical-align: middle; 
+            border-bottom: 1px solid black;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        td {
+            word-wrap: break-word;
+            white-space: normal;
+            text-align: left;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, .05);
+        }
+        .form-control {
+            border:  none !important;
+            background-color: transparent !important;
+            text-align: left;
+            box-shadow: none !important;
+
+        }
+        .form-control:focus {
+            background-color: transparent !important;
+            outline: none;
+            box-shadow: none !important;
+            text-align: left;
+        }
+        .add-row-button, .edit-button, .delete-button {
+            cursor: pointer;
+            font-size: 1.25rem;  
+        }
+        .breadcrumb{
+            font-size: 18px !important;
+            color: black;
+            flex:1;
+            margin-top: 25px;
+            margin-left: 260px;
+            font-family: 'Arial MT Rounded';
+        }
+                 
+        .bold-text {
+            font-weight: bold;
+        }
+        html, body {
+            overflow: hidden; /* Hides the scrollbars */
+        }
+        .btn-edit, 
+        .delete-button {
+            background-color: transparent;
+            border: none !important; /* Ensure no border */
+            cursor: pointer;
+            padding: 0; /* Avoid extra padding around the icon */
+            outline: none;
+        }
+        .btn-edit img {
+            width: 35px;
+            height: 35px;
+            margin: 0;
+            padding: 0;
+            display: inline-block; /* Make sure it's displayed properly */
+        }
+        .btn-edit img:focus{
+            outline: none !important;
+            box-shadow: none !important; 
+        }
+        .delete-button img {
+            width: 35px;
+            height: 35px;
+            margin: 0;
+            padding: 0;
+            display: inline-block; /* Make sure it's displayed properly */
+
+        }
+/* Remove border and ensure proper alignment for Save and Cancel buttons */
+.save-button, .cancel-button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+}
+
+.save-button img, .cancel-button img {
+    width: 35px; /* Adjust the size of the icons */
+    height: 35px;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+/* Align edit, delete, save, and cancel buttons in a row */
+.actions {
+    display: flex;
+    justify-content: space-around;
+    /* align-items: center; */
+}
+
+/* Optional: Remove hover styles for save and cancel buttons */
+.save-button img:hover, .cancel-button img:hover {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+td :nth-child(7){
+    margin-right: -5px;
+    align-items: center !important;
+    width: 40px !important;
+}
+
+
+    </style>
+</head>
+<meta name="csrf-token" content="{{ csrf_token }}">
+<body>
+
+    {% include './company_profile.html' %}
+  <div class="breadcrumb">
+        <span>My Companies</span> &ndash; <span>{{ company.name }}</span> &ndash; <span class="bold-text">Cap Table</span>
+    </div>  
+    <div class="container">
+        <div id="tableContainer" class="table-container">
+            <table id="capTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Shareholder</th>
+                        <th>Name</th>
+                        <th>Equity Share</th>
+                        <th>Invested Since</th>
+                        <th>Investment Amount</th>
+                        <th>Valuation</th>
+                        <th>Details</th>
+                        <th class="actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    {% for entry in cap_table %}
+                    <tr data-id="{{ entry.id }}">
+                        <td>{{ entry.shareholder }}</td>
+                        <td>{{ entry.name }}</td>
+                        <td>{{ entry.percentage_of_shares }}</td>
+                        <td>{{ entry.investedsince }}</td>
+                        <td>{{ entry.amount }}</td>
+                        <td>{{ entry.valuation }}</td>
+                        <td>{{ entry.details }}</td>
+                        <td>
+                            <button class="btn btn-edit" onclick="editRow(this)">
+                                <img src="{% static 'images/edit.png' %}">
+                            </button>
+                            <button class="btn delete-button" onclick="deleteRow(this)">
+                                <img src="{% static 'images/delete.png' %}">
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="text-center mt-3">
+                <span class="add-row-button" onclick="showEntryRow()">+ Add Row</span>
+            </div>
+        </div>
+    </div>
+
+<script>
+    let rows = [];
+    let editIndex = -1;
+
+    function showEntryRow() {
+    const tableBody = document.getElementById('tableBody');
+
+    // Remove any existing entry row before adding a new one
+    const existingEntryRow = document.getElementById('entryRow');
+    if (existingEntryRow) {
+        existingEntryRow.remove();
+    }
+
+    // Create a new entry row
+    const entryRow = document.createElement('tr');
+    entryRow.setAttribute('id', 'entryRow');
+    entryRow.innerHTML = `
+        <td>
+            <select class="form-control" id="shareholderInput">
+                <option value="Founder">Founder</option>
+                <option value="Executive">Executive</option>
+                <option value="Investor">Investor</option>
+                <option value="Incubator">Incubator</option>
+                <option value="Accelerator">Accelerator</option>
+                <option value="Government">Government</option>
+                <option value="Others">Others</option>
+            </select>
+        </td>
+        <td><input type="text" class="form-control" id="nameInput"></td>
+        <td><input type="text" class="form-control" id="equityShareInput"></td>
+        <td><input type="date" class="form-control" id="investedSinceInput"></td>
+        <td><input type="text" class="form-control" id="investmentAmountInput"></td>
+        <td><input type="text" class="form-control" id="valuationInput"></td>
+        <td><input type="text" class="form-control" id="detailsInput"></td>
+        <td><button class="btn btn-primary btn-sm" onclick="saveRow()">Add</button></td>
+    `;
+    tableBody.appendChild(entryRow);
+}
+function saveRow() {
+    const row = {
+        shareholder: document.getElementById('shareholderInput').value,
+        name: document.getElementById('nameInput').value,
+        equityShare: document.getElementById('equityShareInput').value,
+        investedSince: document.getElementById('investedSinceInput').value,
+        investmentAmount: document.getElementById('investmentAmountInput').value,
+        valuation: document.getElementById('valuationInput').value,
+        details: document.getElementById('detailsInput').value
+    };
+    
+    if (editIndex === -1) {
+        sendRowData(row);  // New row, send to backend and append
+    } else {
+        rows[editIndex] = row;  // Update the row in the array
+        updateTableRow(editIndex, row);  // Update the row in the table
+        editIndex = -1;  // Reset edit index
+    }
+    
+}
+
+
+function appendRow(row) {
+    const tableBody = document.getElementById('tableBody');
+    const entryRow = document.getElementById('entryRow');
+    
+    // Replace the entry row inputs with static text and action buttons
+    entryRow.innerHTML = `
+        <td>${row.shareholder}</td>
+        <td>${row.name}</td>
+        <td>${row.equityShare}</td>
+        <td>${row.investedSince}</td>
+        <td>${row.investmentAmount}</td>
+        <td>${row.valuation}</td>
+        <td>${row.details}</td>
+        <td>
+            <button class="btn btn-edit" onclick="editRow(this)">
+                <img src="{% static 'images/edit.png' %}">
+            </button>
+            <button class="btn delete-button" onclick="deleteRow(this)">
+                <img src="{% static 'images/delete.png' %}">
+            </button>
+        </td>
+    `;
+    entryRow.removeAttribute('id');  // Remove the id after transforming the row
+}
+
+
+    function renderRows() {
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = '';
+        rows.forEach((row, index) => {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${row.shareholder}</td>
+                <td>${row.name}</td>
+                <td>${row.equityShare}</td>
+                <td>${row.investedSince}</td>
+                <td>${row.investmentAmount}</td>
+                <td>${row.valuation}</td>
+                <td>${row.details}</td>
+                <td>
+                    <button class="btn btn-edit" onclick="editRow(${index})">
+                        <img src="{% static 'images/edit.png' %}">
+                    </button>
+                    <button class="btn delete-button" onclick="deleteRow(${index})">
+                        <img src="{% static 'images/delete.png' %}">
+                    </button>
+                </td>
+            `;
+            // tableBody.appendChild(newRow);
+        });
+    }
+
+    
+    
+   // Function to initialize rows array
+   function initializeRows() {
+            const tableBody = document.querySelector('#tableBody');
+            const tableRows = tableBody.querySelectorAll('tr');
+            rows = Array.from(tableRows).map(row => {
+                return {
+                    shareholder: row.cells[0].innerText,
+                    name: row.cells[1].innerText,
+                    equityShare: row.cells[2].innerText,
+                    investedSince: row.cells[3].innerText,
+                    investmentAmount: row.cells[4].innerText,
+                    valuation: row.cells[5].innerText,
+                    details: row.cells[6].innerText
+                };
+            });
+        }
+
+        function editRow(element) {
+    const row = element.closest('tr');
+    const index = Array.from(row.parentNode.children).indexOf(row);
+
+    // Get current data of the row
+    const data = {
+        id: row.getAttribute('data-id'),
+        shareholder: row.cells[0].innerText,
+        name: row.cells[1].innerText,
+        equityShare: row.cells[2].innerText,
+        investedSince: row.cells[3].innerText,
+        investmentAmount: row.cells[4].innerText,
+        valuation: row.cells[5].innerText,
+        details: row.cells[6].innerText
+    };
+
+    // Ensure the investedSince date is in 'YYYY-MM-DD' format
+    const dateValue = new Date(data.investedSince).toISOString().split('T')[0];
+
+    // Create editable row
+    row.innerHTML = `
+        <td>
+            <select class="form-control" id="shareholderInput">
+                <option value="Founder" ${data.shareholder === 'Founder' ? 'selected' : ''}>Founder</option>
+                <option value="Executive" ${data.shareholder === 'Executive' ? 'selected' : ''}>Executive</option>
+                <option value="Investor" ${data.shareholder === 'Investor' ? 'selected' : ''}>Investor</option>
+                <option value="Incubator" ${data.shareholder === 'Incubator' ? 'selected' : ''}>Incubator</option>
+                <option value="Accelerator" ${data.shareholder === 'Accelerator' ? 'selected' : ''}>Accelerator</option>
+                <option value="Government" ${data.shareholder === 'Government' ? 'selected' : ''}>Government</option>
+                <option value="Others" ${data.shareholder === 'Others' ? 'selected' : ''}>Others</option>
+            </select>
+        </td>
+        <td><input type="text" class="form-control" id="nameInput" value="${data.name}"></td>
+        <td><input type="text" class="form-control" id="equityShareInput" value="${data.equityShare}"></td>
+        <td><input type="date" class="form-control" id="investedSinceInput" value="${dateValue}"></td>
+        <td><input type="text" class="form-control" id="investmentAmountInput" value="${data.investmentAmount}"></td>
+        <td><input type="text" class="form-control" id="valuationInput" value="${data.valuation}"></td>
+        <td><input type="text" class="form-control" id="detailsInput" value="${data.details}"></td>
+        <td>
+            <button class="save-button" onclick="saveEditedRow(${index})"><img src="{% static 'images/save.png' %}"></button>
+            <button class="cancel-button" onclick="cancelEdit(${index})"><img src="{% static 'images/cancel.png' %}"></button>
+        </td>
+    `;
+}
+
+
+function saveEditedRow(index) {
+    const row = document.querySelector(`#tableBody tr:nth-child(${index + 1})`);
+    const updatedRow = {
+        id: row.getAttribute('data-id'),
+        shareholder: document.getElementById('shareholderInput').value,
+        name: document.getElementById('nameInput').value,
+        equityShare: document.getElementById('equityShareInput').value,
+        investedSince: document.getElementById('investedSinceInput').value,
+        investmentAmount: document.getElementById('investmentAmountInput').value,
+        valuation: document.getElementById('valuationInput').value,
+        details: document.getElementById('detailsInput').value
+    };
+
+    fetch(`/update-cap-table-entry/${updatedRow.id}/`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify(updatedRow)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update row in table
+            row.innerHTML = `
+                <td>${updatedRow.shareholder}</td>
+                <td>${updatedRow.name}</td>
+                <td>${updatedRow.equityShare}</td>
+                <td>${updatedRow.investedSince}</td>
+                <td>${updatedRow.investmentAmount}</td>
+                <td>${updatedRow.valuation}</td>
+                <td>${updatedRow.details}</td>
+                <td>
+                    <button class="btn btn-edit" onclick="editRow(this)">
+                        <img src="{% static 'images/edit.png' %}">
+                    </button>
+                    <button class="btn delete-button" onclick="deleteRow(this)">
+                        <img src="{% static 'images/delete.png' %}">
+                    </button>
+                </td>
+            `;
+            alert("Details Edited successfully!");
+        } else {
+            alert('Error updating row');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function cancelEdit(index) {
+    const row = document.querySelector(`#tableBody tr:nth-child(${index + 1})`);
+    const data = rows[index];
+    
+    // Reset the row to its original state
+    row.innerHTML = `
+        <td>${data.shareholder}</td>
+        <td>${data.name}</td>
+        <td>${data.equityShare}</td>
+        <td>${data.investedSince}</td>
+        <td>${data.investmentAmount}</td>
+        <td>${data.valuation}</td>
+        <td>${data.details}</td>
+        <td>
+            <button class="btn btn-edit" onclick="editRow(this)">
+                <img src="{% static 'images/edit.png' %}">
+            </button>
+            <button class="btn delete-button" onclick="deleteRow(this)">
+                <img src="{% static 'images/delete.png' %}">
+            </button>
+        </td>
+    `;
+}
+
+        function renderExistingRows() {
+    const tableBody = document.getElementById('tableBody');
+    rows.forEach((row, index) => {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>${row.shareholder}</td>
+            <td>${row.name}</td>
+            <td>${row.equityShare}</td>
+            <td>${row.investedSince}</td>
+            <td>${row.investmentAmount}</td>
+            <td>${row.valuation}</td>
+            <td>${row.details}</td>
+            <td>
+                <button class="btn btn-edit" onclick="editRow(${index})">
+                    <img src="{% static 'images/edit.png' %}">
+                </button>
+                <button class="btn delete-button" onclick="deleteRow(${index})">
+                    <img src="{% static 'images/delete.png' %}">
+                </button>
+            </td>
+        `;
+        // tableBody.appendChild(newRow);
+    });
+}
+function getCSRFToken() {
+    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+}
+
+
+// Initial rendering of the existing rows from the backend
+renderExistingRows();
+
+   
+function deleteRow(element) {
+    // Get the closest <tr> to the clicked delete icon
+    var row = element.closest('tr');
+    
+    // Get the ID from the row's data-id attribute
+    var entryId = row.getAttribute('data-id');
+
+    // Show confirmation dialog
+    if (confirm("Are you sure you want to delete this row?")) {
+        // Send a DELETE request to the server
+        fetch(`/delete-cap-table-entry/${entryId}/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(), // Add CSRF token if needed
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                // Successfully deleted
+                row.remove();  // Remove the row from the table
+                alert('Row deleted successfully');
+            } else {
+                console.error('Failed to delete row');
+                alert('Failed to delete the row. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the row.');
+        });
+    } else {
+        console.log('Deletion canceled');
+    }
+}
+
+function sendRowData(rowData) {
+    const id = "{{ company.company_id }}";  // Assuming 'company' is in your template context
+    fetch(`/cap_table/${id}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken(),  // Include CSRF token
+        },
+        body: JSON.stringify(rowData),
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();  // Optionally handle the response
+        } else {
+            throw new Error('Failed to save row');
+        }
+    })
+    .then(data => {
+        // Handle successful save, append the new row to the table
+        appendRow(rowData);  // Call appendRow to replace input row with normal row
+        
+        // Show success alert
+        alert("Details saved successfully!");
+        console.log('Row saved successfully', data);
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('Error:', error);
+        alert('Error saving row. Please try again.');
+    });
+}
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+{% endblock content %}
+

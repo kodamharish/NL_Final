@@ -1,0 +1,79 @@
+{% extends '../base.html' %} {% block content %}
+<div class="container">
+    <form method="post">
+        {% csrf_token %}
+        <div class="row mt-5 mb-5">
+            <h4 class="mb-4 text-center">Add Team Members</h4>
+            {% for msg in messages %}
+            <p class="text-danger mt-2 fw-bold text-center">{{msg}}</p>
+            {% endfor %}
+
+            
+            <div class="col-md-6">
+                <div class="mb-3 mt-3 inline">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control w-50" name="username" value="{{team.username}}" required>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control w-50" name="email" value="{{team.email}}"required>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="phone_number">Phone Number</label>
+                    <input type="number" class="form-control w-50" name="phone_number" value="{{team.phone_number}}" required>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="linkedin_url">Linkedin URL</label>
+                    <input type="url" class="form-control w-50" name="linkedin_url" value="{{team.linkedin_url}}" required>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="user_type">User Type</label>
+                    <select class="form-select w-50" id="user_type" name="user_type" required>
+                        <option value="editor">Editor</option>
+                        <option value="user">User</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 mt-3 inline">
+                    <label for="firstname">First Name</label>
+                    <input type="text" class="form-control w-50" name="firstname" value="{{team.firstname}}" required>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="lastname">Last Name</label>
+                    <input type="text" class="form-control w-50" name="lastname" value="{{team.lastname}}" required>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control w-50" name="password" value="{{team.password}}" required>
+                </div>
+                <!-- <div class="mb-3 inline">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" class="form-control w-50" name="confirm_password" required>
+                </div> -->
+                <div class="mb-3 mt-3 inline">
+                    <label for="company">Company</label>
+                    <select class="form-select w-50" id="company" name="company" required>
+                        
+
+                        {% if current_user_companies %}
+                        {% for company in current_user_companies %}
+                        <option value="{{ company.company_id }}">{{ company.company_name }}</option>
+                        {% endfor %}
+                        
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+
+            
+        </div>
+
+        <div class="text-center mt-5 mb-3">
+            <button type="submit" class="btn btn-secondary border-radius pl pr mb-3" style="width:15%">Submit</button>
+        </div>
+    </form>
+
+
+</div>
+{% endblock content %}

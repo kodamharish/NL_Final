@@ -1,0 +1,81 @@
+{% extends '../base.html' %}
+
+{% block content %}
+<style>
+    label {
+        width: auto !important;
+    }
+    table {
+        border: 1px solid #000000 !important;
+        border-collapse: collapse;
+    }
+    table th, table td {
+        border: 1px solid #000000 !important;
+    }
+</style>
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"/>
+<div class="container">
+   
+    <div class="row mt-5 mb-5">
+        <div class="col-md-12">
+            <h4 class="text-center mb-5">CA Firms</h4>
+            
+            <div class="table-responsive">
+                <table id="teamTable" class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>User Type</th>
+                            <th>Company Type</th>
+                            <!-- <th>Edit</th> -->
+                            <th>Delete</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ca_firm in ca_firms %}
+                        <tr>
+                            <td>{{ca_firm.user_id}}</td>
+                            <td>{{ ca_firm.firstname }}</td>
+                            <td>{{ ca_firm.lastname }}</td>
+                            <td>{{ ca_firm.email }}</td>
+                            <td>{{ ca_firm.username }}</td>
+                            <td>{{ ca_firm.user_type }}</td>
+                            <td>{{ ca_firm.role }}</td>
+                            <!-- <td><a href="#" onclick="return confirmEdit('{{ ca_firm.user_id }}')"><i class="fa fa-pen"></i></a></td> -->
+                            <td><a href="#" onclick="return confirmDelete('{{ ca_firm.user_id }}')"><i class="fa fa-trash-alt"></i></a></td>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function() {
+        $('#teamTable').DataTable();
+    });
+
+    function confirmEdit(subuser_id) {
+        return confirm('Are you sure you want to Edit Sub User ID: ' + subuser_id + '?');
+    }
+
+    function confirmDelete(subuser_id) {
+        return confirm('Are you sure you want to Delete Sub User ID: ' + subuser_id + '?');
+    }
+</script>
+{% endblock content %}

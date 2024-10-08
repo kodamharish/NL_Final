@@ -1,0 +1,202 @@
+{% block content %}
+<style>
+    /* styles.css */
+    .main-content {
+        margin-left: 290px;
+        padding: 40px;
+        transition: margin-left 0.3s;
+    }
+    /* General styling for a modern look */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f2f5;
+        color: #333;
+    }
+</style>
+
+{% csrf_token %}
+{% include './company_profile.html' %}
+
+<div class="main-content">
+    <div class="container mt-2">
+        <h4 class="text-center">Revenue Verticals</h4>
+
+        {% for msg in messages %}
+            <p class="text-danger mt-2 fw-bold text-center">{{ msg }}</p>
+        {% endfor %}
+
+        <ul class="nav nav-pills mt-3" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="pill" href="#home">Revenue</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="pill" href="#menu1">Menu 1</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="pill" href="#menu2">Menu 2</a>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-3">
+            <div id="home" class="tab-pane fade show active">
+                <button class="btn btn-primary" id="addRevenueVerticalBtn" onclick="showProductTypeDropdown()">Add Revenue Verticals</button>
+                <form id="revenueForm" method="post" action="{% url 'revenue_verticals' company_profile.company_id %}">
+                    {% csrf_token %}
+                    <div id="productTypeDropdown" style="display:none;">
+                        <div class="mt-2">
+                            <select class="form-select" name="type_of_product" id="type_of_product" required>
+                                <option value="">Select</option>
+                                <option value="Homogenous">Homogenous</option>
+                                <option value="Heterogenous">Heterogenous</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-secondary mt-2" onclick="generateRows()">Add</button>
+
+                        <div id="dynamicRowsHomogenous" class="mt-3"></div>
+                    <div id="dynamicRowsHeterogenous" class="mt-3"></div>
+                    <button type="submit" class="btn btn-primary mt-3">Save Data</button>
+                    </div>
+                    
+                </form>
+                
+                
+            </div>
+            <div id="menu1" class="tab-pane fade">
+                
+                <h3>Menu 1</h3>
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+               
+            </div>
+            <div id="menu2" class="tab-pane fade">
+                <h3>Menu 2</h3>
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showProductTypeDropdown() {
+        document.getElementById('productTypeDropdown').style.display = 'block';
+    }
+    
+    function generateRows() {
+        const typeOfProduct = document.getElementById('type_of_product').value;
+    
+        if (typeOfProduct === '') {
+            return; // Do nothing if 'Select' is chosen
+        }
+    
+        let tableHTML = '';
+    
+        if (typeOfProduct === 'Homogenous') {
+            tableHTML = `
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Selling Price Per Unit</th>
+                            <th>No of Units Sold</th>
+                            <th>Expected Growth Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" class="form-control" name="homogenous_product_name[]" required></td>
+                            <td><input type="number" class="form-control" name="homogenous_selling_price_per_unit[]" required></td>
+                            <td><input type="number" class="form-control" name="homogenous_units_sold[]" required></td>
+                            <td><input type="number" class="form-control" name="homogenous_expected_growth_rate[]" required></td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('dynamicRowsHomogenous').insertAdjacentHTML('beforeend', tableHTML);
+        } else if (typeOfProduct === 'Heterogenous') {
+            tableHTML = `
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Expected Revenue</th>
+                            <th>Expected Growth Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" class="form-control" name="heterogenous_product_name[]" required></td>
+                            <td><input type="number" class="form-control" name="heterogenous_expected_revenue[]" required></td>
+                            <td><input type="number" class="form-control" name="heterogenous_expected_growth_rate[]" required></td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('dynamicRowsHeterogenous').insertAdjacentHTML('beforeend', tableHTML);
+        }
+    }
+    
+    
+</script>
+
+<!-- <script>
+    function showProductTypeDropdown() {
+        document.getElementById('productTypeDropdown').style.display = 'block';
+    }
+
+    function generateRows() {
+        const dynamicRows = document.getElementById('dynamicRows');
+        const typeOfProduct = document.getElementById('type_of_product').value;
+    
+        if (typeOfProduct === '') {
+            return; // Do nothing if 'Select' is chosen
+        }
+    
+        let tableHTML = '';
+    
+        if (typeOfProduct === 'Homogenous') {
+            tableHTML = `
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Selling Price Per Unit</th>
+                            <th>No of Units Sold</th>
+                            <th>Expected Growth Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" class="form-control" name="homogenous_product_name[]" required></td>
+                            <td><input type="number" class="form-control" name="homogenous_selling_price_per_unit[]" required></td>
+                            <td><input type="number" class="form-control" name="homogenous_units_sold[]" required></td>
+                            <td><input type="number" class="form-control" name="homogenous_expected_growth_rate[]" required></td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        } else if (typeOfProduct === 'Heterogenous') {
+            tableHTML = `
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Expected Revenue</th>
+                            <th>Expected Growth Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" class="form-control" name="heterogenous_product_name[]" required></td>
+                            <td><input type="number" class="form-control" name="heterogenous_expected_revenue[]" required></td>
+                            <td><input type="number" class="form-control" name="heterogenous_expected_growth_rate[]" required></td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+    
+        dynamicRows.innerHTML += tableHTML;
+    }
+    
+</script> -->
+
+{% endblock content %}

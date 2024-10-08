@@ -1,0 +1,134 @@
+{% extends '../base.html' %}
+
+{% block content %}
+<style>
+    /* Basic styles for sidebar and dropdown menus */
+    .sidebar {
+        position: absolute;
+        top: 80px;
+        left: 0;
+        height: 100%;
+        width: 270px; /* Slightly wider for better content spacing */
+        background: linear-gradient(180deg, #2c3e50, #00b4f6);
+        overflow-y: auto; /* Enable vertical scroll if content exceeds height */
+        padding-top: 20px;
+        z-index: 1000; /* Ensure sidebar stays above other content */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Soft shadow for depth */
+        border-radius: 8px; /* Rounded corners for modern look */
+        font-family: 'Agency FB', sans-serif; /* Apply font to sidebar */
+    }
+
+    .sidebar h2 {
+        padding-left: 20px;
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .sidebar a {
+        padding: 12px 20px;
+        text-decoration: none;
+        font-size: 18px;
+        color: #fff;
+        display: block;
+        transition: background-color 0.3s, color 0.3s;
+        border-radius: 4px; /* Rounded corners for links */
+        margin: 5px 10px; /* Spacing between links */
+    }
+
+    .sidebar a:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: #fff;
+    }
+
+    .dropdown-container {
+        display: none;
+        background-color: rgba(255, 255, 255, 0.1); /* Transparent background for submenus */
+        padding-left: 15px;
+        border-radius: 4px; /* Rounded corners for submenus */
+        margin: 5px 0; /* Spacing between dropdown containers */
+    }
+
+    .dropdown-container a {
+        font-size: 16px;
+        margin: 3px 0; /* Spacing between submenu items */
+        padding-left: 12px; /* Indent sub-links with 3 character spaces */
+    }
+
+    .dropdown-btn {
+        cursor: pointer;
+        outline: none;
+    }
+
+    /* Adjust main content position to avoid overlap */
+    .main-content {
+        margin-left: 290px; /* Adjust according to sidebar width */
+        padding: 40px; /* Reduce padding for a cleaner look */
+        transition: margin-left 0.3s; /* Smooth transition for sidebar width changes */
+        font-family: 'Agency FB', sans-serif; /* Apply font to main content */
+    }
+
+    /* General styling for a modern look */
+    body {
+        font-family: 'Agency FB', sans-serif; /* Apply font to body */
+        background-color: #f0f2f5;
+        color: #333;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        color: #005792;
+    }
+
+    .edit-icon {
+        display: none; /* Initially hide edit icon */
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        color: #fff; /* Adjust icon color to match sidebar theme */
+    }
+
+    /* Adjust sidebar anchor tag position to make space for the edit icon */
+    .sidebar a {
+        position: relative;
+    }
+</style>
+
+        <div class="sidebar">
+            <h2>{{ company.name }}</h2>
+            <a href="{% if company.company_id %}{% url 'basic_information' company.company_id %}{% else %}#{% endif %}" class="dropdown-btn">Profile</a>
+            <a href="#" class="dropdown-btn">Products & Services</a>
+            <a href="{%  url 'founders_and_team' company.company_id %}" class="dropdown-btn">Founders & Team</a>
+            <a href="#" class="dropdown-btn">Pitch Video</a>
+            <a href="#" class="dropdown-btn">Pitch Presentation</a>
+            <a href="#" class="dropdown-btn">Portfolio</a>
+            <a href="#" class="dropdown-btn">Exits</a>
+            <a href="#" class="dropdown-btn">News</a>
+            <a href="#" class="dropdown-btn">Contact / Reach</a>
+        </div>
+</div>
+
+<script>
+    /* JavaScript for toggling the dropdown menus */
+    document.addEventListener("DOMContentLoaded", function() {
+        var dropdowns = document.getElementsByClassName("dropdown-btn");
+        for (var i = 0; i < dropdowns.length; i++) {
+            dropdowns[i].addEventListener("click", function() {
+                var dropdownContent = this.nextElementSibling;
+                if (dropdownContent && dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                    // Hide edit icon when menu is closed
+                    this.querySelector('.edit-icon').style.display = 'none';
+                } else if (dropdownContent) {
+                    dropdownContent.style.display = "block";
+                    // Show edit icon when menu is opened
+                    this.querySelector('.edit-icon').style.display = 'inline'; // or 'inline-block'
+                }
+            });
+        }
+    });
+
+    var selectedCompanyName = localStorage.getItem('selectedCompanyName');
+    document.getElementById('myCompanyName').innerHTML = selectedCompanyName ? selectedCompanyName.toUpperCase() : '';
+</script>
+{% endblock content %}

@@ -1,0 +1,945 @@
+
+{% include 'admin/company_profile.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+   :root {
+        --row-height: 20px !important;
+        --font-size: 14px;
+        --first-column-width: 180px !important;
+        --indentation: 20px;
+        --double-indentation: 40px;
+        --triple-indentation: 60px;
+        --quad-indentation: 80px;
+        --column-width: 220px !important;
+    }
+
+
+
+    .modal-dialog {
+    max-width: 40%; /* Adjust as needed */
+    max-height: 90vh; /* Make sure the modal doesn't grow too large */
+    overflow-y: auto; /* Enable vertical scrolling inside the modal if content overflows */
+    overflow-x: hidden; /* Prevent horizontal scrolling in the modal */
+}
+
+/* Ensure the page background content doesn't move when modal is open */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Constrain modal-body */
+.modal-body {
+    max-height: calc(100vh - 200px); /* Adjust this value to suit your design */
+    overflow-y: auto; /* Add scrolling for long content */
+}
+
+
+.add-button {
+    margin-right: 50px;
+    font-size: 25px; /* Adjust the margin as needed */
+}
+
+.fas.fa-plus {
+    margin-top: 0; /* Reset any existing margin */
+}
+.breadcrumb-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table {
+            table-layout: relative;
+            width: 950px; /* Ensure the table has a large enough width to cause scrolling */
+        }
+
+    /* Ensure the label and dropdowns are inline */
+    .dropdown-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        /* Space between label and dropdown */
+    }
+
+    .inline-container {
+        display: flex;
+        align-items: center;
+        /* Center items vertically */
+        gap: 10px;
+        /* Space between label and dropdown */
+        margin: 15px;
+    }
+
+    .inline-container label {
+        width: 85px;
+    }
+
+    .form-select {
+        margin-left: 10px;
+        /* Space between label and dropdown */
+        width: 50%;
+
+    }
+
+    /* Add scroll bar to table */
+    .table-container {
+    max-height: 550px;
+    overflow-y: scroll; /* Ensure vertical scrollability */
+    overflow-x: auto;
+
+    /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-container::-webkit-scrollbar {
+    width: 0px; /* Remove scrollbar width */
+    background: transparent; /* Ensure background remains transparent */
+}
+
+.table-container {
+    -ms-overflow-style: none;  /* Internet Explorer and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* This ensures that scrolling is still possible even though the scrollbar is hidden */
+
+
+.container {
+        margin-left: 250px;
+        max-width: 90%;
+        position: relative;
+        height: calc(100vh - 135px);
+        overflow-y: auto;
+        max-height: 100%;
+        margin-top: 10px !important;
+        font-family: 'Arial MT Rounded';
+        
+    }
+
+.container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, WebKit */
+}
+
+.content {
+        margin: 40px auto;
+        padding-top: 30px;
+        padding-left: 200px;
+    }
+
+    table {
+        width: 100%;
+        table-layout: relative;
+        border-collapse: collapse;
+        font-family: 'Arial MT Rounded';
+        font-size: var(--font-size);
+        width: calc(var(--first-column-width) + 4 * var(--column-width));
+        /* coloumn-width:var(--column-width) !important; */
+        
+    }
+
+    th, td {
+        vertical-align: middle;
+        text-align: right; 
+        padding: 12px;
+        height: var(--row-height);
+        font-size: var(--font-size);
+        line-height: 1.2;
+        overflow: hidden;
+        white-space: nowrap; /* Prevent text wrap */
+        text-overflow: ellipsis; /* Add ellipsis for overflow text */
+        transition: background-color 0.3s ease;
+        border-bottom: 1px solid #ddd;
+    }
+    th:first-child {
+        position: sticky;
+        left: 0;
+        background-color: white;
+        z-index: 3;
+        width: 350px !important;
+        text-align: left;
+    }
+
+        td:first-child, th:first-child {
+        width: var(--first-column-width); /* 350px fixed width */
+        white-space: nowrap; /* Prevent text wrap */
+        text-overflow: ellipsis; /* Ellipsis for overflow */
+    }
+
+        .table th:first-child, .table td:first-child {
+            position: sticky;
+            left: 0;
+            background-color: white;
+            z-index: 3; /* Ensure the first column stays on top */
+            width: var(--first-column-width);
+        }
+        td:first-child {
+        position: sticky;
+        left: 0;
+        background-color: white;
+        z-index: 3;
+        /* width: 350px !important; */
+        text-align: left !important;
+    }
+
+        .sub-row {
+            background-color: #f9f9f9;
+        }
+
+        .sub-row td:first-child {
+            padding-left: var(--indentation) !important;
+        }
+
+        .sub-row .sub-row td:first-child {
+            padding-left: var(--double-indentation) !important;
+        }
+
+        .expandable-icon {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .expandable-icon::before {
+            content: "\25B6";
+            display: inline-block;
+            transform: rotate(90deg);
+        }
+
+        .collapse.show .expandable-icon::before {
+            content: "\25BC";
+            transform: rotate(0deg);
+        }
+
+        /* .table-hover tbody tr:hover {
+            background-color: #f5f5f5;
+        } */
+
+    th {
+        background-color: #ffff !important;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        text-align: center !important;
+    }
+    tr:nth-child(even) {
+        background-color: #ffff;
+    }
+
+    /* tr:hover {
+        background-color: #f1f1f1;
+    } */
+    .rowview {
+        width: 35%;
+    }
+
+    .rowview1 {
+        width: 10%;
+    }
+
+   
+    tr.hidden {
+        display: none;
+    }
+   
+
+  
+    .indent-level-1 td:first-child {
+        padding-left: 2em;
+    }
+
+    .indent-level-2 td:first-child {
+        padding-left: 4em;
+    }
+
+    .indent-level-3 td:first-child {
+        padding-left: 6em;
+    }
+    .indent-level-4 td:first-child {
+        padding-left: 8em;
+    }
+    body, html {
+        overflow: hidden; /* Hide scrollbars */
+        height: 100%; /* Full height */
+        margin: 0; /* Remove default margin */
+    }
+    .breadcrumb{
+            display: flex;
+            align-items: left;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-left: 268px;
+            font-family: 'Arial MT Rounded' !important;
+            
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+        .error{
+            margin-left: 500px;
+            margin-top: 10px;
+            font-size: 20px;
+        }
+        .table-wrapper {
+        position: relative;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: auto;
+        flex-grow:1;
+        max-width: 70% !important;
+        margin-right: 0px;
+        overflow-y: auto; /* Add vertical scrollbar */
+    scrollbar-width: none;  /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none; 
+    }
+    .table-wrapper::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, WebKit */
+}
+.card{
+        /* flex:1; */
+        /* margin-left: 0px; */
+        margin-right: -20px;
+        margin-left: 10px !important;
+        max-width: 20%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: none;  /* Hide scrollbar for Firefox */
+        -ms-overflow-style: none; 
+        max-height: 550px;
+        border-left: 1px solid black;
+        border-bottom: 0px;
+        border-right: 0px;
+        border-top: 0px;
+        border-radius: 0px;
+        position: sticky;
+        width: 250px;
+        
+
+    }
+    .card::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, WebKit */
+}
+    .form-group{
+    padding-left: 0px;
+    margin-left: 0px;
+}
+.form-control{
+    border-bottom: 1px black solid;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-radius: 0px;
+}
+.card-title{
+    padding-bottom: 20px;
+    text-align: center;
+}
+.liquidity{
+    text-align: center;
+    color:black;
+}
+.label{
+    font-family: 'Arial MT Rounded';
+    font-size: 12px;
+    color: grey;
+    text-decoration: none;
+    
+}
+.lable-value{
+    font-family: 'Arial MT Rounded';
+    font-size: 16px;
+    text-decoration: bold;
+    margin-top: -8px;
+}
+.btn-group ms-3{
+    margin-left: 100px !important;
+} 
+.table-card-wrapper{
+        display: flex;
+        justify-content: block;
+
+    }
+    .add-button-container{
+        margin-top: -10px;
+        margin-left: -10px;
+        
+    }
+    .breadcrumb-container{
+        margin-top: -5px;
+        margin-left: -10px;
+    }
+    .btn-group ms-3{
+    /* margin-left: 450px !important; */
+   
+    margin-top: -5px;
+}
+.btn-custom {
+      background-color: transparent; /* Set background color */
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      display: flex;
+      align-items: center; /* Center the image and text vertically */
+      gap: 10px; /* Gap between image and text */
+      margin-top: -3px;
+      margin-right: 20px;
+      /* margin-left: -80px; */
+    }.btn-custom img {
+      width: 35px;
+      height: 35px;
+    }
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="error">
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</div>
+
+
+{% if manual_entry_option %}
+            <div class="text-center">
+                <p class="text-danger text-center mt-2 fw-bold" style="font-size: 0.9rem;">
+                    {% if missing_data == 'current' %}
+                        Income Statement and Balance Sheet for the current period are missing.
+                    {% elif missing_data == 'previous' %}
+                        No previous entry exists in Balance Sheet or Income Statement for the previous {{ period_type }}.
+                    {% endif %}
+                </p>
+                <button class="btn btn-primary" onclick="manualEntry()">Manual Entry</button>
+                <button class="btn btn-secondary" onclick="enterPLBS()">Enter P&L or BS</button>
+            </div>
+        {% endif %}
+
+
+
+        <div class="breadcrumb-container">
+            <div class="breadcrumb">
+                <span>Corporate Finance</span> &ndash; <span>Planning & Budgeting</span> &ndash; <span class="bold-text">Cash Flow</span>
+                <div class="btn-group ms-3" >
+                    <button class="btn btn-primary">Monthly</button>
+                    <button class="btn btn-primary">Quarterly</button>
+                    <button class="btn btn-primary">Annual</button>
+                </div>
+            </div>
+          
+            <a href="#" class="btn btn-custom" id="plus" data-bs-toggle="modal" data-bs-target="#cash_flow"><img src="{% static 'images/add.png' %}"></a>
+        </div>
+        
+
+
+<div class="container  mt-1">
+    <div class="row">
+
+        
+        <div class="col-md-4">
+        </div>
+        <div class="add-button-container">
+            
+            <!-- The Modal -->
+            <div class="modal" id="cash_flow">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title"></h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <!-- Modal Body -->
+                        <div class="modal-body text-center">
+                            <form method="POST" action="#" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <!-- Period Selection -->
+                                <div class="inline mb-4">
+                                    <label>Select the Period for Cash Flow:</label>
+                                    <div style="margin-right:15px;">
+                                        <input type="radio" class="form-check-input" id="monthly" name="select_type_of_data" value="monthly" onclick="showDropdown()">
+                                        <label class="form-check-label" for="monthly">Monthly</label>
+                                    </div>
+                                    <div style="margin-right:15px;">
+                                        <input type="radio" class="form-check-input" id="quarterly" name="select_type_of_data" value="quarterly" onclick="showDropdown()">
+                                        <label class="form-check-label" for="quarterly">Quarterly</label>
+                                    </div>
+                                    <div>
+                                        <input type="radio" class="form-check-input" id="yearly" name="select_type_of_data" value="yearly" onclick="showDropdown()">
+                                        <label class="form-check-label" for="yearly">Yearly</label>
+                                    </div>
+                                </div>
+            
+                                <div id="dropdown-container" class="mt-3" style="display: none;"></div>
+            
+                                <!-- First Year of Operations Question (Initially hidden) -->
+                                <div id="first-year-question" class="mt-4" style="display:none;">
+                                    <label>Is this the First Period of operations?</label>
+                                    <div style="margin-right:15px;">
+                                        <input type="radio" class="form-check-input" id="first_year_yes" name="first_period" value="yes">
+                                        <label class="form-check-label" for="first_year_yes">Yes</label>
+                                    </div>
+                                    <div style="margin-right:15px;">
+                                        <input type="radio" class="form-check-input" id="first_year_no" name="first_period" value="no">
+                                        <label class="form-check-label" for="first_year_no">No</label>
+                                    </div>
+                                </div>
+            
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                            </form>
+                        </div>
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="table-container mt-1">
+                <div class="table-card-wrapper">
+                <div class="table-wrapper">
+                    <table class="cell">
+                        <thead>
+                            <tr>
+                                <th class="rowview">Breakdown</th>
+                                {% for income_statement in cash_flows %}
+                                <th class="rowview1">{{income_statement.end_date|date:'d-m-Y'}}
+                                    <span class="period-type" style="display: none;">{{ income_statement.monthly_or_quarterly_or_yearly }}</span>
+                                   </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Total Assets Section -->
+                            <tr>
+                                <td>Operating Cash Flow<span class="expandable-icon" onclick="toggle(this, '#MS01a');"></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td id="total_assets-{{ forloop.counter }}">{{income_statement.operating_cash_flow}}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="MS01a" class="hidden indent-level-1">
+                                <td>Net Income from Continuing Operations<span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="current-assets-column" id="current-assets-{{ forloop.counter }}">{{ income_statement.net_income_from_continuing_operations }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="MS01a" class="hidden indent-level-1">
+                                <td>Depreciation & amortization<span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="current-assets-column" id="current-assets-{{ forloop.counter }}">{{ income_statement.depreciation_and_amortization }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="MS01a" class="hidden indent-level-1">
+                                <td>Change in working capital<span class="expandable-icon" onclick="toggle(this, '#LI01a');"></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="current-assets-column" id="current-assets-{{ forloop.counter }}">{{ income_statement.change_in_working_capital }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01a" class="hidden indent-level-2">
+                                <td>Changes in Receivables<span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="gross_ppe-column" id="gross_ppe-{{ forloop.counter }}">{{ income_statement.changes_in_receivables }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01a" class="hidden indent-level-2">
+                                <td>Change in Inventory<span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="gross_ppe-column" id="gross_ppe-{{ forloop.counter }}">{{ income_statement.change_in_inventory }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01a" class="hidden indent-level-2">
+                                <td>Change in Hedging Assets Current<span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="gross_ppe-column" id="gross_ppe-{{ forloop.counter }}">{{ income_statement.change_in_hedging_assets_current }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01a" class="hidden indent-level-2">
+                                <td>Change in Other Current Assets<span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="gross_ppe-column" id="gross_ppe-{{ forloop.counter }}">{{ income_statement.change_in_other_current_assets }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01a" class="hidden indent-level-2">
+                                <td>Change in Payables And Accrued Expense<span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="gross_ppe-column" id="gross_ppe-{{ forloop.counter }}">{{ income_statement.change_in_payables_and_accrued_expense }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01a" class="hidden indent-level-2">
+                                <td>Change in Pension & Other Post Retirement Benefit Plans Current<span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="gross_ppe-column" id="gross_ppe-{{ forloop.counter }}">{{ income_statement.change_in_pension_and_other_post_retirement_benefit_plans_current }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01a" class="hidden indent-level-2">
+                                <td>Change in Current Debt And Capital Lease Obligation<span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="gross_ppe-column" id="gross_ppe-{{ forloop.counter }}">{{ income_statement.change_in_current_debt_and_capital_lease_obligation }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01a" class="hidden indent-level-2">
+                                <td>Change in Current Deferred Liabilities<span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="gross_ppe-column" id="gross_ppe-{{ forloop.counter }}">{{ income_statement.change_in_current_deferred_liabilities }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01a" class="hidden indent-level-2">
+                                <td>Change in Other Current Liabilities<span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="gross_ppe-column" id="gross_ppe-{{ forloop.counter }}">{{ income_statement.change_in_other_current_liabilities }}</td>
+                                {% endfor %}
+                            </tr>
+                                <tr>
+                                <td>Investing Cash Flow<span class="expandable-icon" onclick="toggle(this, '#LI01');"></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class=" total_non_current_assets_column" id="total_non_current_assets-{{ forloop.counter }}" oninput="calculatetotal()">{{ income_statement.investing_cash_flow }}</td>
+                                {% endfor %}
+                            </tr>
+        
+                            <tr id="LI01" class="hidden indent-level-1">
+                                <td>Cash Flow from Continuing Investing Activities <span class="expandable-icon" onclick="toggle(this, '#LI011a');"></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class=" net_ppe_column" id="net_ppe-{{ forloop.counter }}" oninput="calculatetotal()">{{ income_statement.cash_flow_from_continuing_investing_activities }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI011a" class="hidden indent-level-2">
+                                <td>Net PPE Purchase And Sale <span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="gross_ppe-column" id="gross_ppe-{{ forloop.counter }}">{{ income_statement.net_ppe_purchase_and_sale }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI011a" class="hidden indent-level-2">
+                                <td>Goodwill And Other Intangible Assets<span span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="gross_ppe-column" id="gross_ppe-{{ forloop.counter }}">{{ income_statement.goodwill_and_other_intangible_assets }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI011a" class="hidden indent-level-2">
+                                <td>Investments And Advances <span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="gross_ppe-column" id="gross_ppe-{{ forloop.counter }}">{{ income_statement.investments_and_advances }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI011a" class="hidden indent-level-2">
+                                <td>Other Non Current Assets<span span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class="gross_ppe-column" id="gross_ppe-{{ forloop.counter }}">{{ income_statement.other_non_current_assets }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>Financing Cash Flow <span class="expandable-icon" onclick="toggle(this, '#LI01a');"></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class=" total-liabilities-column" id="total-liabilities-net-minority-interest-{{ forloop.counter }}" oninput="calculatetotal()">{{ income_statement.financing_cash_flow }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01a" class="hidden indent-level-1">
+                                <td>Cash Flow from Continuing Financing Activities <span class="expandable-icon" onclick="toggle(this, '#LI01b');"></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class=" current-liabilities-column" id="current-liabilities-{{ forloop.counter }}" oninput="calculatetotal()">{{ income_statement.cash_flow_from_continuing_financing_activities }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01b" class="hidden indent-level-2">
+                                <td>Long Term Debt And Capital Lease Obligation <span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class=" payables-accrued-column" id="payables-and-accrued-expenses-{{ forloop.counter }}" oninput="calculatetotal()">{{ income_statement.long_term_debt_and_capital_lease_obligation }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01b" class="hidden indent-level-2">
+                                <td>Non Current Deferred Liabilities</td>
+                                {% for income_statement in cash_flows %}
+                                <td class="editable accounts-payable-column" id="accounts-payable-{{ forloop.counter }}" oninput="calculatetotal()">{{ income_statement.non_current_deferred_liabilities }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01b" class="hidden indent-level-2">
+                                <td>Trade and Other Payables Non Current<span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class=" payables-accrued-column" id="payables-and-accrued-expenses-{{ forloop.counter }}" oninput="calculatetotal()">{{ income_statement.trade_and_other_payables_non_current }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01b" class="hidden indent-level-2">
+                                <td>Other Non Current Liabilities</td>
+                                {% for income_statement in cash_flows %}
+                                <td class="editable accounts-payable-column" id="accounts-payable-{{ forloop.counter }}" oninput="calculatetotal()">{{ income_statement.other_non_current_liabilities }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01b" class="hidden indent-level-2">
+                                <td>Common Stock Issuance/ (Payments)t<span></span></td>
+                                {% for income_statement in cash_flows %}
+                                <td class=" payables-accrued-column" id="payables-and-accrued-expenses-{{ forloop.counter }}" oninput="calculatetotal()">{{ income_statement.common_stock_issuance_payments }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr id="LI01b" class="hidden indent-level-2">
+                                <td>Common Stock Dividend Paid</td>
+                                {% for income_statement in cash_flows %}
+                                <td class="editable accounts-payable-column" id="accounts-payable-{{ forloop.counter }}" oninput="calculatetotal()">{{ income_statement.common_stock_dividend_paid }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>End Cash Position</td>
+                                {% for income_statement in cash_flows %}
+                                    <td>{{income_statement.end_cash_position}}</td>
+                                    {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>Changes in Cash</td>
+                                {% for income_statement in cash_flows %}
+                                    <td>{{income_statement.changes_in_cash}}</td>
+                                    {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>Beginning Cash Position</td>
+                                {% for income_statement in cash_flows %}
+                                    <td>{{income_statement.beginning_cash_position}}</td>
+                                    {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>Capital Expenditure</td>
+                                {% for income_statement in cash_flows %}
+                                    <td>{{income_statement.capital_expenditure}}</td>
+                                    {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>Issuance/ (Repurchase) of Capital Stock</td>
+                                {% for income_statement in cash_flows %}
+                                    <td>{{income_statement.issuance_repurchase_of_capital_stock}}</td>
+                                    {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>Repayment of Debt</td>
+                                {% for income_statement in cash_flows %}
+                                    <td>{{income_statement.repayment_of_debt}}</td>
+                                    {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>Free Cash Flow</td>
+                                {% for income_statement in cash_flows %}
+                                    <td>{{income_statement.free_cash_flow}}</td>
+                                    {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row"  style="margin-top: -15px; text-align: end; color: grey; font-size: 14px; padding-bottom: 0px; margin-bottom: 0px;"><p>Currency in INR</p></div>
+                        <h5 class="card-title">Ratios</h5>
+                        <div class="form-group">
+                            <div class="row align-items-center" style="margin-bottom: 10px;">
+                                <div class="col-md-6" style="text-align: right; ">
+                                    <label for="period">Select Period</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="period" class="form-control">
+                                        <option value="" disabled selected>Choose Period</option>
+                                        {% for income_statement in cash_flows %}
+                                            <option value="{{ income_statement.id }}">{{ income_statement.end_date|date:'d-m-Y' }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <h6 class="liquidity">Liquidity Ratios</h6>
+                        <div class="info-block">
+                            <label for="current_ratio" class="label"> Current Ratio</label>
+                            <p id="current_ratio" class="lable-value"></p>
+                        </div>
+                        <div class="info-block">
+                            <label for="quick_ratio" class="label">Quick Ratio </label>
+                            <p id="quick_ratio" class="lable-value"></p>
+                        </div>
+                        <div class="info-block">
+                            <label for="cash_ratio" class="label">Cash Ratio</label>
+                            <p id="cash_ratio" class="lable-value"></p>
+                        </div>
+                        <div class="info-block">
+                            <label for="working_capital" class="label">Working Capital</label>
+                            <p id="working_capital" class="lable-value"></p>
+                        </div>
+                
+                
+                        <h6 class="liquidity">Activity/ Efficiency Ratios</h6>
+                        <div class="info-block">
+                            <label for="operating_cash_flow_ratio" class="label">Operating Cash Flow Ratio</label>
+                            <p id="operating_cash_flow_ratio" class="lable-value"></p>
+                        </div>
+                        <div class="info-block">
+                            <label for="debt_service_coverage_ratio" class="label">Debt Service Coverage Ratio</label>
+                            <p id="debt_service_coverage_ratio" class="lable-value"></p>
+                        </div>
+                    </div>
+                </div>
+                
+        </div>
+        </div>
+
+<script>
+      function toggle(button, targetId) {
+        var targetRows = document.querySelectorAll(targetId);
+        var isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+        button.setAttribute('aria-expanded', !isExpanded);
+        targetRows.forEach(row => {
+            if (isExpanded) {
+                row.classList.add('hidden');
+            } else {
+                row.classList.remove('hidden');
+            }
+        });
+    }
+    window.onload = function() {
+        document.querySelectorAll('.expandable-icon').forEach(icon => {
+            icon.setAttribute('aria-expanded', 'false');
+            var targetId = icon.getAttribute('onclick').split("'")[1];
+            document.querySelectorAll(targetId).forEach(row => row.classList.add('hidden'));
+        });
+    }
+    function showDropdown() {
+        const dropdownContainer = document.getElementById('dropdown-container');
+        const firstYearQuestion = document.getElementById('first-year-question');
+
+        dropdownContainer.innerHTML = ''; // Clear existing content
+        firstYearQuestion.style.display = 'none'; // Hide the question initially
+
+        const selectedType = document.querySelector('input[name="select_type_of_data"]:checked').value;
+        let label, selectName, options;
+
+        // Create the Year dropdown
+        const yearWrapper = document.createElement('div');
+        yearWrapper.classList.add('inline-container');
+
+        const yearLabel = document.createElement('label');
+        yearLabel.textContent = 'Select Year:';
+
+        const yearSelect = document.createElement('select');
+        yearSelect.name = 'year';
+        yearSelect.classList.add('form-select');
+        const years = JSON.parse('{{ years_json|escapejs }}');
+        years.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.textContent = option;
+            yearSelect.appendChild(opt);
+        });
+
+        yearWrapper.appendChild(yearLabel);
+        yearWrapper.appendChild(yearSelect);
+
+        dropdownContainer.appendChild(yearWrapper); // Append year dropdown to the container
+
+        // Create the Month/Quarter dropdown
+        const mainWrapper = document.createElement('div');
+        mainWrapper.classList.add('inline-container');
+
+        const mainLabel = document.createElement('label');
+        const mainSelect = document.createElement('select');
+        mainSelect.classList.add('form-select');
+
+        if (selectedType === 'monthly') {
+            mainLabel.textContent = 'Select Month:';
+            mainSelect.name = 'month';
+            options = JSON.parse('{{ months_json|escapejs }}');
+        } else if (selectedType === 'quarterly') {
+            mainLabel.textContent = 'Select Quarter:';
+            mainSelect.name = 'quarter';
+            options = Object.entries(JSON.parse('{{ quarters_json|escapejs }}')).map(([key, value]) => `${key} ${value}`);
+        }
+
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.textContent = option;
+            mainSelect.appendChild(opt);
+        });
+
+        mainWrapper.appendChild(mainLabel);
+        mainWrapper.appendChild(mainSelect);
+        dropdownContainer.appendChild(mainWrapper); // Append month/quarter dropdown to the container
+
+        dropdownContainer.style.display = 'block';
+
+        // Show the question after a selection is made in the dropdown
+        yearSelect.addEventListener('change', function () {
+            if (mainSelect.value) {
+                firstYearQuestion.style.display = 'block';
+            }
+        });
+
+        mainSelect.addEventListener('change', function () {
+            if (yearSelect.value) {
+                firstYearQuestion.style.display = 'block';
+            }
+        });
+    }
+
+   
+
+
+
+    function manualEntry() {
+        window.location.href = "{% url 'cash_flow_manual_entry' company.company_id %}";
+    }
+</script>
+
+<script>
+  function toggle(element, targetId) {
+    var targetRows = document.querySelectorAll(targetId);
+    var isExpanded = element.getAttribute('aria-expanded') === 'true';
+
+    element.setAttribute('aria-expanded', !isExpanded);
+    targetRows.forEach(row => {
+        if (isExpanded) {
+            row.classList.add('hidden');
+        } else {
+            row.classList.remove('hidden');
+        }
+    });
+}
+
+window.onload = function() {
+    document.querySelectorAll('.expandable-icon').forEach(icon => {
+        icon.setAttribute('aria-expanded', 'false');
+        var targetId = icon.getAttribute('onclick').split("'")[1];
+        document.querySelectorAll(targetId).forEach(row => row.classList.add('hidden'));
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const periodSelect = document.getElementById('period');
+
+    // Parse the JSON safely
+    const cashRatios = JSON.parse('{{ cashratio_json|escapejs }}');
+    console.log(cashRatios)
+
+    periodSelect.addEventListener('change', function() {
+        const selectedPeriodId = parseInt(this.value); // Ensure selectedPeriodId is a number
+        console.log("Selected Period ID:", selectedPeriodId); // Debugging output
+
+        // Find the ratios for the selected period
+        const selectedRatios = cashRatios.find(ratio => ratio.cashflowsheet_id === selectedPeriodId);
+        console.log("Selected Ratios:", selectedRatios); // Debugging output
+
+        if (selectedRatios) {
+            // Display the ratio values and fallback to 'N/A' only if the value is null or undefined
+            document.getElementById('current_ratio').textContent = selectedRatios.current_ratio !== null && selectedRatios.current_ratio !== undefined ? selectedRatios.current_ratio : 'N/A';
+            document.getElementById('quick_ratio').textContent = selectedRatios.quick_ratio !== null && selectedRatios.quick_ratio !== undefined ? selectedRatios.quick_ratio : 'N/A';
+            document.getElementById('cash_ratio').textContent = selectedRatios.cash_ratio !== null && selectedRatios.cash_ratio !== undefined ? selectedRatios.cash_ratio : 'N/A';
+            document.getElementById('working_capital').textContent = selectedRatios.working_capital !== null && selectedRatios.working_capital !== undefined ? selectedRatios.working_capital : 'N/A';
+            document.getElementById('operating_cash_flow_ratio').textContent = selectedRatios.operating_cash_flow_ratio !== null && selectedRatios.operating_cash_flow_ratio !== undefined ? selectedRatios.operating_cash_flow_ratio : 'N/A';
+            document.getElementById('debt_service_coverage_ratio').textContent = selectedRatios.debt_service_coverage_ratio !== null && selectedRatios.debt_service_coverage_ratio !== undefined ? selectedRatios.debt_service_coverage_ratio : 'N/A';
+        } else {
+            // Set all fields to 'N/A' if no ratios are found for the selected period
+            const ratioIds = ['current_ratio', 'quick_ratio', 'cash_ratio', 'working_capital', 'operating_cash_flow_ratio', 'debt_service_coverage_ratio'];
+            ratioIds.forEach(id => document.getElementById(id).textContent = 'N/A');
+        }
+    });
+});
+
+
+
+</script>
+{% endblock content %}

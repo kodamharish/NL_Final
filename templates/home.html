@@ -1,0 +1,623 @@
+{% extends './base.html' %}
+{% load static %}
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+ /* General Styling */
+ body {
+  font-family: 'Arial MT Rounded';
+    background-color: #fcfcfc;
+    margin: 0;
+    padding: 0;
+}
+
+/* Carousel */
+.carousel-caption h3 {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.carousel-caption p {
+    font-size: 1.2rem;
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+/* Event Details */
+section.startup {
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    background-color: rgb(243, 252, 255);
+}
+
+section.startup h5 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+section.startup img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+}
+
+section.startup .btn-primary {
+    background-color: #17a2b8;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 50px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+section.startup .btn-primary:hover {
+    background-color: #117a8b;
+    transform: scale(1.05);
+}
+
+/* Features Section */
+.features .container {
+    background-color: #fefefe;
+    border: 1px rgb(118, 118, 118);
+}
+
+.features .card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.features .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.features span {
+    color: #6c757d;
+}
+
+.features .card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 280px;
+    object-fit: cover;
+}
+
+.features .card-title {
+    font-size: 1.5rem;
+    color: #0047c2;
+}
+
+.features .card-text {
+    color: #2c80c9;
+    font-size: 1rem;
+}
+
+.features .card ul {
+    padding-left: 20px;
+}
+
+.features .card ul li {
+    margin-bottom: 10px;
+}
+
+.features .card .btn-primary {
+    background-color: #17a2b8;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 50px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.features .card .btn-primary:hover {
+    background-color: #117a8b;
+    transform: scale(1.05);
+}
+
+/* Key Issues Section */
+.key-issues-section {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.key-issues-section .section-title {
+    font-size: 1.8rem;
+    color: #1b8ac5;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    border-bottom: 2px solid #1b8ac5;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.key-issues-section ul {
+    padding-left: 20px;
+    list-style-type: none;
+}
+
+.key-issues-section ul li {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    color: #6c757d;
+    position: relative;
+    padding-left: 25px;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.key-issues-section ul li::before {
+    content: "\2022";
+    color: #17a2b8;
+    font-weight: bold;
+    display: inline-block;
+    width: 20px;
+    margin-left: -20px;
+}
+
+/* We Have Answers Section */
+.we-have-answers-section {
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.we-have-answers-section h3.we-have-answers {
+    font-size: 24px;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.we-have-answers-section p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.custom-size {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+}
+.popular-request .card {
+    border: none;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.popular-request .card p {
+    border-bottom:1px rgb(167, 167, 167);
+    
+}
+
+.popular-request .card h3{
+    margin-left: 10px;
+}
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.carousel-item,
+.card,
+.container section,
+.container h2,
+.container p {
+    animation: fadeInUp 1s ease-in-out;
+}
+
+/* Button Styling */
+.btn-primary {
+    background-color: #17a2b8;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 50px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #117a8b;
+    transform: scale(1.05);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 50px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    transform: scale(1.05);
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 50px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 50px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+    transform: scale(1.05);
+}
+.card-container {
+            flex: 1 0 30%; /* Flex grow, flex shrink, and basis */
+            margin: 5px;
+            border: none;
+        }
+        .card-container:hover{
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        footer {
+    background-color: #364452; /* Dark background */
+    color: white; /* White text color */
+    padding: 20px 0; /* Padding for top and bottom */
+}
+
+footer h5 {
+    color:#5ca2e8; /* Blue color for headings */
+    font-size: 40px !important;
+    padding-bottom: 2px !important;
+}
+footer p{
+  line-height: 2px;
+}
+
+footer a {
+    color: white; /* White text for links */
+}
+
+footer a:hover {
+    color: #364452; /* Light grey on hover for links */
+}
+
+/* Icons styling */
+footer .fab {
+    font-size: 16px; /* Icon size */
+    /* line-height: 1rem; */
+}
+.card-body{
+  border: none;
+}
+
+</style>
+<!-- Carousel -->
+<div id="demo" class="carousel slide" data-bs-ride="carousel">
+
+    <!-- Indicators/dots -->
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
+      <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+      <button type="button" data-bs-target="#demo" data-bs-slide-to="3"></button>
+
+    </div>
+    
+    <!-- The slideshow/carousel -->
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="https://t3.ftcdn.net/jpg/05/63/66/48/360_F_563664874_ibw1AUSzTgJ4vUz3WxTehvTSC53FVLJB.jpg" alt="image" class="d-block" style="width:100%; height: 450px;" >
+        <div class="carousel-caption">
+          <h3>DO BUSINESS</h3>
+          <p>In Our Investment and Partner Exchanges!</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/bg2.webp' %}" alt="image" class="d-block" style="width:100%; height: 450px;"> 
+        <div class="carousel-caption">
+          <h3>EXPLORE</h3>
+          <p>Startups, Investors, Partners, &amp; Professional Firms!</p>
+        </div> 
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/bg3.avif' %}" alt="image" class="d-block" style="width:100%; height: 450px;">
+        <div class="carousel-caption">
+          <h3>ALL IN ONE</h3>
+          <p>Single Source of Truth of documentation of startups!</p>
+        </div>  
+      </div>
+
+      <div class="carousel-item">
+        <img src="{% static 'images/bg4.avif' %}" alt="image" class="d-block" style="width:100%; height: 450px;">
+        <div class="carousel-caption">
+          <h3>AUTOMATE</h3>
+          <p>Financial Forecasts &amp; Valuation!</p>
+        </div>  
+      </div>
+    </div>
+    
+    <!-- Left and right controls/icons -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+
+  <section class="startup container mt-5">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-5 mt-4">
+            <h5>STARTUP MEETUP - JULY 6, 2024</h5>
+            <img src="{% static 'images/startupmeet.jpg' %}" alt="Event Image" class="img-fluid">
+            <p>Present your dreams in action to investors, industry leaders, and peers!</p>
+        </div>
+        <div class="col-md-5">
+            <div class="mt-4">
+                <h4>Event Details:</h4>
+                <p><strong>Date:</strong> Saturday, July 6, 2024</p>
+                <p><strong>Time:</strong> 2 PM - 6 PM</p>
+                <p><strong>Venue:</strong> St. Joseph's College of Commerce, 163, Brigade Rd, Shanthalala Nagar, Ashok Nagar, Bengaluru, Karnataka 560025</p>
+                <p>Bringing the startup ecosystem together to connect and help each other.</p>
+                <a href="#" class="btn btn-primary">Click here to register!</a>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</section>
+
+<!-- Features Section -->
+ 
+<div class="container text-center mt-5">
+  <div class="row">
+      <div class="col-md-4">
+          <div class="card">
+              <div class="card-header">START UPS</div>
+              <div class="card-body">
+                  <img src="{% static 'images/2.png' %}" alt="Startups" class="img-fluid">
+                  <p class="mt-2">
+                      As an unlisted startup company, you will need tremendous help at the right times to build your products and services and grow your business. Using our platform you can:
+                      <br>- Compare listed and unlisted companies (against yours)
+                      <br>- Connect with Investors, Partners, Banks, and CAs for investments & services
+                      <br>- Create your business profile by uploading your business plans, financials, and so on for valuation
+                      <br>- Automatically generate financial forecasts & valuation
+                      <br>- Seek investments & partnerships using our Start Up Exchange
+                  </p>
+                  <a href="#" class="btn btn-primary">Read More</a>
+              </div>
+          </div>
+      </div>
+
+      <div class="col-md-4">
+          <div class="card">
+              <div class="card-header">INVESTORS</div>
+              <div class="card-body">
+                  <img src="{% static 'images/1.png' %}" alt="Investors" class="img-fluid">
+                  <p class="mt-2">
+                      As an investor or a partner, you can access all information you need to evaluate and assess a startup company before you make a decision to invest or partner. You can:
+                      <br>- Compare listed and unlisted companies
+                      <br>- Connect with Startups
+                      <br>- Get all information you need, of a startup, for your valuation purposes
+                      <br>- Automatically generate custom financial forecasts for startup companies
+                      <br>- Invest in or partner with startup companies through our Start Up Exchange platform
+                  </p>
+                  <a href="#" class="btn btn-primary">Read More</a>
+              </div>
+          </div>
+      </div>
+
+      <div class="col-md-4">
+          <div class="card">
+              <div class="card-header">FINANCE FIRMS</div>
+              <div class="card-body">
+                  <img src="{% static 'images/3.png' %}" alt="Finance Firms" class="img-fluid">
+                  <p class="mt-2">
+                      If you are a Bank or a CA or anyone interested in a startup company financials, our platform will provide:
+                      <br>- Current financials of the company
+                      <br>- Comparisons with similar companies in the industry
+                      <br>- Get all information you need, of a startup, for your valuation purposes
+                      <br>- Automatically generate financial forecasts
+                  </p>
+                  <a href="#" class="btn btn-primary">Read More</a>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<!-- We Have Answers Section -->
+<section class="we-have-answers-section container mt-5">
+    <div class="row">
+        <div class="col-md-7">
+            <h3 class="we-have-answers">WE HAVE ANSWERS!</h3>
+            <p>Our platform addresses many challenges that the unlisted startup community has! With multiple features specifically built for startup founders, investors, banks, CAs, and CSs - we are making their lives easier.</p>
+            <p>We provide tools and resources to help startups navigate the complex landscape of fundraising, valuation, and investor relations. Our comprehensive platform ensures that founders are well-prepared to meet the demands of investors and can focus on growing their businesses effectively.</p>
+        </div>
+        <div class="col-md-5">
+            <img src="https://t3.ftcdn.net/jpg/05/39/14/98/240_F_539149881_mFxSBALTvD9mlPuBmR2oWEh6BY6GTPAD.jpg" class="img-fluid custom-size rounded-start" alt="Finance Firms">
+        </div>
+    </div>
+</section>
+
+<!-- Combined Section -->
+<section class="key-issues-section container mt-5">
+  <div class="row">
+    <div class="col-12 mb-4 text-center">
+      <h3 class="section-title">KEY ISSUES ADDRESSED</h3>
+      <p class="section-description">Our platform tackles crucial challenges faced by startups, investors, and financial firms with innovative solutions.</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <div class="card key-issue-card h-100">
+        <div class="card-body">
+          <div class="icon mb-3">
+            <i class="fas fa-chart-line fa-2x text-primary"></i>
+          </div>
+          <h5 class="card-title">Inaccurate Financial Forecasting</h5>
+          <p class="card-text">Companies and firms struggle with financial forecasting due to lack of knowledge, spending weeks to arrive at accurate numbers.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card key-issue-card h-100">
+        <div class="card-body">
+          <div class="icon mb-3">
+            <i class="fas fa-balance-scale fa-2x text-primary"></i>
+          </div>
+          <h5 class="card-title">Erroneous Valuation</h5>
+          <p class="card-text">Startups and investors often overvalue or undervalue companies, leading to unfair partnerships and loss of ownership.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card key-issue-card h-100">
+        <div class="card-body">
+          <div class="icon mb-3">
+            <i class="fas fa-handshake fa-2x text-primary"></i>
+          </div>
+          <h5 class="card-title">Lack of Exposure to Right Investors</h5>
+          <p class="card-text">Startups struggle to find the right investors with the appropriate mindset, leading to missed opportunities and unfair practices.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card key-issue-card h-100">
+        <div class="card-body">
+          <div class="icon mb-3">
+            <i class="fas fa-database fa-2x text-primary"></i>
+          </div>
+          <h5 class="card-title">Lack of Comparative Data</h5>
+          <p class="card-text">There is no system to compare similar companies' financials, products, market size, and investments effectively.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card key-issue-card h-100">
+        <div class="card-body">
+          <div class="icon mb-3">
+            <i class="fas fa-book fa-2x text-primary"></i>
+          </div>
+          <h5 class="card-title">No Single Source of Truth</h5>
+          <p class="card-text">Information is fragmented across multiple systems, making it challenging to verify and maintain accuracy.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card key-issue-card h-100">
+        <div class="card-body">
+          <div class="icon mb-3">
+            <i class="fas fa-folder-open fa-2x text-primary"></i>
+          </div>
+          <h5 class="card-title">Incomplete Due Diligence Documentation</h5>
+          <p class="card-text">Financial, legal, and audit documents are often scattered across different sources, complicating the collation process.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class=" popular-request container mt-5">
+  <div class="row">
+      <div class="col-md-6 mb-4">
+          <div class="card mb-3">
+            <h3 class="section-title">POPULAR INVESTOR REQUESTS</h3>
+              <div class="card-body">
+                  <h6 class="card-title"><strong>What is the product?</strong></h6>
+                  <p class="card-text">Request rate: 52% - What problem does the product solve? What does it do?</p>
+                  <h6 class="card-title"><strong>What is the potential?</strong></h6>
+                  <p class="card-text">Request rate: 48% - How big is the market size? How many products can be sold?</p>
+                  <h6 class="card-title"><strong>Who is the target?</strong></h6>
+                  <p class="card-text">Request rate: 42% - Which industries? Who are the users?</p>
+                  <h6 class="card-title"><strong>What is the roadmap?</strong></h6>
+                  <p class="card-text">Request rate: 41% - What are the plans for the next 6 months? One year? Three years?</p>
+                  <h6 class="card-title"><strong>What are the financials?</strong></h6>
+                  <p class="card-text">Request rate: 40% - How much revenue is being made? What are the projections?</p>
+              </div>
+          </div>
+      </div>
+      <div class="col-md-6 mb-4">
+          <div class="card mb-3">
+            <h3 class="section-title">POPULAR STARTUP REQUESTS</h3>
+              <div class="card-body">
+                  <h6 class="card-title"><strong>How much to raise?</strong></h6>
+                  <p class="card-text">Request rate: 55% - How much money is needed for the next 6 months? One year?</p>
+                  <h6 class="card-title"><strong>What are the valuation metrics?</strong></h6>
+                  <p class="card-text">Request rate: 50% - How is the valuation determined? What metrics are used?</p>
+                  <h6 class="card-title"><strong>Who are the potential investors?</strong></h6>
+                  <p class="card-text">Request rate: 47% - Which investors are likely to be interested?</p>
+                  <h6 class="card-title"><strong>What are the terms?</strong></h6>
+                  <p class="card-text">Request rate: 46% - What are the investment terms? Equity? Debt?</p>
+                  <h6 class="card-title"><strong>What is the exit strategy?</strong></h6>
+                  <p class="card-text">Request rate: 44% - How can investors exit? IPO? Acquisition?</p>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+    <!-- Footer -->
+    <footer class="bg-dark text-light pt-4 pb-2">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-4">
+                  <h5>ABOUT</h5>
+                  <p>PRODUCT OF MANARTHA SOLUTIONS</p>
+                  <p>© 2021. All Rights Reserved</p>
+              </div>
+              <div class="col-md-4">
+                  <h5>CONTACT</h5>
+                  <p>BENGALURU, INDIA</p>
+                  <p>info@numberleader.com</p>
+              </div>
+                <div class="col-md-4">
+                    <a href="#" class="text-light me-2"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-light me-2"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-light me-2"><i class="fab fa-google-plus-g"></i></a><br>
+                    <a href="#" class="text-light me-2" style="text-decoration: none;">Privacy Policy</a>
+                  </div>
+                </div>
+          </div>
+      </div>
+  </footer>
+  
+
+
+
+{% endblock %}

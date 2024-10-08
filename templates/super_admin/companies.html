@@ -1,0 +1,89 @@
+{% extends '../base.html' %}
+
+{% block content %}
+<style>
+    label {
+        width: auto !important;
+    }
+    table {
+        border: 1px solid #000000 !important;
+        border-collapse: collapse;
+    }
+    table th, table td {
+        border: 1px solid #000000 !important;
+    }
+</style>
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"/>
+<div class="container">
+   
+    <div class="row mt-5 mb-5">
+        <div class="col-md-12">
+            <h4 class="text-center mb-5">Companies</h4>
+
+            <div class="table-responsive">
+                <table id="teamTable" class="table table-bordered text-center">
+                    <thead>
+                        <tr class="text-nowrap">
+                            <th>User Id</th>
+                            <th>Company ID</th>
+                            <th>Company Name</th>
+                            <th>Company Email</th>
+                            <th>Website</th>
+                            <th>Company Linkedin URL</th>
+                            <th>Subscription Type</th>
+                            <th>Founder Name</th>
+                            <th>Founder Email</th>
+                            <th>Founder Linkedin URL</th>
+                            <th>Founder Phone Number</th>
+                            <!-- <th>Edit</th> -->
+                            <th>Delete</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for company in companies %}
+                        <tr>
+                            <td>{{company.user_id}}</td>
+                            <td>{{ company.company_id }}</td>
+                            <td>{{ company.company_name }}</td>
+                            <td>{{ company.company_email }}</td>
+                            <td>{{ company.company_website_url }}</td>
+                            <td>{{ company.company_linkedin_url }}</td>
+                            <td>{{ company.subscription_type }}</td>
+                            <td>{{ company.founder_name }}</td>
+                            <td>{{ company.founder_email }}</td>
+                            <td>{{ company.founder_linkedin_url }}</td>
+                            <td>{{ company.founder_phone_number }}</td>                            
+                            <!-- <td><a href="#" onclick="return confirmEdit('{{ company.company_id }}')"><i class="fa fa-pen"></i></a></td> -->
+                            <td><a href="#" onclick="return confirmDelete('{{ company.company_id }}')"><i class="fa fa-trash-alt"></i></a></td>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function() {
+        $('#teamTable').DataTable();
+    });
+
+    function confirmEdit(subuser_id) {
+        return confirm('Are you sure you want to Edit Sub User ID: ' + subuser_id + '?');
+    }
+
+    function confirmDelete(subuser_id) {
+        return confirm('Are you sure you want to Delete Sub User ID: ' + subuser_id + '?');
+    }
+</script>
+{% endblock content %}

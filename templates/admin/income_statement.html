@@ -1,0 +1,451 @@
+{% include 'admin/company_profile.html' %}
+
+{% block styles %}
+<style>
+    .container {
+    padding-left: 220px;
+    max-width: 90%;
+    padding-top: 10px;
+
+    position: relative;  /* Changed from fixed to relative */
+    overflow-y: scroll;
+    max-height: 100%;
+    margin-top: -60px;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    font-size: 14px !important;
+    
+}
+    .container::-webkit-scrollbar {
+        display: none;  /* Safari and Chrome */
+    }
+
+    .content {  
+        margin: 40px auto;  
+        padding-top: 30px;
+        padding-left: 200px;
+        width: calc(100% - 200px);
+    }
+
+    table {
+        width: 80%;
+        font-family: 'Arial MT Rounded';
+        border-collapse: collapse;
+        table-layout: auto;
+        padding-top: -10px;
+        border-right: 0px;
+        border-left: 0px;
+        font-size: 14px;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        text-align: left !important;
+        padding: 0.5px;
+        padding-bottom: 0.5px !important;
+        font-size: 14px;
+        border-right: 0px;
+        border-left: 0px;
+    }
+
+    td {
+        text-align: right;
+    }
+
+    th {
+        background-color: white;
+        top: 0;
+        z-index: 0;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .rowview {
+        width: 25% !important;
+    }
+
+    .rowview1 {
+        width: 0% !important;
+    }
+
+    .rowview2 {
+        width: fit-content !important;
+    }
+
+    tr.hidden {
+        display: none;
+    }
+
+    .indent-level-1 td:first-child {
+        padding-left: 2em;
+    }
+
+    .indent-level-2 td:first-child {
+        padding-left: 4em;
+    }
+
+    .indent-level-3 td:first-child {
+        padding-left: 6em;
+    }
+
+    .indent-level-4 td:first-child {
+        padding-left: 8em;
+    }
+
+    .table-container {
+        max-height: 500px;
+        overflow-y: scroll;
+        overflow-x: none;
+        -ms-overflow-style: none;  /* Internet Explorer 10+ */
+        scrollbar-width: none;  /* Firefox */
+        margin-top: -10px;
+    }
+
+    .table-container::-webkit-scrollbar {
+        display: none;  /* Safari and Chrome */
+    }
+
+    .form-control {
+        height: 20px;
+        padding: 0 5px;
+        font-size: 14px;
+        line-height: 20px;
+        border: none;
+        border-bottom: 0.5px solid black;
+        outline: none !important;
+        box-shadow: none !important;
+        color: grey;
+        border-radius: 0px;
+    }
+
+    .form-control1 {
+        height: 20px;
+        padding: 0 5px;
+        font-size: 14px;
+        line-height: 20px;
+        border: none;
+        border-bottom: none;
+        outline: none !important;
+        box-shadow: none !important;
+        color: grey;
+    }
+    .form-control1:focus {
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    .root {
+        row-gap: inherit;
+    }
+
+    .row {
+        height: -10px;
+    }
+
+    .breadcrumb {
+        margin-top: 15px;
+        margin-left: 260px !important;
+        font-size: 14px !important;
+        color: black;
+        display: inline-block; 
+        align-items: left;
+        font-family: 'Arial MT Rounded';
+    }
+    body {
+    overflow: hidden;  /* Hides the body scroll bar */
+}
+
+    .bold-text {
+        font-weight: bold;
+        
+    }
+    .period {
+        font-size: 14px !important;
+        color: black;
+        display: inline-block; /* Ensures both elements appear on the same line */
+        margin-left: 100px; /* Creates a 100px gap between elements */
+        vertical-align: middle;
+        font-family: 'Arial MT Rounded';
+    }
+    .btn-primary {
+        margin-top: -80px; /* Added negative margin to adjust the position of the button */
+        margin-left: -350px;
+    }
+</style>
+{% endblock styles %}
+
+
+
+
+{% block content %}
+<div class="breadcrumb">
+    <span>Corporate Finance</span> &ndash; <span>{{ company.name }}</span> &ndash; <span class="bold-text">Income Statement</span>
+</div>
+
+<div class="period">
+    <span>Period: </span><span></span>{{ date }}</span>
+</div>
+
+<div class="container mt-0">
+    <form method="POST" action="#" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="table-responsive table-container">
+            <table class="table table-bordered table-wrapper">
+                <thead>
+                    <tr>
+                        <th class="rowview">Breakdownss</th> 
+                        <th class="rowview1">TTM{{income_statement.date|date:'d-m-Y'}}</th>
+                        <th class="rowview2">Definition</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: grey;"><b>Total Revenue</b></td>
+                        <td><input type="number" class="form-control1" id="total_revenue" name="total_revenue" readonly placeholder="00.00"></td>
+                        <td>The total income generated from all business activities.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Operating Revenue</td>
+                        <td><input type="number" class="form-control" id="operating_revenue" name="operating_revenue" oninput="totalrevenue()"></td>
+                        <td>Income earned from the core business operations.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Other Income/(Expense)</td>
+                        <td><input type="number" class="form-control1" id="other_income_or_expense" name="other_income_or_expense" readonly placeholder="00.00"></td>
+                        <td>Income or expenses not related to core business operations.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Gain/(Loss) on Sale of Security</td>
+                        <td><input type="number" class="form-control" id="gain_or_loss_on_sale_of_security" name="gain_or_loss_on_sale_of_security" oninput="totalrevenue()"></td>
+                        <td>Profit or loss from selling investments.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Special Income(Charges)</td>
+                        <td><input type="number" class="form-control" id="special_income_or_charges" name="special_income_or_charges" oninput="totalrevenue()"></td>
+                        <td>One-time or unusual gains or expenses.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Write Off</td>
+                        <td><input type="number" class="form-control" id="write_off" name="write_off" oninput="totalrevenue()"></td>
+                        <td>The accounting action of recognizing an asset's reduced or zero value.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Other Non Operating Income(Expenses)</td>
+                        <td><input type="number" class="form-control" id="other_non_operating_income_or_expenses" name="other_non_operating_income_or_expenses" oninput="totalrevenue()"></td>
+                        <td>Income or expenses from activities not related to the core business.</td>
+                    </tr>
+                    <tr>
+                        <td>Cost of Revenue</td>
+                        <td><input type="number" class="form-control" id="cost_of_revenue" name="cost_of_revenue" oninput="totalrevenue()"></td>
+                        <td>The direct costs associated with producing goods or services sold.</td>
+                    </tr>
+                    <tr>
+                        <td>Gross Profit</td>
+                        <td><input type="number" class="form-control1" id="gross_profit" name="gross_profit" readonly placeholder="00.00"></td>
+                        <td>Total revenue minus the cost of revenue.</td>
+                    </tr>
+                    <tr>
+                        <td>Operating Expense</td>
+                        <td><input type="number" class="form-control1" id="operating_expense" name="operating_expense" readonly placeholder="00.00"></td>
+                        <td>Expenses incurred during regular business operations.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Selling, General and Administrative Expense</td>
+                        <td><input type="number" class="form-control1" id="selling_general_and_administrative_expense" name="selling_general_and_administrative_expense" readonly placeholder="00.00"></td>
+                        <td>Overheads related to selling products and managing the business.</td>
+                    </tr>
+                    <tr  class="indent-level-2">
+                        <td>General & Administrative Expenses</td>
+                        <td><input type="number" class="form-control" id="general_and_administrative_expenses" name="general_and_administrative_expenses" oninput="totalrevenue()"></td>
+                        <td>Costs associated with running the company, excluding production and selling costs.</td>
+                    </tr>
+                    <tr  class="indent-level-2">
+                        <td>Selling and Marketing Expense</td>
+                        <td><input type="number" class="form-control" id="selling_and_marketing_expense" name="selling_and_marketing_expense" oninput="totalrevenue()"></td>
+                        <td>Costs related to promoting and selling products or services.</td>
+                    </tr>
+
+                    <tr class="indent-level-1">
+                        <td>Research and Development Expense </td>
+                        <td><input type="number" class="form-control" id="research_and_development_expense" name="research_and_development_expense" oninput="totalrevenue()"></td>
+                        <td>Costs incurred for researching and developing new products or services.</td>
+                    </tr>
+                    <tr>
+                        <td>Operating Income</td>
+                        <td><input type="number" class="form-control1" id="operating_income" name="operating_income" readonly placeholder="00.00"></td>
+                        <td>Gross profit minus operating expenses.</td>
+                    </tr>
+                    <tr class="indent-level-1">
+                        <td>Net Non Operating Interest Income(Expense)</td>
+                        <td><input type="number" class="form-control1" id="net_non_operating_interest_income_expense" name="net_non_operating_interest_income_expense" readonly placeholder="00.00"></td>
+                        <td>Net interest earned or paid from non-operating activities.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Interest Income Non Operating</td>
+                        <td><input type="number" class="form-control" id="interest_income_non_operating" name="interest_income_non_operating" oninput="totalrevenue()"></td>
+                        <td>Interest earned from investments and other non-core activities.</td>
+                    </tr>
+                    <tr class="indent-level-2">
+                        <td>Interest Expense Non Operating</td>
+                        <td><input type="number" class="form-control" id="interest_expense_non_operating" name="interest_expense_non_operating" oninput="totalrevenue()"></td>
+                        <td>Interest paid on non-operating liabilities.</td>
+                    </tr>
+                   
+                    <tr>
+                        <td>Pretax Income</td>
+                        <td><input type="number" class="form-control1" id="pretax_income" name="pretax_income" readonly placeholder="00.00"></td>
+                        <td>Income before income taxes are deducted.</td>
+                    </tr>
+                    <tr>
+                        <td>Tax Provision</td>
+                        <td><input type="number" class="form-control" id="tax_provision" name="tax_provision" oninput="totalrevenue()"></td>
+                        <td>The estimated amount of income tax expense for a period.</td>
+                    </tr> 
+                    <tr>
+                        <td>Net Income</td>
+                        <td><input type="number" class="form-control1" id="net_income" name="net_income" readonly placeholder="00.00"></td>
+                        <td>The company's total profit after all expenses, including taxes, have been deducted.</td>
+                    </tr>
+                    <tr>
+                        <td>Preference Share Dividends</td>
+                        <td><input type="number" class="form-control" id="preference_share_dividends" name="preference_share_dividends" oninput="totalrevenue()"></td>
+                        <td>Dividends paid to preferred shareholders.</td>
+                    </tr>
+                    <tr>
+                        <td>Net Income to Common Stockholders</td>
+                        <td><input type="number" class="form-control1" id="net_income_to_common_stockholders" name="net_income_to_common_stockholders" readonly placeholder="00.00"></td>
+                        <td>Net income available to common shareholders after preferred dividends.</td>
+                    </tr>
+                    <tr>
+                        <td>Equity Share Dividends</td>
+                        <td><input type="number" class="form-control" id="equity_share_dividends" name="equity_share_dividends" oninput="totalrevenue()"></td>
+                        <td>Dividends paid to equity shareholders.</td>
+                    </tr>
+                    <tr>
+                        <td>Retained Earnings</td>
+                        <td><input type="number" class="form-control1" id="retained_earnings" name="retained_earnings" readonly placeholder="00.00"></td>
+                        <td>Profits reinvested in the business instead of being distributed as dividends.</td>
+                    </tr>
+                    <tr>
+                        <td>No of Equity Shares</td>
+                        <td><input type="number" class="form-control" id="no_of_equity_shares" name="no_of_equity_shares"  oninput="totalrevenue()"></td>
+                    </tr>
+
+                   
+                    <tr>
+                        <td>Basic EPS</td>
+                        <td><input type="number" class="form-control1" id="basic_eps" name="basic_eps" readonly placeholder="00.00"></td>
+                        <td>Earnings per share calculated using the outstanding shares.</td>
+                    </tr>
+                    <tr>
+                        <td>Diluted EPS</td>
+                        <td><input type="number" class="form-control" name="diluted_eps"  oninput="totalrevenue()" ></td>
+                        <td>Earnings per share calculated using the outstanding shares plus any convertible securities.</td>
+                    </tr>
+                    <tr>
+                        <td>Depreciation and Amortization</td>
+                        <td><input type="number" class="form-control" id="depreciation_and_amortization" name="depreciation_and_amortization"  oninput="calculate()"></td>
+                        <td>Non-cash expenses that reduce the value of tangible and intangible assets over time.</td>
+                    </tr>
+                    <tr>
+                        <td>EBITDA</td>
+                        <td><input type="number" class="form-control1" id="EBITDA" name="EBITDA" readonly placeholder="00.00"></td>
+                        <td>Earnings before interest, taxes, depreciation, and amortization.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary" id="submit_income_statement">Submit</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
+
+
+<script>
+    function totalrevenue(){
+        
+        var operatingrevenue=parseFloat(document.getElementById('operating_revenue').value) || 0;
+        var gainloss=parseFloat(document.getElementById('gain_or_loss_on_sale_of_security').value) || 0;
+        var specialincome=parseFloat(document.getElementById('special_income_or_charges').value) || 0;
+        var writeoff=parseFloat(document.getElementById('write_off').value) || 0;
+        var otheroperatingincome=parseFloat(document.getElementById('other_non_operating_income_or_expenses').value) || 0;
+
+        var otherincome_expense=gainloss+specialincome+writeoff+otheroperatingincome;
+        document.getElementById('other_income_or_expense').value=otherincome_expense;
+
+        var total=otherincome_expense+operatingrevenue;
+        document.getElementById('total_revenue').value=total
+
+
+        var cost_of_revenue=parseFloat(document.getElementById('cost_of_revenue').value) || 0;
+        var profit=total-cost_of_revenue;
+        document.getElementById('gross_profit').value=profit;
+
+        var general=parseFloat(document.getElementById('general_and_administrative_expenses').value) || 0;
+        var selling=parseFloat(document.getElementById('selling_and_marketing_expense').value) || 0;
+        var research=parseFloat(document.getElementById('research_and_development_expense').value) || 0;
+
+        var administrative=general+selling
+        document.getElementById('selling_general_and_administrative_expense').value=administrative
+
+        var operatingexpense=administrative+research;
+        document.getElementById('operating_expense').value=operatingexpense
+        
+        var income_operating=profit-operatingexpense;
+        document.getElementById('operating_income').value=income_operating
+
+        var income_interest=parseFloat(document.getElementById('interest_income_non_operating').value) || 0;
+        var interest_expense=parseFloat(document.getElementById('interest_expense_non_operating').value) || 0;
+
+        var net_non_operating=income_interest-interest_expense;
+        document.getElementById('net_non_operating_interest_income_expense').value=net_non_operating
+
+
+        var pretax= income_operating+net_non_operating;
+        document.getElementById('pretax_income').value=pretax
+
+        var provision_tax=parseFloat(document.getElementById('tax_provision').value) || 0;
+        var income_net=pretax-provision_tax;
+        document.getElementById('net_income').value=income_net
+
+        var pretax_dividends=parseFloat(document.getElementById('preference_share_dividends').value) || 0;
+        var common_stock=income_net-pretax_dividends;
+
+        document.getElementById('net_income_to_common_stockholders').value=common_stock
+
+        var equity=parseFloat(document.getElementById('equity_share_dividends').value) || 0;
+
+        var retained=common_stock-equity
+        document.getElementById('retained_earnings').value=retained
+
+        var equity_num=parseFloat(document.getElementById('no_of_equity_shares').value) || 0;
+        var basiceps=common_stock/equity_num
+        document.getElementById('basic_eps').value=basiceps
+        
+        var dilutedeps=parseFloat(document.getElementById('diluted_eps').value) || 0;
+    }
+    function calculate(){
+        var depreciation=parseFloat(document.getElementById('depreciation_and_amortization').value) || 0;
+        var income=parseFloat(document.getElementById('operating_income').value) || 0;
+        var edbita=income+depreciation;
+        console.log(edbita)
+        document.getElementById('EBITDA').value=edbita
+    }
+
+</script>
+{% endblock content %}

@@ -1,0 +1,199 @@
+
+{% block content %}
+<style>
+    /* styles.css */
+
+    .main-content {
+        margin-left: 290px;
+        /* Adjust according to sidebar width */
+        padding: 40px;
+        /* Reduce padding for a cleaner look */
+        transition: margin-left 0.3s;
+        /* Smooth transition for sidebar width changes */
+    }
+
+    /* General styling for a modern look */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f2f5;
+        color: #333;
+    }
+
+    /* Add scrollbars to the table container */
+    .table-responsive {
+        max-height: 500px;
+        /* Adjust as necessary */
+        overflow-y: auto;
+        overflow-x: auto;
+    }
+    table{
+        max-width: fit-content;
+    }
+    /* Ensure table header remains fixed */
+    .table-responsive table thead th {
+        position: sticky;
+        top: -2;
+        background-color: #f0f2f5;
+        /* Same as body background to blend in */
+        z-index: 1;
+    }
+
+    .hidden {
+        display: none;
+    }
+    .extra-polate-btn{
+        position: absolute;
+        top:450px;
+        right:450px;
+    }
+</style>
+{% include './company_profile.html' %}
+
+
+
+<div class="main-content">
+    <div class="container mt-2">
+        <h4 class="text-center">Unit Economics</h4>
+
+        <ul class="nav nav-pills mt-3" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="pill" href="#home">Revenue</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="pill" href="#menu1">Menu 1</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="pill" href="#menu2">Menu 2</a>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-3">
+
+
+            <div id="home" class="tab-pane fade show active">
+                {% if homogenous_products or heterogenous_products %}
+                <div class="table-responsive">
+                    <table id="revenueTable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Y1</th>
+                                <th class="hidden">Y2</th>
+                                <th class="hidden">Y3</th>
+                                <th class="hidden">Y4</th>
+                                <th class="hidden">Y5</th>
+                                <th class="hidden">Y6</th>
+                                <th class="hidden">Y7</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Particulars</td>
+                                <td>Amount</td>
+                                <td class="hidden">Amount</td>
+                                <td class="hidden">Amount</td>
+                                <td class="hidden">Amount</td>
+                                <td class="hidden">Amount</td>
+                                <td class="hidden">Amount</td>
+                                <td class="hidden">Amount</td>
+                            </tr>
+                            <tr>
+                                <td><b>Homogeneous</b></td>
+                            </tr>
+                            <tr>
+                                <td>Revenue Vertical</td>
+                            </tr>
+                            {% for product in homogenous_products %}
+                            <tr>
+                                <td>Product Name</td>
+                                <td><input type="text" class="form-control" value="{{product.product_name}}"></td>
+                                
+                            </tr>
+                            <tr>
+                                <td>Product Cost</td>
+                                <td><input type="number" class="form-control"
+                                        value="{{product.selling_price_per_unit}}"></td>
+                            </tr>
+                            <tr>
+                                <td>No of Products</td>
+                                <td><input type="number" class="form-control" value="{{product.units_sold}}"></td>
+                            </tr>
+                            <tr>
+                                <td>Revenue from Product</td>
+                                <td>{{product.revenue_from_product}}</td>
+                            </tr>
+                            <tr>
+                                <td>Expected Growth</td>
+                                <td><input type="number" class="form-control" value="{{product.expected_growth_rate}}">
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                            {% for product in heterogenous_products %}
+                            <tr>
+                                <td><b>Heterogeneous</b></td>
+                            </tr>
+                            <tr>
+                                <td>Product Name</td>
+                                <td><input type="text" class="form-control" value="{{product.product_name}}"></td>
+                            </tr>
+                            <tr>
+                                <td>Expected Revenue</td>
+                                <td><input type="number" class="form-control" value="{{product.expected_revenue}}"></td>
+                            </tr>
+                            <tr>
+                                <td>Expected Growth</td>
+                                <td><input type="number" class="form-control" value="{{product.expected_growth_rate}}">
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            <!-- Placeholder rows for Revenue Verticals -->
+                            <tr id="totalRevenueRow">
+                                <td>Total Revenue</td>
+                                <td class="total-revenue" colspan="7">0</td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <button id="extraPolateBtn" class="btn btn-primary mb-3 extra-polate-btn" onclick="extraPolate()">Extra Polate</button>
+                {% else%}
+                <h4 class="mb-4 text-center mt-5">Please Add Revenue Verticals</h4>
+                <div class="text-center mt-5 mb-3">
+                    <a href="{% url 'revenue_verticals' company_profile.company_id %}">Click here to Add Revenue
+                        Verticals</a>
+                </div>
+                {% endif %}
+            </div>
+
+
+            <div id="menu1" class="tab-pane fade">
+                <h3>Menu 1</h3>
+                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat.</p>
+            </div>
+            <div id="menu2" class="tab-pane fade">
+                <h3>Menu 2</h3>
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                    totam rem aperiam.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and custom JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function extraPolate(){
+        const columns = document.querySelectorAll(".hidden");
+        extraPolateButton = document.getElementById("extraPolateBtn")
+        columns.forEach(column => column.style.display = "table-cell");
+        extraPolateButton.style.display = "none"
+    }
+</script>
+
+
+
+{% endblock content %}

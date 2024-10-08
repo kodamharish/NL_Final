@@ -1,0 +1,150 @@
+{% load static %}
+{% block content %}
+<style>
+    .main-content {
+        margin-left: 290px;
+        /* Adjust according to sidebar width */
+        padding: 40px;
+        /* Reduce padding for a cleaner look */
+        transition: margin-left 0.3s;
+        /* Smooth transition for sidebar width changes */
+    }
+    label{
+        width:140px;
+    }
+</style>
+{% include './company_profile.html' %}
+
+<div class="main-content">
+
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addProductVideo">
+                    Add Pitch & Product Video
+                </button>
+                <!-- The Modal -->
+                <div class="modal" id="addProductVideo">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+    
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Pitch & Product Video </h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+    
+                            <!-- Modal body -->
+                            <div class="modal-body text-center">
+                                <form method="POST" action="#" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="mb-3 mt-3 inline">
+                                        <label for="pitch_video">Pitch Video File</label>
+                                        <input type="file" class="w-50" name="pitch_video">
+                                    </div>
+                                    <div class="mb-3 mt-3 inline">
+                                        <label for="product_video">Product Video File</label>
+                                        <input type="file" class="w-50" name="product_video">
+                                    </div>
+                                 <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                                
+                            </div>
+    
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            </div>
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col-md-4">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#updateProductVideo">
+                    Update Pitch & Product Video
+                </button>
+                <!-- The Modal -->
+                <div class="modal" id="updateProductVideo">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+    
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Update Pitch & Product Video</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+    
+                            <!-- Modal body -->
+                            <div class="modal-body text-center">
+                                <form method="POST" action="#" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="mb-3 mt-3 inline">
+                                        <label for="new_pitch_video">New Pitch Video File</label>
+                                        <input type="file" class="w-50" name="new_pitch_video" required>
+                                    </div>
+
+                                    <div class="mb-3 mt-3 inline">
+                                        <label for="new_product_video">New Product Video File</label>
+                                        <input type="file" class="w-50" name="new_product_video" required>
+                                    </div>
+                                 <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                                
+                            </div>
+    
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            </div>
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col-md-4"></div>
+    
+    
+    
+        </div>
+    
+    
+        
+        <div class="row mt-4 text-center">
+            {% if company_profile.pitch_video %}
+            <div class="col-md-6">
+                <video controls id="video" width="500px"  height="400px">
+                    <source
+                        src="{% static company_profile.pitch_video.url %}"
+                        type="video/mp4"  >
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            {% endif %}
+
+            {% if company_profile.product_video %}
+            <div class="col-md-6">
+                <video controls id="video" width="500px"  height="400px">
+                    <source
+                        src="{% static company_profile.product_video.url %}"
+                        type="video/mp4"  >
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+           {% endif %}
+
+        </div>
+
+
+        
+    
+    </div>
+
+
+</div>
+
+
+{% endblock %}

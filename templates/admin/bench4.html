@@ -1,0 +1,894 @@
+
+{% include './company_profile.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        /* Hide scrollbar for WebKit browsers (Chrome, Safari) */
+       body, html {
+    /* height: 550px; */
+    overflow-y: none; /* Allow vertical scroll while hiding scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+html::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+
+
+        /* h3 {
+            font-weight: bold;
+        } */
+
+        .form-label {
+            font-size: 12px;
+            color: grey;
+            margin-bottom: 0px;
+        }
+
+        .form-control {
+            border: none;
+            border-bottom: 1px solid #000;
+            background-color: transparent;
+            border-radius: 0;
+            padding-left: 0;
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .form-control-editing {
+            border-bottom: 1px solid #000;
+        }
+
+        .row {
+            margin-bottom: 0.2rem;
+        }
+
+        textarea.form-control {
+            border: none;
+            border-bottom: 1px solid #000;
+        }
+
+      
+/* Container with scrolling content */
+.container {
+    position: absolute;
+    padding: 30px 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    max-width: 1000px;
+    margin-left: 238px; /* Leave space for the sidebar */
+    overflow-y: auto; /* Enable vertical scrolling */
+    height: calc(100vh - 100px); /* Adjust the container height */
+    font-family: 'Arial MT Rounded';
+    z-index: 1;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    margin-top: -50px;
+}
+
+/* Hide the scrollbar for WebKit browsers (e.g., Chrome, Safari) */
+.container::-webkit-scrollbar {
+    display: none; /* Hide the scrollbar */
+}
+
+/* Hide scrollbar for IE, Edge */
+.container {
+    -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+    scrollbar-width: none;  /* Hide scrollbar for Firefox */
+}
+
+
+        
+.content-area{
+    margin-top: 30px;
+    position: relative;
+    overflow: -moz-hidden-unscrollable;
+
+}
+
+      
+
+        .add-section-icon {
+    font-size: 2rem;
+    color: #7b7b7b;
+    background-color: transparent;
+    border: none;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: absolute;
+    top: -10px; /* Adjust the position */
+    right: 20px; /* Adjust positioning to ensure visibility */
+    z-index: 100; /* Ensure the icon stays on top of other elements */
+}
+
+        .add-section-icon.moved {
+            top: 200px;
+            right: 180px;
+            left: auto;
+            bottom: auto;
+            transform: none;
+        }
+
+        
+
+        .buttons-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .benchmark-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 15px;
+        }
+
+        .benchmark-item .form-control[readonly] {
+            border: none;
+            padding-left: 0;
+            font-weight: normal;
+            color: black;
+            font-size: 16px;
+            padding-top: 0px;
+            /* Customize top padding for view mode values */
+        }
+
+       
+
+        input:read-only,
+        textarea:read-only{
+            border-bottom: none !important;
+            padding-bottom: 0 !important;
+        }
+
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .plus-icon {
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #7b7b7b;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1;
+            position: absolute;
+            top: 55%;
+            left: 48%;
+        }
+
+        .plus-icon.uploaded {
+            top: 10px;
+            left: auto;
+            right: 10px;
+            transform: none;
+        }
+
+        .plus-icon:hover {
+            color: #000000;
+            transform: scale(1.2);
+        }
+
+        .card-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        .card-header {
+            background-color: #fff;
+            padding: 10px;
+        }
+
+        .card-body {
+            padding: 30px;
+            text-align: center;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;            
+        }
+
+        .pdf-preview-container {
+            text-align: center;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 5px;
+        }
+
+        .pdf-thumbnail {
+            border: none;
+            width: 200px;
+            height: 120px;
+            background-color: #e74c3c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .pdf-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pdf-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .pdf-info {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .pdf-icon {
+            font-size: 1rem; /* Small icon size */
+            color: #e74c3c;
+            margin-right: 8px;
+        }
+
+        .pdf-name {
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #2c3e50;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 200px; /* Adjust as needed */
+        }
+
+        .pdf-actions {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .pdf-actions .btn {
+            font-size: 0.65rem; /* Smaller text */
+            padding: 2px 6px; /* Smaller padding */
+            text-decoration: none;
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+
+        .btn-custom {
+            background-color: transparent; /* Set background color */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            display: flex;
+            align-items: center; /* Center the image and text vertically */
+            gap: 10px; /* Gap between image and text */
+            margin-left: 1180px;
+            margin-top: -37px;
+            
+        }
+        .btn-custom img {
+            width: 35px; /* Ensure the image has a proper size */
+            height: 35px;
+        }
+  
+        .breadcrumb {
+            font-size: 18px;
+            color: black;
+            flex: 1;
+            margin-top: 25px;
+            margin-left: 260px;
+            font-family: 'Arial MT Rounded';
+            position: relative; /* Add this to position the breadcrumb */
+            display:inline-block;
+            z-index: 2;
+        }     
+        .add-benchmark-btn-icon {
+            font-size: 2rem;
+            color: black;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute; /* Absolute positioning to place it relative to the breadcrumb */
+            top: 0; /* Align with the top of the breadcrumb */
+            right: -60px; /* Adjust this value to control the horizontal distance from the breadcrumb */
+            cursor: pointer;
+            z-index: 10000; /* Ensure it appears above other elements */
+            transition: transform 0.3s ease;
+        }
+        
+        
+        .add-benchmark-btn-icon.moved {
+            top:-14px; /* Adjust this value if needed */
+            left: 1166px; /* Ensure the icon is visible and aligned */
+            transform: none;
+            color: black;
+            font-size: 1.7rem;
+            font-weight: bold;
+          
+            
+        }
+        
+        .add-benchmark-btn-icon:hover {
+            color: #000000;
+            transform: scale(1.2); /* Slight scaling effect for hover */
+        }
+        .form {
+    display: block;
+    margin-top: 0em;
+    unicode-bidi: isolate;
+    position: fixed !important;
+}
+        
+    </style>
+
+
+
+  <div class="breadcrumb">
+            <span>My Companies</span> &ndash; <span>{{ company.name }}</span> &ndash; <span class="bold-text">Products and Services</span>
+            <button class="btn btn-custom" id="add-benchmark-btn"><img src="{% static 'images/add.png' %}" alt="Add"></button>    
+        </div>  
+    <div class="container">
+        
+       
+        
+        {% if bench_dt %}
+        {% for i in bench_dt|dictsortreversed:"line_no" %}
+        {% if not i.line_no == 1 %}
+            <form action="" method="post" enctype="multipart/form-data" id="bench_form_{{i.line_no}}">
+                {% csrf_token %}   
+                <input type="text" name="line_no" value="{{i.line_no}}" id="" hidden>   
+                <label for="p_name" class="form-label">Select Product</label>
+                <select id="p_name_{{i.line_no}}" name="p_name" disabled required>
+                    <option value="{{i.p_name}}">{{i.p_name}}</option>
+                    {% for i in products %}
+                    <option value="{{i.name}}">{{i.name}}</option>
+                    {% endfor %}
+                </select> <br><br>
+
+                <div class="row">                           
+                    <div class="col-md-4">
+                        <label for="valuation" class="form-label">Current Valuation</label>
+                        <input type="number" id="valuation_{{i.line_no}}" value="{{i.valuation}}" name="valuation" required class="form-control" readonly placeholder="Enter valuation">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="source" class="form-label">Valuation Source / Vendor</label>
+                        <input type="text" id="source_{{i.line_no}}" value="{{i.source}}" name="source" class="form-control" required readonly placeholder="Enter valuation source">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="valuation_dt" class="form-label">Valuation Date</label>
+                        <input type="date" id="valuation_dt_{{i.line_no}}" value="{{i.valuation_dt|date:'Y-m-d'}}" name="valuation_dt" required readonly class="form-control" placeholder="Enter valuation date">
+                    </div>
+                </div>
+
+                <div class="row">                    
+                    <div class="col-lg-6">
+                        <div class="card card-wrapper">
+                            <div class="card-header">
+                                <p>Benchmarking Documents<br> <small>&lt;&lt; Upload the PDF format &gt;&gt;</small></p>
+                            </div>
+                            <div class="card-body">
+                                <div  {% if i.bench_mark_doc.name %} class="plus-icon uploaded" {% else %} class="plus-icon" {% endif %} id="pdf-plus-icon_{{i.line_no}}">
+                                    <i class="fas fa-plus"></i>                                       
+                                    <input type="file" accept=".pdf" name="bench_mark_doc" id="bench_mark_doc_{{i.line_no}}" class="file-input pdf-upload">                                                                
+                                </div>
+                                <div class="uploaded-files">                                    
+                                    {% if i.bench_mark_doc.name %}                                    
+                                        <div class="pdf-preview-container">
+                                            <canvas id="pdf-canvas-bm-{{i.line_no}}" class="pdf-thumbnail" data-pdf-url="{{ i.bench_mark_doc.url }}"></canvas>
+                                            <div class="pdf-details">
+                                                <p class="pdf-name">{{ i.bench_mark_doc.name }}</p>
+                                                <div class="pdf-actions">
+                                                    <a href="{{ i.bench_mark_doc.url }}" target="_blank" class="btn btn-primary">Open</a>                                                    
+                                                    <button class="btn btn-danger" onclick="if (confirm('Are you sure you want to delete this file?')) { removeFile('{{ i.line_no }}', 'b'); } return false;">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>                                                
+                                    {% endif %}                                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card card-wrapper">
+                            <div class="card-header">
+                                <p>Valuation Documents<br> <small>&lt;&lt; Upload the PDF format &gt;&gt;</small></p>
+                            </div>
+                            <div class="card-body">
+                                <div {% if i.valuation_doc.name %} class="plus-icon uploaded" {% else %} class="plus-icon" {% endif %} id="pdf-plus-icon_{{i.line_no}}">
+                                    <i class="fas fa-plus"></i>                                       
+                                    <input type="file" accept=".pdf" name="valuation_doc" id="valuation_doc_{{i.line_no}}" class="file-input pdf-upload">                                    
+                                </div>
+                                <div class="uploaded-files">                                    
+                                    {% if i.valuation_doc.name %}                                    
+                                        <div class="pdf-preview-container">
+                                            <canvas id="pdf-canvas-val-{{ i.line_no }}" class="pdf-thumbnail" data-pdf-url="{{ i.valuation_doc.url }}"></canvas>
+                                            <div class="pdf-details">
+                                                <p class="pdf-name">{{ i.valuation_doc.name }}</p>
+                                                <div class="pdf-actions">
+                                                    <a href="{{ i.valuation_doc.url }}" target="_blank" class="btn btn-primary">Open</a>
+                                                    <button class="btn btn-danger" onclick="if (confirm('Are you sure you want to delete this file?')) { removeFile('{{ i.line_no }}', 'v'); } return false;">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>                                                
+                                    {% endif %}                                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>                   
+                </div>
+                
+                
+                <div class="buttons-container">                    
+                    <!-- <a  onclick="handleFileUpload(`{{i.line_no}}`)" class="btn btn-primary" id="submit_btn_{{i.line_no}}" style="display: none;">Submit</a> -->
+                    <button type="submit" class="btn btn-primary" id="submit_btn_{{i.line_no}}" style="display: none;" >Submit</button>
+                    <a href="#" class="btn btn-primary" onclick="enable_fields(`{{i.line_no}}`)" id="edit_{{i.line_no}}">Edit</a>
+                    <a href="{% url 'delete_bench' i.line_no %}?id={{company.company_id}}" class="btn btn-danger" id="delete_{{i.line_no}}" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>                    
+                </div>
+            </form>
+        {% endif %}
+        {% endfor %}
+        {% endif %}   
+           
+
+        <div class="content-area">
+            <form action="" method="post" enctype="multipart/form-data" id="bench_form_1">
+                {% csrf_token %}     
+                <div class="row">   
+                    <input type="text" name="line_no" value="1" id="" hidden>                        
+                    <div class="col-md-4">
+                        <label for="valuation" class="form-label">Current Valuation</label>
+                        <input type="number" id="valuation_1" name="valuation" class="form-control" required {% if bench_dt %} {% for i in bench_dt %} {% if i.line_no == 1 %} {% if i.valuation %} value="{{i.valuation}}" {% endif %} readonly {% endif %} {% endfor %} {% endif %} placeholder="Enter valuation">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="source" class="form-label">Valuation Source / Vendor</label>
+                        <input type="text" id="source_1" name="source" class="form-control" required {% if bench_dt %} {% for i in bench_dt %} {% if i.line_no == 1 %} {% if  i.source %} value="{{i.source}}" {% endif %} readonly {% endif %} {% endfor %} {% endif %} placeholder="Enter valuation source">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="valuation_dt_1" class="form-label">Valuation Date</label>
+                        <input type="date" id="valuation_dt_1" name="valuation_dt" class="form-control" required {% if bench_dt %} {% for i in bench_dt %} {% if i.line_no == 1 %} {% if i.valuation_dt %} value="{{i.valuation_dt|date:'Y-m-d'}}" {% endif %} readonly {% endif %} {% endfor %} {% endif %} placeholder="Enter valuation date">
+                    </div>
+                </div>
+                               
+                <div class="row">                    
+                    <div class="col-lg-6">
+                        <div class="card card-wrapper">
+                            <div class="card-header">
+                                <p>Benchmarking Documents<br> <small>&lt;&lt; Upload the PDF format &gt;&gt;</small></p>
+                            </div>
+                            <div class="card-body">
+                                <div {% if bench_dt %} {% for i in bench_dt %} {% if i.line_no == 1 and i.bench_mark_doc.name %} class="plus-icon uploaded" {% else %} class="plus-icon" {% endif %} {% endfor %} {% else %} class="plus-icon" {% endif %} id="pdf-plus-icon_1">
+                                    <i class="fas fa-plus"></i>                                       
+                                    <input type="file" accept=".pdf" name="bench_mark_doc" id="bench_mark_doc_1" class="file-input pdf-upload">                                                                
+                                </div>
+                                <div class="uploaded-files">
+                                    {% if bench_dt %}
+                                        {% for i in bench_dt %}
+                                            {% if i.line_no == 1 and i.bench_mark_doc.name %}                                    
+                                                <div class="pdf-preview-container">
+                                                    <canvas id="pdf-canvas-bm-{{ i.line_no }}" class="pdf-thumbnail" data-pdf-url="{{ i.bench_mark_doc.url }}"></canvas>
+                                                    <div class="pdf-details">
+                                                        <p class="pdf-name">{{ i.bench_mark_doc.name }}</p>
+                                                        <div class="pdf-actions">
+                                                            <a href="{{ i.bench_mark_doc.url }}" target="_blank" class="btn btn-primary">Open</a>                                                            
+                                                            <button class="btn btn-danger" onclick="if (confirm('Are you sure you want to delete this file?')) { removeFile('{{ i.line_no }}', 'b'); } return false;">Remove</button>
+                                                        </div>
+                                                    </div>
+                                                </div>                                                
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card card-wrapper">
+                            <div class="card-header">
+                                <p>Valuation Documents<br> <small>&lt;&lt; Upload the PDF format &gt;&gt;</small></p>
+                            </div>
+                            <div class="card-body">
+                                <div {% if bench_dt %} {% for i in bench_dt %} {% if i.line_no == 1 and i.valuation_doc.name %} class="plus-icon uploaded" {% else %} class="plus-icon" {% endif %} {% endfor %} {% else %} class="plus-icon" {% endif %} id="pdf-plus-icon_1">
+                                    <i class="fas fa-plus"></i>                                       
+                                    <input type="file" accept=".pdf" name="valuation_doc" id="valuation_doc_1" class="file-input pdf-upload">                                    
+                                </div>
+                                <div class="uploaded-files">
+                                    {% if bench_dt %}
+                                        {% for i in bench_dt %}
+                                            {% if i.line_no == 1 and i.valuation_doc.name %}                                    
+                                                <div class="pdf-preview-container">
+                                                    <canvas id="pdf-canvas-val-{{ i.line_no }}" class="pdf-thumbnail" data-pdf-url="{{ i.valuation_doc.url }}"></canvas>
+                                                    <div class="pdf-details">
+                                                        <p class="pdf-name">{{ i.valuation_doc.name }}</p>
+                                                        <div class="pdf-actions">
+                                                            <a href="{{ i.valuation_doc.url }}" target="_blank" class="btn btn-primary">Open</a>
+                                                            <button class="btn btn-danger" onclick="if (confirm('Are you sure you want to delete this file?')) { removeFile('{{ i.line_no }}', 'v'); } return false;">Remove</button>
+                                                        </div>
+                                                    </div>
+                                                </div>                                                
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>                   
+                </div>
+                
+                <div class="buttons-container">                                        
+                    {% if com_line %}
+                    <a href="#" 
+                    style="width: 35px; height: 35px; z-index: 1000 !important; outline: none !important; border: none; box-shadow: none !important; padding: 0; display: flex; align-items: center; justify-content: center;" 
+                    onclick="enable_fields(1)" id="edit_1">
+                    <img src="{% static 'images/edit.png' %}" alt="Save" style="width: 100%; height: 100%; object-fit: contain;">
+                 </a>                                                                              
+                 
+                 <a href="{% url 'delete_bench' 1 %}?id={{company.company_id}}" 
+                   
+                    style="width: 35px; height: 35px; z-index: 1000 !important; outline: none !important; border: none; box-shadow: none !important; padding: 0; display: flex; align-items: center; justify-content: center;" 
+                    id="delete_1" onclick="return confirm('Are you sure you want to delete this record?')">
+                    <img src="{% static 'images/delete.png' %}" alt="Delete" style="width: 100%; height: 100%; object-fit: contain;">
+                 </a> 
+                        <button type="submit" id="submit_btn_1" style="display: none; width: 35px; height: 35px;z-index: 1000 !important; background-color: none; outline: none !important; padding: 0; border: none; align-items: center; justify-content: center;  "><img src="{% static 'images/save.png' %}" alt="edit" style="width: 100%; height: 100%; object-fit: contain;"></button>
+                    {% else %}                        
+                    <button type="submit"  id="submit_btn_1" style="width: 35px; height: 35px; z-index: 1000 !important; background-color: none; outline: none !important; padding: 0; border: none; display: flex; align-items: center; justify-content: center;">
+                        <img src="{% static 'images/save.png' %}" alt="Save" style="width: 100%; height: 100%; object-fit: contain;">
+                    </button>
+                    
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+
+
+        
+
+        {% if success_msg %}
+        <script>     
+            window.onload = function () {
+                alert("{{  success_msg|safe }}");                
+                window.location.href = "{% url 'bench4' company.company_id %}";
+            };
+        </script>
+        {% endif %}
+        
+    </div>
+
+    <div id="bench-data" style="display: none;">
+        [
+        {% for i in bench_dt %}
+            {
+                "line_no": "{{ i.line_no }}",
+                "bench_mark_doc": "{% if i.bench_mark_doc and i.bench_mark_doc.name %}{{ i.bench_mark_doc.url }}{% else %}''{% endif %}",
+                "valuation_doc": "{% if i.valuation_doc and i.valuation_doc.name %}{{ i.valuation_doc.url }}{% else %}''{% endif %}"
+            }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+        ]
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
+
+    
+
+    {% if last_rec %}
+    <script>
+        var last_rec_1 = "{{last_rec}}";        
+    </script>
+    {% else %}
+    <script>
+        var last_rec_1 = 1
+    </script>
+    {% endif %}
+
+
+
+    <script>
+        let sectionCount = last_rec_1;    
+
+
+        document.getElementById('add-benchmark-btn').addEventListener('click', function() {
+            sectionCount++;
+            const newSectionHTML = `
+                <div class="content-area">
+                    <form action="" method="post" id="bench_form_${sectionCount}">
+                        {% csrf_token %}   
+
+                        <input type="text" name="line_no" value="${sectionCount}" id="" hidden>                        
+                        
+                        <label for="p_name" class="form-label">Select Product</label>
+                        <select id="p_name_${sectionCount}" name="p_name" required>
+                            <option value="">--select--</option>
+                            {% for i in products %}
+                            <option value="{{i.name}}">{{i.name}}</option>
+                            {% endfor %}
+                        </select> <br><br>
+
+                        <div class="row">                           
+                            <div class="col-md-4">
+                                <label for="valuation" class="form-label">Current Valuation</label>
+                                <input type="number" id="valuation_${sectionCount}" name="valuation" required class="form-control" placeholder="Enter valuation">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="source" class="form-label">Valuation Source / Vendor</label>
+                                <input type="text" id="source_${sectionCount}" name="source" required class="form-control" placeholder="Enter valuation source">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="valuation_dt_${sectionCount}" class="form-label">Valuation Date</label>
+                                <input type="date" id="valuation_dt_${sectionCount}" name="valuation_dt" required class="form-control" placeholder="Enter valuation date">
+                            </div>
+                        </div>
+
+                        <div class="row">                    
+                            <div class="col-lg-6">
+                                <div class="card card-wrapper">
+                                    <div class="card-header">
+                                        <p>Benchmarking Documents<br> <small>&lt;&lt; Upload the PDF format &gt;&gt;</small></p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="plus-icon" id="pdf-plus-icon_${sectionCount}">
+                                            <i class="fas fa-plus"></i>                                       
+                                            <input type="file" accept=".pdf" name="bench_mark_doc" id="bench_mark_doc_${sectionCount}" class="file-input pdf-upload">                                                                
+                                        </div>
+                                        <div class="uploaded-files">                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="card card-wrapper">
+                                    <div class="card-header">
+                                        <p>Valuation Documents<br> <small>&lt;&lt; Upload the PDF format &gt;&gt;</small></p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div  class="plus-icon" id="pdf-plus-icon_${sectionCount}">
+                                            <i class="fas fa-plus"></i>                                       
+                                            <input type="file" accept=".pdf" name="valuation_doc" id="valuation_doc_${sectionCount}" class="file-input pdf-upload">                                    
+                                        </div>
+                                        <div class="uploaded-files">                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                   
+                        </div>
+                        
+                        <div class="buttons-container">                                                        
+                            <button type="submit" class="btn btn-primary" id="submit_btn_${sectionCount}">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+        
+            document.querySelector('.container').insertAdjacentHTML('afterbegin', newSectionHTML);   
+            
+            // Optionally, scroll to the newly added form
+            document.getElementById(`p_name_${sectionCount}`).scrollIntoView({ behavior: 'smooth' });
+
+            // Re-attach event listeners for the file uploads
+            attachEventListeners();
+            });
+
+
+
+        function enable_fields(sectionCount){
+            
+            console.log('sectionCount', sectionCount)
+
+            var edit_btn = document.getElementById(`edit_${sectionCount}`)
+            var delete_btn = document.getElementById(`delete_${sectionCount}`)
+            var submit_btn_btn = document.getElementById(`submit_btn_${sectionCount}`)
+
+            var p_name_inp = document.getElementById(`p_name_${sectionCount}`)
+                        
+            var valuation_inp = document.getElementById(`valuation_${sectionCount}`)
+            var source_inp = document.getElementById(`source_${sectionCount}`)
+            var valuation_dt_inp = document.getElementById(`valuation_dt_${sectionCount}`)
+            
+
+            if (p_name_inp){
+                p_name_inp.disabled = false;
+            }
+            valuation_inp.readOnly = false;
+            source_inp.readOnly = false;
+            valuation_dt_inp.readOnly = false;
+            
+
+            edit_btn.style.display = 'none';
+            delete_btn.style.display = 'none';
+            submit_btn_btn.style.display = 'block';
+
+        }
+        
+
+        document.querySelectorAll('.file-input').forEach(input => {
+    input.addEventListener('change', handleFileUpload);
+});
+
+function handleFileUpload(event) {
+    const fileInput = event.target;
+    const sectionNumber = fileInput.id.split('_').pop();
+    const file = fileInput.files[0];
+
+    const formData = new FormData();
+    formData.append('line_no', sectionNumber);
+    formData.append(fileInput.name, file);
+
+    fetch("{% url 'bench4_files' company.company_id %}", {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            alert(data.message);
+
+            // Refresh the page after the file is successfully uploaded
+            window.location.reload();
+            refreshPageSection()
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
+    });
+}
+
+
+
+                
+        function removeFile(lineNo, type) {
+            const url = `/remove-bench4-file/?line_no=${lineNo}&type=${type}`;
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    window.location.reload();
+                    refreshPageSection();  // Refresh section after removing the file
+                } else if (data.error) {
+                    alert('Failed to remove file: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                alert('Error: ' + error.message);
+            });
+        }
+
+
+        function refreshPageSection() {
+    fetch("{% url 'bench4' company.company_id %}")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();  // Get the response as text
+        })
+        .then(html => {
+            // Parse the new HTML and find the section we want to update
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newSection = doc.querySelector('.container.my-5'); // Adjust selector as needed
+
+            // Replace the old section with the new section
+            const oldSection = document.querySelector('.container.my-5');
+            if (oldSection && newSection) {
+                oldSection.innerHTML = newSection.innerHTML;
+                
+                // Re-attach event listeners to new elements
+                document.querySelectorAll('.file-input').forEach(input => {
+                    input.addEventListener('change', handleFileUpload);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error while refreshing page section:', error);
+        });
+}
+
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.worker.min.js';
+            
+
+            // Get the JSON data from the hidden element
+            var benchDataElement = document.getElementById('bench-data');
+            var benchData = JSON.parse(benchDataElement.textContent);
+
+            // Iterate over the data and render the PDFs
+            benchData.forEach(function(item) {
+                if (item.bench_mark_doc) {                    
+                    var canvasBenchMark = document.getElementById("pdf-canvas-bm-" + item.line_no);
+                    if (canvasBenchMark) {                
+                        renderPDF(item.bench_mark_doc, canvasBenchMark);
+                    }
+                }
+
+                if (item.valuation_doc) {
+                    var canvasValuation = document.getElementById("pdf-canvas-val-" + item.line_no);
+                    if (canvasValuation) {
+                        renderPDF(item.valuation_doc, canvasValuation);
+                    }
+                }
+            });
+        });
+
+
+
+        function renderPDF(url, canvas) {
+    var context = canvas.getContext("2d");
+
+    pdfjsLib.getDocument(url).promise.then(function(pdf) {
+        pdf.getPage(1).then(function(page) {
+            var viewport = page.getViewport({ scale: 1 });
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            var renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+
+            page.render(renderContext).promise.then(function() {
+                console.log('Rendering complete for canvas:', canvas.id);
+            }).catch(function(error) {
+                console.error('Render error:', error);
+            });
+        });
+    }).catch(function(error) {
+        console.error('PDF load error:', error);
+    });
+}
+
+
+    </script>
+
+
+{% endblock content %}
+

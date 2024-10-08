@@ -1,0 +1,37 @@
+/* Dashboard */
+.super-admin .card
+{
+    box-shadow: 0 0 16px #ccc;
+    margin-top: 20px;
+    cursor: pointer;
+    /* max-width:200px; */
+    max-height: 100px;
+}
+.super-admin .card-body i
+{
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-left: 10px;
+}
+.super-admin .card-body ul li 
+{
+    font-size:18px;
+    font-weight: 700;
+    position: relative;
+    top: -35px;
+    margin-left:40px;
+    list-style-type: none;
+    text-align: center;
+}
+
+.card-body .fa-users
+ {
+    color:#00b0f0;
+}
+/* Dashboard */
+/* Companies */
+.text-nowrap 
+{
+    white-space: nowrap;
+}
+/* Companies */

@@ -1,0 +1,571 @@
+{% extends '../base.html' %}
+{% block content %}
+<style>
+label{
+    width:320px !important;
+}
+</style>
+<div class="container">
+    <form method="POST" action="#" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row mt-5 mb-5">
+            <div class="col-md-6">
+                <div class="mb-3 mt-3 inline">
+                    <label for="startup_name">Startup Name</label>
+                    <input type="text" class="form-control w-50" name="startup_name" value="{{company.name}}" required readonly>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="date_of_incorporation">Founded In</label>
+                    <input type="date" class="form-control w-50" name="date_of_incorporation"  required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control w-50" name="email" value="{{company.email}}" required readonly>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="linkedin_url">Linkedin URL</label>
+                    <input type="url" class="form-control w-50" name="linkedin_url" value="{{company.linkedin_url}}" required readonly>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="sector">Industory/Sector</label>
+                    <select class="form-select w-50" id="sector" name="sector"  required>
+                        <option value="">Select</option>
+                        {% for sector in sectors %}
+                        <option value="{{sector.name}}">{{sector.name}}</option>
+                        {% endfor %}
+                        
+                    </select>
+                </div>
+               
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="type_of_business ">Type of Business </label>
+                    <select class="form-select w-50" id="type_of_business" name="type_of_business"  required>
+                        <option value="">Select</option>
+                        {% for business_type in business_types %}
+                        <option value="{{business_type.name}}">{{business_type.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="website_url">Website URL</label>
+                    <input type="url" class="form-control w-50" name="website_url" value="{{company.website_url}}" required readonly>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="location">Location</label>
+                    <input type="text" class="form-control w-50" name="location" value="{{company.location}}" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="product_or_service">Product/Service</label>
+                    <input type="text" class="form-control w-50" name="product_or_service" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="subscription_type">Subscription Type</label>
+                    <select class="form-select w-50" id="subscription_type" name="subscription_type" required>
+                        <option value="">Select</option>
+                        <option value="basic">Basic</option>
+                        <option value="premium">Premium</option>
+                        <option value="advance">Advance</option>
+                    </select>
+                </div>
+
+    
+                <!-- <div class="mb-3 mt-3 inline">
+                    <label for="business_plan">Business Plan</label>
+                    <input type="file" class="w-50" name="business_plan" required>
+                </div> -->
+                
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 mt-3 inline">
+                    <label for="no_of_employees">No. of Employees (includes FTE, Contractors, Interns and Others)</label>
+                    <input type="text" class="form-control w-50" name="no_of_employees" required>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="tam">TAM</label>
+                    <input type="number" class="form-control w-50" name="tam" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="cagr">CAGR</label>
+                    <input type="text" class="form-control w-50" name="cagr" required>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="previous_year_revenue">Previous Year Revenue</label>
+                    <input type="number" class="form-control w-50" name="previous_year_revenue" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="current_year_revenue">Current Year Revenue (ARR)</label>
+                    <input type="number" class="form-control w-50" name="current_year_revenue" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="current_monthly_burn_rate">Current Monthly Burn Rate</label>
+                    <input type="number" class="form-control w-50" name="current_monthly_burn_rate" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="forecasted_revenue_for_next_year">Forecasted Revenue for next year</label>
+                    <input type="number" class="form-control w-50" name="forecasted_revenue_for_next_year" required>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="stage_of_business">Stage of Business </label>
+                    <select class="form-select w-50" id="stage_of_business" name="stage_of_business" required>
+                        <option value="">Select</option>
+                        {% for business_stage in business_stages %}
+                        <option value="{{business_stage.name}}">{{business_stage.name}}</option>
+                        {% endfor %}
+                        
+
+                    </select>
+                </div>
+
+                <div class="mb-3 mt-3 inline">
+                    <label for="equity_funds_raised_so_far">Equity Funds raised so far?</label>
+                    <input type="number" class="form-control w-50" name="equity_funds_raised_so_far" required>
+                </div>
+                <div class="mb-3 mt-3 inline">
+                    <label for="funds_needed">Funds Needed</label>
+                    <input type="number" class="form-control w-50" name="funds_needed" required>
+                </div>
+
+                <!-- <div class="mb-3 mt-3 inline">
+                    <label for="business_introductry_video_url">Business Introductory Video (URL)</label>
+                    <input type="url" class="form-control w-50" name="business_introductry_video_url" required>
+                </div> --> 
+            </div>
+        </div>
+
+        <!-- Founder Details Section -->
+        <div id="founders-section">
+            <div class="row mt-5 mb-5 founder-section">
+                <h4 class="mb-4 text-center">Founder 1 Details</h4>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="founder_1_name">Name</label>
+                        <input type="text" class="form-control w-50" name="founder_1_name" required>
+                    </div>
+                    <div class="mb-3 mt-3 inline">
+                        <label for="founder_1_linkedin_profile">LinkedIn Profile</label>
+                        <input type="text" class="form-control w-50" name="founder_1_linkedin_profile" required>
+                    </div>
+                    <div class="mb-3 mt-3 inline">
+                        <label for="founder_1_short_profile">Short Profile</label>
+                        <textarea class="form-control w-50" rows="6" name="founder_1_short_profile" required></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="founder_1_phno">Phone Number</label>
+                        <input type="number" class="form-control w-50" name="founder_1_phno" required>
+                    </div>
+                    <div class="mb-3 mt-3 inline">
+                        <label for="founder_1_email">Email ID</label>
+                        <input type="email" class="form-control w-50" name="founder_1_email" required>
+                    </div>
+                    <div class="mb-3 mt-3 inline">
+                        <label for="founder_1_photo">Professional Photo</label>
+                        <input type="file" class="w-50" name="founder_1_photo" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button to Add More Founders -->
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-founder-btn">Add Another Founder</button>
+            </div>
+        </div>
+
+
+
+         <!-- Executive Member Details Section -->
+         <div id="executive-members-section">
+            <div class="row mt-5 mb-5 executive-member-section">
+                <h4 class="mb-4 text-center">Executive Team 1 Details</h4>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="executive_member_name_1">Name</label>
+                        <input type="text" class="form-control w-50" name="executive_member_1_name" required>
+                    </div>
+                    <div class="mb-3 mt-3 inline">
+                        <label for="executive_member_email_1">Email ID</label>
+                        <input type="email" class="form-control w-50" name="executive_member_1_email" required>
+                    </div>
+                    
+                </div>
+                <div class="col-md-6">
+                    
+                    <div class="mb-3 mt-3 inline">
+                        <label for="executive_member_designation_1">Designation</label>
+                        <input type="text" class="form-control w-50" name="executive_member_1_designation" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button to Add More Executive Team -->
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-executive-member-btn">Add Another Executive Team Member</button>
+            </div>
+        </div>
+
+
+
+        <!-- Advisors Details Section -->
+        <div id="advisors-section">
+            <div class="row mt-5 mb-5 advisor-section">
+                <h4 class="mb-4 text-center">Advisor 1 Details</h4>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="advisor_1_name">Name</label>
+                        <input type="text" class="form-control w-50" name="advisor_1_name" required>
+                    </div>
+                    <div class="mb-3 mt-3 inline">
+                        <label for="advisor_1_email">Email ID</label>
+                        <input type="email" class="form-control w-50" name="advisor_1_email" required>
+                    </div>
+                    
+                </div>
+                <div class="col-md-6">
+                    
+                    <div class="mb-3 mt-3 inline">
+                        <label for="advisor_1_phno">Phone Number</label>
+                        <input type="text" class="form-control w-50" name="advisor_1_phno" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button to Add More Advisors -->
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-advisor-btn">Add Another Advisor</button>
+            </div>
+        </div>
+
+
+
+
+        
+      
+        <!-- Problems Solved Details Section -->
+        <div id="solved-problems-section">
+            <div class="row mt-5 mb-5 solved-problem-section">
+                <h4 class="mb-4 text-center">Problem Solved 1</h4>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="problem_solved_1">Problem Solved</label>
+                        <textarea class="form-control w-50" rows="6" name="problem_solved_1" required></textarea>
+
+                    </div>
+                    
+                    
+                </div>
+                <div class="col-md-6">
+                    
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Button to Add More Problems Solved -->
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-problem-solved-btn">Add Another</button>
+            </div>
+        </div>
+
+
+         <!-- Challanges Details Section -->
+         <div id="challenges-section">
+            <div class="row mt-5 mb-5 challenge-section">
+                <h4 class="mb-4 text-center">Challange 1</h4>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="challenge_1">Challange</label>
+                        <textarea class="form-control w-50" rows="6" name="challenge_1" required></textarea>
+
+                    </div>
+                    
+                    
+                </div>
+                <div class="col-md-6">
+                    
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Button to Add More Challanges -->
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-challenge-btn">Add Another</button>
+            </div>
+        </div>
+
+
+         <!-- Competitors Details Section -->
+         <div id="competitors-section">
+            <div class="row mt-5 mb-5 competitor-section">
+                <h4 class="mb-4 text-center">Competitor 1</h4>
+                <div class="col-md-6">
+                    <div class="mb-3 mt-3 inline">
+                        <label for="competitor_1">Competitor</label>
+                        <input type="text" class="form-control w-50" name="competitor_1" required>
+
+                        
+                    </div>
+                    
+                    
+                </div>
+                <div class="col-md-6">
+                    
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Button to Add More Competitors -->
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-competitor-btn">Add Another</button>
+            </div>
+        </div>
+
+
+
+       
+
+
+        
+
+        <!-- Social Media Links Section -->
+        <div id="social-media-section" class="row mt-5 mb-5">
+            <h4 class="mb-4 text-center">Social Media Links</h4>
+            <div class="col-md-6">
+                <div class="mb-3 mt-3 inline">
+                    <label for="url_1">URL 1</label>
+                    <input type="text" class="form-control w-50" name="url_1" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 mt-3 inline">
+                    <label for="url_2">URL 2</label>
+                    <input type="text" class="form-control w-50" name="url_2" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button to Add More Social Media URLs -->
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-url-btn">Add Another URL</button>
+            </div>
+        </div>
+
+        <!-- Client Names Section -->
+        <div id="clients-section" class="row mt-5 mb-5">
+            <h4 class="mb-4 text-center">Clients</h4>
+            <div class="col-md-6">
+                <div class="mb-3 mt-3 inline">
+                    <label for="client_name_1">Client 1 Name</label>
+                    <input type="text" class="form-control w-50" name="client_name_1" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 mt-3 inline">
+                    <label for="client_logo_1">Logo</label>
+                    <input type="file" class="w-50" name="client_logo_1" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button to Add More Clients -->
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" id="add-client-btn">Add Another Client</button>
+            </div>
+        </div>
+
+        
+
+        <!-- Hidden input fields to store counts -->
+        <input type="hidden" name="founder_count" id="founder_count" value="1">
+
+        
+        <input type="hidden" name="executive_member_count" id="executive_member_count" value="1">
+        <input type="hidden" name="advisor_count" id="advisor_count" value="1">
+        <input type="hidden" name="problem_solved_count" id="problem_solved_count" value="1">
+
+        <input type="hidden" name="competitor_count" id="competitor_count" value="1">
+
+        <input type="hidden" name="challenge_count" id="challenge_count" value="1">
+
+
+        <!-- <input type="hidden" name="social_media_count" id="social_media_count" value="1"> -->
+        <input type="hidden" name="url_count" id="url_count" value="2">
+
+        <input type="hidden" name="client_count" id="client_count" value="1">
+
+        
+
+        <div class="row mt-5 mb-5">
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    var founderCount = 1;
+    document.getElementById('add-founder-btn').addEventListener('click', function () {
+        founderCount++;
+        document.getElementById('founder_count').value = founderCount;
+
+        var newFounderSection = document.querySelector('.founder-section').cloneNode(true);
+        newFounderSection.querySelector('h4').textContent = 'Founder ' + founderCount + ' Details';
+        newFounderSection.querySelectorAll('input, textarea').forEach(function (input) {
+            input.name = input.name.replace(/founder_1+/, 'founder_' + founderCount);
+            input.value = '';
+        });
+
+        document.getElementById('founders-section').appendChild(newFounderSection);
+    });
+
+
+    var executiveMemberCount = 1;
+    document.getElementById('add-executive-member-btn').addEventListener('click', function () {
+        executiveMemberCount++;
+        document.getElementById('executive_member_count').value = executiveMemberCount;
+
+        var newExecutiveTeamSection = document.querySelector('.executive-member-section').cloneNode(true);
+        newExecutiveTeamSection.querySelector('h4').textContent = 'Executive Team ' + executiveMemberCount + ' Details';
+        newExecutiveTeamSection.querySelectorAll('input').forEach(function (input) {
+            input.name = input.name.replace(/executive_member_1+/, 'executive_member_' + executiveMemberCount);
+            input.value = '';
+        });
+        document.getElementById('executive-members-section').appendChild(newExecutiveTeamSection);
+    });
+
+    var advisorCount = 1;
+    document.getElementById('add-advisor-btn').addEventListener('click', function () {
+        advisorCount++;
+        document.getElementById('advisor_count').value = advisorCount;
+
+        var newAdvisorSection = document.querySelector('.advisor-section').cloneNode(true);
+        newAdvisorSection.querySelector('h4').textContent = 'Advisor ' + advisorCount + ' Details';
+        newAdvisorSection.querySelectorAll('input').forEach(function (input) {
+            input.name = input.name.replace(/advisor_1+/, 'advisor_' + advisorCount);
+            input.value = '';
+        });
+        document.getElementById('advisors-section').appendChild(newAdvisorSection);
+    });
+
+
+    
+
+
+
+    var urlCount = 2;
+    document.getElementById('add-url-btn').addEventListener('click', function () {
+        urlCount++;
+        document.getElementById('url_count').value = urlCount;
+
+        var newUrlInput = document.querySelector('input[name="url_1"]').parentElement.parentElement.cloneNode(true);
+        newUrlInput.querySelector('label').textContent = 'URL ' + urlCount;
+        newUrlInput.querySelector('input').name = 'url_' + urlCount;
+        newUrlInput.querySelector('input').value = '';
+
+        document.getElementById('social-media-section').appendChild(newUrlInput);
+    });
+
+    var clientCount = 1;
+    document.getElementById('add-client-btn').addEventListener('click', function () {
+        clientCount++;
+        document.getElementById('client_count').value = clientCount;
+
+        // Create a new row for the client name
+
+        var newClientNameRow = document.querySelector('input[name="client_name_1"]').parentElement.parentElement.cloneNode(true);
+
+        newClientNameRow.querySelector('label').textContent = 'Client ' + clientCount + " " + 'Name';
+        newClientNameRow.querySelector('input').name = 'client_' + 'name_' + clientCount;
+        newClientNameRow.querySelector('input').value = '';
+
+        // Create a new row for the client logo
+        var newClientLogoRow = document.querySelector('input[name="client_logo_1"]').parentElement.parentElement.cloneNode(true);
+        newClientLogoRow.querySelector('label').textContent = 'Logo';
+        newClientLogoRow.querySelector('input').name = 'client_' + 'logo_' + clientCount ;
+        newClientLogoRow.querySelector('input').value = '';
+
+        // Append the new rows to the clients section
+        document.getElementById('clients-section').appendChild(newClientNameRow);
+        document.getElementById('clients-section').appendChild(newClientLogoRow);
+    });
+</script>
+
+<script>
+    // JavaScript for Problems Solved
+    var problemSolvedCount = 1;
+    document.getElementById('add-problem-solved-btn').addEventListener('click', function () {
+        problemSolvedCount++;
+        document.getElementById('problem_solved_count').value = problemSolvedCount;
+
+        var newProblemsSolvedSection = document.querySelector('.solved-problem-section').cloneNode(true);
+        newProblemsSolvedSection.querySelector('h4').textContent = 'Problem Solved ' + problemSolvedCount;
+        newProblemsSolvedSection.querySelectorAll('textarea').forEach(function (textarea) {
+            textarea.name = 'problem_solved_' + problemSolvedCount;
+            textarea.value = '';
+        });
+
+        document.getElementById('solved-problems-section').appendChild(newProblemsSolvedSection);
+    });
+
+    // JavaScript for Challenges
+    var challengeCount = 1;
+    document.getElementById('add-challenge-btn').addEventListener('click', function () {
+        challengeCount++;
+        document.getElementById('challenge_count').value = challengeCount;
+        
+        var newChallengeSection = document.querySelector('.challenge-section').cloneNode(true);
+        newChallengeSection.querySelector('h4').textContent = 'Challenge ' + challengeCount;
+        newChallengeSection.querySelectorAll('textarea').forEach(function (textarea) {
+            textarea.name = 'challenge_' + challengeCount;
+            textarea.value = '';
+        });
+
+        document.getElementById('challenges-section').appendChild(newChallengeSection);
+    });
+
+    // JavaScript for Competitors
+    var competitorCount = 1;
+    document.getElementById('add-competitor-btn').addEventListener('click', function () {
+        competitorCount++;
+        document.getElementById('competitor_count').value = competitorCount;
+
+        var newCompetitorSection = document.querySelector('.competitor-section').cloneNode(true);
+        newCompetitorSection.querySelector('h4').textContent = 'Competitor ' + competitorCount;
+        newCompetitorSection.querySelectorAll('input').forEach(function (input) {
+            input.name = 'competitor_' + competitorCount;
+            input.value = '';
+        });
+
+        document.getElementById('competitors-section').appendChild(newCompetitorSection);
+    });
+</script>
+
+
+
+{% endblock content %}

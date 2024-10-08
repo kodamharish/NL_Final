@@ -1,0 +1,73 @@
+
+{% block content %}
+<style>
+    /* Add styles for card and other elements */
+    .card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        margin-bottom: 20px;
+        padding: 20px;
+        border-left: 15px solid #00b0f0;
+        top:-30px;
+    }
+
+    .card h2 {
+        color: #005792;
+    }
+
+
+    .main-content {
+        margin-left: 50px;
+        padding: 40px;
+        height: calc(100vh - 80px); /* Subtract any padding or fixed header height */
+        overflow-y: auto; /* Enable scrolling */
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f2f5;
+        color: #333;
+        margin: 0;  /* Ensure no default margin */
+        padding: 0;  /* Ensure no default padding */
+        height: 100vh; /* Full viewport height */
+        overflow: hidden; /* Prevent body scrolling */
+
+    }
+</style>
+    
+
+{% include './company_profile.html' %}
+
+<div class="main-content">
+    <div id="executive-summary" class="card">
+        <h2>Executive Summary</h2>
+        <p>{{ company_profile.excecutive_summary }}</p>
+    </div>
+    <div id="business-profile" class="card">
+        <h2>Business Profile</h2>
+        <p>Industry: {{ company_profile.type_of_industry }}</p>
+        <p>No. of Employees: {{ company_profile.no_of_employees }}</p>
+    </div>
+    <div id="technology-profile" class="card">
+        <h2>Technology Profile</h2>
+        <p>{{ company_profile.technology_profile }}</p>
+    </div>
+    <div id="product-list" class="card">
+        <h2>Product List</h2>
+       
+        <p>{{ product.product_name }}</p>
+
+    </div>
+    <div id="organization-chart" class="card">
+        <h2>Organization Chart</h2>
+        <p>CEO: {{ company_profile.ceo }}</p>
+        <p>CFO: {{ company_profile.cfo }}</p>
+        <p>CMO: {{ company_profile.cmo }}</p>
+        <p>VP: {{ company_profile.vp }}</p>
+    </div>
+</div>
+
+
+
+{% endblock content %}
